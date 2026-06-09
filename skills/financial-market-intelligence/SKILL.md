@@ -66,6 +66,7 @@ Use these reference files when the task needs deeper structure:
 - Autonomous deep-dive rules: `references/autonomous-deep-dive-rules.zh.md`
 - Daily briefing continuity rules: `references/daily-briefing-continuity.zh.md`
 - Report output format: `references/report-output-format.zh.md`
+- Benchmark-inspired report modules: `references/benchmark-inspired-modules.zh.md`
 - Central bank and official data calendar: `references/central-bank-data-calendar.zh.md`
 - Source map: `references/source-map.zh.md`
 - Core source whitelist: `references/core-source-whitelist.zh.md`
