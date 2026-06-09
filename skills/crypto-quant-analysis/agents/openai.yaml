@@ -1,0 +1,7 @@
+interface:
+  display_name: "Crypto Quant Analysis"
+  short_description: "Crypto data hub, levels, signals, and risk"
+  default_prompt: "Use $crypto-quant-analysis to monitor BTC ETH SOL, summarize crypto data/news, and produce support levels plus 1-day/7-day/30-day long-short scenarios."
+
+policy:
+  allow_implicit_invocation: true
