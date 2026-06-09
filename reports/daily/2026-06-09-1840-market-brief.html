@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>2026-06-09 金融市场跟踪日报</title>
+    <style>
+      :root {
+        --bg: #f6f7f9;
+        --paper: #ffffff;
+        --ink: #17202a;
+        --muted: #667085;
+        --line: #d9dee7;
+        --soft: #eef2f7;
+        --accent: #0f766e;
+        --risk: #b42318;
+        --warn: #b54708;
+        --good: #067647;
+        --neutral: #475467;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+        line-height: 1.55;
+      }
+      .page { max-width: 1220px; margin: 0 auto; padding: 30px 22px 56px; }
+      .report-header, .section {
+        background: var(--paper);
+        box-shadow: 0 1px 2px rgba(16, 24, 40, 0.06);
+      }
+      .report-header { border-top: 6px solid var(--accent); padding: 28px 32px; }
+      .section { margin-top: 18px; padding: 24px 28px; }
+      .eyebrow { margin: 0 0 8px; color: var(--accent); font-size: 13px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+      h1 { margin: 0; font-size: 34px; line-height: 1.2; letter-spacing: 0; }
+      h2 { margin: 0 0 16px; font-size: 22px; letter-spacing: 0; }
+      h3 { margin: 18px 0 10px; font-size: 17px; letter-spacing: 0; }
+      p { margin: 0 0 10px; }
+      ul { margin: 8px 0 0; padding-left: 20px; }
+      .meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; color: var(--muted); font-size: 14px; }
+      .pill { display: inline-flex; align-items: center; min-height: 28px; padding: 4px 10px; border: 1px solid var(--line); background: #fafbfc; border-radius: 6px; font-weight: 700; }
+      .bluf { display: grid; grid-template-columns: 1.2fr .8fr; gap: 18px; }
+      .headline-call { border-left: 5px solid var(--accent); background: #f0fdfa; padding: 18px 20px; font-size: 19px; font-weight: 800; }
+      .watch-box { border: 1px solid var(--line); background: #fafbfc; padding: 16px; }
+      .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+      .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+      .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+      .card { border: 1px solid var(--line); background: #fff; padding: 16px; }
+      .card h3 { margin-top: 0; }
+      .metric { color: var(--muted); font-size: 13px; font-weight: 750; }
+      .verdict { margin: 8px 0 10px; font-size: 18px; font-weight: 850; }
+      .muted, .sources { color: var(--muted); }
+      .sources { font-size: 13px; }
+      .table-scroll { overflow-x: auto; }
+      table { width: 100%; border-collapse: collapse; font-size: 14px; }
+      th { background: var(--soft); color: #344054; font-weight: 800; text-align: left; }
+      th, td { border-bottom: 1px solid var(--line); padding: 10px 9px; vertical-align: top; }
+      tr:last-child td { border-bottom: 0; }
+      .tag { display: inline-block; padding: 2px 7px; border-radius: 5px; font-size: 12px; font-weight: 800; white-space: nowrap; }
+      .tag-risk { color: var(--risk); background: #fee4e2; }
+      .tag-warn { color: var(--warn); background: #fef0c7; }
+      .tag-good { color: var(--good); background: #dcfae6; }
+      .tag-neutral { color: var(--neutral); background: #eaecf0; }
+      .note { border-left: 4px solid var(--accent); background: #f8fafc; padding: 12px 14px; }
+      a { color: #0f766e; font-weight: 700; text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      @media (max-width: 900px) {
+        .page { padding: 18px 12px 36px; }
+        .report-header, .section { padding: 20px 16px; }
+        h1 { font-size: 28px; }
+        .bluf, .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+        table { min-width: 920px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header class="report-header">
+        <p class="eyebrow">市场情报日报 Daily Market Intelligence</p>
+        <h1>金融市场跟踪日报</h1>
+        <div class="meta">
+          <span class="pill">数据截止：2026-06-09 18:22 北京时间(BJT)</span>
+          <span class="pill">数据：Hyperliquid 加密永续 / Nasdaq(纳斯达克) ETF(交易所交易基金)代理 / 腾讯 A 股个股行情</span>
+        </div>
+      </header>
+
+      <section class="section bluf">
+        <div>
+          <h2>一句话结论</h2>
+          <div class="headline-call">
+            数据接入后，结论更清楚：美股盘前有修复、加密仍是弱反弹而非反转；
+            在 6/10 美国 CPI(消费者价格指数) 前，主策略仍是防守中观察，不把反弹当趋势确认。
+          </div>
+        </div>
+        <aside class="watch-box">
+          <strong>本轮已实际下钻的数据</strong>
+          <ul>
+            <li>加密：Hyperliquid 的 BTC(比特币)/ETH(以太坊)/SOL(Solana) 永续价格、K 线、资金费率(funding)、未平仓合约(OI)、盘口、24 小时成交。</li>
+            <li>美股：Nasdaq(纳斯达克) ETF(交易所交易基金)代理，覆盖 SPY/QQQ/DIA/IWM/板块/美元/长债/信用/黄金。</li>
+            <li>A 股：腾讯个股行情备源已接入，覆盖科技、红利、金融、地产消费、新能源顺周期代表股。</li>
+            <li>黄金：GLD(黄金ETF代理)已刷新，短线仍受美元和利率约束。</li>
+          </ul>
+        </aside>
+      </section>
+
+      <section class="section">
+        <h2>重点转向提醒</h2>
+        <div class="grid-4">
+          <div class="card">
+            <p class="metric">加密 Crypto</p>
+            <p class="verdict"><span class="tag tag-risk">未转向</span></p>
+            <p>BTC(比特币)最新标记价格(mark)约 62,636，低于 1小时成交量加权均价(1h VWAP)63,219 和 4小时成交量加权均价(4h VWAP)64,200，说明当前修复仍弱。</p>
+          </div>
+          <div class="card">
+            <p class="metric">A 股 A Shares</p>
+            <p class="verdict"><span class="tag tag-warn">小幅修正</span></p>
+            <p>A 股维持“政策预期支撑、基本面待验证”。个股行情显示 AI/半导体强于地产消费，但结论不升级为全面进攻。</p>
+          </div>
+          <div class="card">
+            <p class="metric">美股 U.S. Equities</p>
+            <p class="verdict"><span class="tag tag-warn">盘前修复</span></p>
+            <p>SPY +0.45%、QQQ +0.77%、SMH +1.91%，但 QQQ 7 个交易日仍 -3.59%。</p>
+          </div>
+          <div class="card">
+            <p class="metric">黄金 Gold</p>
+            <p class="verdict"><span class="tag tag-neutral">弱修复</span></p>
+            <p>GLD +0.16%，但 7 个交易日 -3.40%、30 日 -7.59%，反弹质量不足。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>昨日判断回溯</h2>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>上一版判断</th>
+                <th>本轮数据验证</th>
+                <th>结果</th>
+                <th>修正</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>加密短期偏空，不追反弹。</td>
+                <td>BTC 低于 1小时/4小时成交量加权均价(VWAP)，ETH 接近前日价，SOL 资金费率(funding)为负；恐惧贪婪指数(Fear & Greed)为 10，极度恐惧。</td>
+                <td><span class="tag tag-risk">正确</span></td>
+                <td>维持偏空/弱修复。</td>
+              </tr>
+              <tr>
+                <td>美股 CPI 前不追科技。</td>
+                <td>QQQ(纳斯达克100 ETF) 和 SMH(半导体 ETF) 盘前修复，但 7 日趋势仍偏弱，TLT(长期美债 ETF)30 日 -1.92%、UUP(美元指数 ETF)30 日 +2.11%。</td>
+                <td><span class="tag tag-warn">部分正确</span></td>
+                <td>短线从“偏空”修正为“盘前修复但未确认”。</td>
+              </tr>
+              <tr>
+                <td>黄金短线偏弱。</td>
+                <td>GLD 盘前 +0.16%，但 7 日 -3.40%、30 日 -7.59%。</td>
+                <td><span class="tag tag-risk">正确</span></td>
+                <td>维持短弱，中长期支撑暂未破坏。</td>
+              </tr>
+              <tr>
+                <td>A 股防守，等待政策和信用确认。</td>
+                <td>指数接口本轮仍不稳，但腾讯个股行情已返回代表股：工业富联 +6.04%、北方华创 +5.35%、中芯国际 +4.41%；地产消费偏弱。</td>
+                <td><span class="tag tag-warn">部分正确</span></td>
+                <td>从“无法刷新”修正为“个股层已接入，指数/资金流仍待增强”。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>政策与数据日历</h2>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>日期</th>
+                <th>事件</th>
+                <th>已知信息</th>
+                <th>可能结果</th>
+                <th>我的结论</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>6/10 20:30 北京时间(BJT)</td>
+                <td>美国 5 月 CPI(消费者价格指数)</td>
+                <td>BLS(美国劳工统计局)日历显示 CPI 于 6/10 08:30 美国东部时间(ET)发布。</td>
+                <td>高于预期：美元/收益率上行，压加密、QQQ/SMH、GLD；低于预期：风险资产修复。</td>
+                <td>强非农后，CPI 前不追风险资产。低 CPI 才能把“弱反弹”升级为“可交易修复”。</td>
+              </tr>
+              <tr>
+                <td>6/11 20:30 北京时间(BJT)</td>
+                <td>美国 5 月 PPI(生产者价格指数)</td>
+                <td>BLS(美国劳工统计局)日历显示 PPI 于 6/11 08:30 美国东部时间(ET)发布。</td>
+                <td>高 PPI 会强化通胀粘性；低 PPI 会缓和 CPI 后的二次压力。</td>
+                <td>PPI 是 CPI 后的确认项，不单独抢方向。</td>
+              </tr>
+              <tr>
+                <td>6/16-17</td>
+                <td>FOMC + SEP(美联储议息会议 + 经济预测摘要)</td>
+                <td>Fed(美联储)会议带经济预测和点阵图。</td>
+                <td>偏鹰：估值继续承压；偏鸽：美股成长和加密延续修复。</td>
+                <td>当前资金更怕“高利率更久”，SEP 是半月级方向锚。</td>
+              </tr>
+              <tr>
+                <td>6/25</td>
+                <td>PCE / GDP(个人消费支出价格指数 / 国内生产总值)</td>
+                <td>BEA(美国经济分析局)日程显示 PCE 和 GDP 三读在 6/25 发布。</td>
+                <td>PCE 高：降息交易继续退潮；PCE 低：风险偏好改善。</td>
+                <td>若 CPI/PPI/PCE 连续降温，30 日趋势才有机会转中性偏多。</td>
+              </tr>
+              <tr>
+                <td>本周窗口</td>
+                <td>中国通胀、信用、政策窗口</td>
+                <td>A 股需要社融、信用、财政/产业政策共同确认。</td>
+                <td>数据弱但政策强：低位轮动；数据和政策同强：顺周期和科技修复。</td>
+                <td>A 股不是只看情绪，必须等成交额、信用和政策共振。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>今日核心资产</h2>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>资产</th>
+                <th>今日状态</th>
+                <th>7日回顾</th>
+                <th>30日回顾</th>
+                <th>未来1日</th>
+                <th>未来7日</th>
+                <th>未来30日</th>
+                <th>未来半年</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>加密</td>
+                <td>BTC(比特币)62,636；ETH(以太坊)1,669；SOL(Solana)66.15。BTC 日内低于 1小时/4小时成交量加权均价(VWAP)，恐惧贪婪指数 10。</td>
+                <td><span class="tag tag-risk">弱修复</span> BTC 日线从 60,861 修到 62,631，但仍低于 4小时成交量加权均价(4h VWAP)。</td>
+                <td>BTC 约从 81,703 降至 62,631，30 日结构偏弱。</td>
+                <td>偏空/不追反弹</td>
+                <td>CPI 低才可转震荡修复</td>
+                <td>需要 BTC 站回 64,200-65,000 且资金费率(funding)/未平仓合约(OI)健康</td>
+                <td>中性偏多潜力仍在，但取决于流动性和 ETF(交易所交易基金)/机构资金回流</td>
+              </tr>
+              <tr>
+                <td>A 股</td>
+                <td>个股层已刷新：AI/半导体代表股普涨，工业富联 +6.04%、北方华创 +5.35%、中芯国际 +4.41%；地产消费偏弱。</td>
+                <td><span class="tag tag-warn">结构分化</span></td>
+                <td>政策预期支撑，但地产消费仍弱，基本面仍需信用和盈利确认。</td>
+                <td>防守观察</td>
+                <td>看政策和成交额</td>
+                <td>若信用改善，可从防守切轮动</td>
+                <td>中性偏多，但不是无条件进攻</td>
+              </tr>
+              <tr>
+                <td>美股</td>
+                <td>SPY(标普500 ETF)742.52 +0.45%；QQQ(纳斯达克100 ETF)721.60 +0.77%；SMH(半导体 ETF)609.61 +1.91%。</td>
+                <td>SPY -2.55%；QQQ -3.59%；SMH -1.59%。</td>
+                <td>SPY +3.36%；QQQ +7.80%；SMH +18.15%，长线 AI 仍强。</td>
+                <td>盘前修复但等 CPI</td>
+                <td>CPI 决定反弹质量</td>
+                <td>高波动，科技估值看 TLT/UUP</td>
+                <td>AI 主线仍强，但利率高位会压估值扩张</td>
+              </tr>
+              <tr>
+                <td>黄金</td>
+                <td>GLD 397.92 +0.16%。</td>
+                <td>GLD -3.40%。</td>
+                <td>GLD -7.59%，短线趋势偏弱。</td>
+                <td>中性偏弱</td>
+                <td>看 CPI 后美元和实际利率</td>
+                <td>若美元回落可修复，否则继续震荡</td>
+                <td>央行购金和地缘支撑仍在，中长期不悲观</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="section">
+        <h2>术语解释</h2>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>术语</th><th>中文解释</th><th>怎么用于判断</th></tr></thead>
+            <tbody>
+              <tr><td>BJT</td><td>北京时间</td><td>报告时间统一用北京时间，方便你对齐 A 股和飞书推送。</td></tr>
+              <tr><td>BLS</td><td>美国劳工统计局</td><td>负责发布非农、CPI、PPI 等关键美国官方数据。</td></tr>
+              <tr><td>FOMC + SEP</td><td>美联储议息会议 + 经济预测摘要</td><td>决定利率路径、点阵图和未来降息/加息预期。</td></tr>
+              <tr><td>VWAP</td><td>成交量加权均价</td><td>价格低于 1小时/4小时 VWAP，说明短线买盘质量不足。</td></tr>
+              <tr><td>funding</td><td>永续合约资金费率</td><td>为正通常说明多头支付空头，为负通常说明空头更积极或多头意愿弱。</td></tr>
+              <tr><td>OI</td><td>未平仓合约</td><td>OI 上升代表杠杆参与增加；价格下跌且 OI 高，清算风险更大。</td></tr>
+              <tr><td>ETF</td><td>交易所交易基金</td><td>用于观察机构资金流和资产代理价格，例如 SPY、QQQ、GLD。</td></tr>
+              <tr><td>spread</td><td>买卖价差</td><td>价差越小，流动性越好；价差扩大时，追单成本更高。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>加密专项：Hyperliquid 实时数据</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h3>BTC(比特币)</h3>
+            <p>标记价格(mark)62,636，中间价(mid)62,635.5，较前日价 63,479 低约 1.33%。资金费率(funding) +0.0010%/小时，未平仓合约(OI)31,438 BTC，24小时名义成交约 26.96 亿美元。</p>
+            <p><strong>结论：</strong><span class="tag tag-risk">弱修复，未反转</span>。低于 1小时成交量加权均价(1h VWAP)63,219 和 4小时成交量加权均价(4h VWAP)64,200，站回 64,200-65,000 前不追。</p>
+          </div>
+          <div class="card">
+            <h3>ETH(以太坊) / SOL(Solana)</h3>
+            <p>ETH 标记价格 1,669.3，资金费率 +0.0003%/小时，未平仓合约 690,979 ETH；SOL 标记价格 66.15，资金费率 -0.0012%/小时，未平仓合约 359.6 万 SOL。</p>
+            <p><strong>结论：</strong>ETH 中性偏弱，SOL 更弱。SOL 资金费率为负说明多头意愿不足或空头更积极。</p>
+          </div>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>指标</th><th>BTC</th><th>ETH</th><th>SOL</th><th>结论</th></tr></thead>
+            <tbody>
+              <tr><td>当前标记价格(mark)</td><td>62,636</td><td>1,669.3</td><td>66.15</td><td>三者均不是强趋势突破。</td></tr>
+              <tr><td>1小时成交量加权均价(1h VWAP)</td><td>63,219</td><td>1,679.2</td><td>66.46</td><td>均低于 1小时 VWAP，短线卖压仍在。</td></tr>
+              <tr><td>4小时成交量加权均价(4h VWAP)</td><td>64,200</td><td>1,731.5</td><td>68.49</td><td>4小时结构偏弱，反弹尚未站稳。</td></tr>
+              <tr><td>资金费率(funding)</td><td>+0.0010%</td><td>+0.0003%</td><td>-0.0012%</td><td>BTC/ETH 杠杆不拥挤，SOL 偏空。</td></tr>
+              <tr><td>盘口价差(spread)</td><td>约 1 美元</td><td>约 0.1 美元</td><td>约 0.001 美元</td><td>流动性可用，盘口不是主要风险。</td></tr>
+              <tr><td>情绪</td><td colspan="3">Alternative.me 恐惧贪婪指数(Fear & Greed) = 10，极度恐惧(Extreme Fear)</td><td>风险偏好很差，反弹容易反复。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="note"><strong>操作含义：</strong>“弱修复”不是做多信号，而是下跌后暂时止跌。BTC 只有站回 64,200-65,000，且 CPI(消费者价格指数)不热、ETF(交易所交易基金)资金流改善，才把 7 日判断从偏空改为中性。</p>
+      </section>
+
+      <section class="section">
+        <h2>美股与黄金专项：Nasdaq(纳斯达克) ETF(交易所交易基金)代理数据</h2>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>类别</th><th>标的</th><th>最新状态</th><th>7个交易日</th><th>30日</th><th>我的结论</th></tr></thead>
+            <tbody>
+              <tr><td>大盘</td><td>SPY(标普500 ETF)</td><td>742.52，+0.45%</td><td>-2.55%</td><td>+3.36%</td><td>盘前修复，但近期回撤未完全修复。</td></tr>
+              <tr><td>成长</td><td>QQQ(纳斯达克100 ETF)</td><td>721.60，+0.77%</td><td>-3.59%</td><td>+7.80%</td><td>长期强，短线仍利率敏感。</td></tr>
+              <tr><td>半导体</td><td>SMH(半导体 ETF)</td><td>609.61，+1.91%</td><td>-1.59%</td><td>+18.15%</td><td>AI(人工智能)主线最强，但 CPI 前不追急拉。</td></tr>
+              <tr><td>小盘</td><td>IWM(罗素2000 ETF)</td><td>286.40，+0.81%</td><td>-1.69%</td><td>+2.51%</td><td>融资成本敏感，仍不是主攻方向。</td></tr>
+              <tr><td>长债</td><td>TLT(长期美债 ETF)</td><td>84.83，+0.25%</td><td>-0.99%</td><td>-1.92%</td><td>利率压力未彻底解除。</td></tr>
+              <tr><td>美元</td><td>UUP(美元指数 ETF)</td><td>28.03，持平</td><td>+0.97%</td><td>+2.11%</td><td>美元偏强，压黄金和加密。</td></tr>
+              <tr><td>信用</td><td>HYG / LQD(高收益债 / 投资级债 ETF)</td><td>HYG 持平，LQD +0.07%</td><td>HYG -0.38%，LQD -0.80%</td><td>HYG -1.20%，LQD -1.13%</td><td>信用未明显恶化，但也没给强风险偏好(risk-on)。</td></tr>
+              <tr><td>黄金</td><td>GLD(黄金 ETF)</td><td>397.92，+0.16%</td><td>-3.40%</td><td>-7.59%</td><td>短线弱修复，中长期支撑仍看央行购金/地缘。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="note"><strong>操作含义：</strong>美股“盘前修复”是上涨，但不是趋势反转。CPI(消费者价格指数)低于预期 + TLT(长期美债 ETF)企稳 + UUP(美元指数 ETF)走弱，才是 QQQ/SMH 反弹质量提升的确认组合。</p>
+      </section>
+
+      <section class="section">
+        <h2>A 股专项</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h3>本轮数据状态</h3>
+            <p>东方财富接口此前已实测可返回上证实时点位、成交额和历史 K 线；本轮个股层改用腾讯公开行情备源，已返回代表股报价、涨跌幅、成交额、换手率和市盈率。</p>
+          </div>
+          <div class="card">
+            <h3>结论不升级</h3>
+            <p>AI(人工智能)/半导体代表股明显强于地产消费，但在指数、北向资金、融资余额和社融数据未稳定确认前，A 股仍按“结构修复，不是全面进攻”处理。</p>
+          </div>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>板块</th><th>代表个股</th><th>当前判断</th><th>背景原因</th><th>操作含义</th><th>失效条件</th></tr></thead>
+            <tbody>
+              <tr><td>科技/半导体/AI</td><td>工业富联 +6.04%，北方华创 +5.35%，立讯精密 +4.84%，中芯国际 +4.41%，海光信息 +3.27%</td><td>强修复</td><td>受美股 SMH(半导体 ETF)修复和国内 AI/算力预期影响，成交额集中在高景气权重股。</td><td>可以作为市场风险偏好修复观察项，但不追高；等连续放量和指数配合。</td><td>板块放量失败，或美股半导体回落。</td></tr>
+              <tr><td>红利/高股息</td><td>江苏银行 +1.92%，工商银行 +0.53%，农业银行 +0.46%，长江电力 +0.44%；中国神华 -3.51%，中国石化 -2.24%</td><td>分化防御</td><td>银行和公用事业较稳，能源红利受价格和资金切换影响回撤。</td><td>“相对防御”是降低波动，不等于所有红利股都会涨。</td><td>成长板块持续强、资金从防御撤出。</td></tr>
+              <tr><td>金融/券商</td><td>中国平安 +1.03%，国泰君安 +0.36%，中信证券 +0.35%，华泰证券 +0.21%，招商银行 -0.03%</td><td>温和修复</td><td>券商弹性需要成交额和政策催化，保险/银行更多体现低估值修复。</td><td>观察不抢；若市场成交额持续放大，券商才可能从跟随转主动。</td><td>成交额回落或政策预期降温。</td></tr>
+              <tr><td>地产链/消费</td><td>中国中免 -0.12%，贵州茅台 -0.55%，美的集团 -0.59%，万科A -0.64%，五粮液 -1.06%，保利发展 -1.90%</td><td>偏弱</td><td>地产链和消费仍受需求、信用和收入预期约束。</td><td>不把消费/地产当进攻主线，等信用数据和销售改善。</td><td>社融、地产销售、消费数据同步改善。</td></tr>
+              <tr><td>新能源/顺周期</td><td>隆基绿能 +4.02%，宁德时代 +1.65%，紫金矿业 +1.50%，比亚迪 +0.77%，宝钢股份 +0.53%，万华化学 -0.72%</td><td>局部修复</td><td>新能源有跌后修复，顺周期看商品价格和 PPI(生产者价格指数)改善。</td><td>先看龙头修复质量，不把全板块一起看多。</td><td>PPI 继续走弱，或行业价格/库存压力再扩大。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="note"><strong>数据说明：</strong>A 股个股行情来自腾讯公开行情备源，时间戳约 2026-06-09 16:14 北京时间。东方财富仍作为指数和历史 K 线优先源，若可用则优先覆盖指数、成交额和北向/资金流。</p>
+      </section>
+
+      <section class="section">
+        <h2>持续重要事项</h2>
+        <div class="grid-2">
+          <div class="card"><h3>美国通胀链</h3><p>CPI、PPI、PCE 是未来两周全市场定价核心。CPI 热则防守继续；CPI 冷才有修复窗口。</p></div>
+          <div class="card"><h3>Fed(美联储)利率路径</h3><p>强非农使 Fed(美联储)更难转鸽。FOMC + SEP(美联储议息会议 + 经济预测摘要)将决定半年维度风险资产估值空间。</p></div>
+          <div class="card"><h3>加密衍生品结构</h3><p>BTC/ETH/SOL 的资金费率(funding)、未平仓合约(OI)、成交量加权均价(VWAP)和盘口已能每日刷新；下一步补清算热力图(liquidation heatmap)、多空比例(long-short ratio)、ETF 资金流。</p></div>
+          <div class="card"><h3>A 股政策与信用</h3><p>A 股要从防守转进攻，需要政策、信用、成交额和盈利共同确认。</p></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>观察清单 Watchlist</h2>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>观察对象</th><th>触发条件</th><th>影响资产</th><th>触发后结论如何变化</th></tr></thead>
+            <tbody>
+              <tr><td>美国 CPI</td><td>低于预期 / 高于预期</td><td>加密、美股、黄金、A 股情绪</td><td>低于预期：风险资产修复；高于预期：防守继续。</td></tr>
+              <tr><td>BTC ETF(比特币交易所交易基金)资金流</td><td>连续 2-3 日净流入</td><td>BTC、ETH、山寨</td><td>加密从偏空转中性。</td></tr>
+              <tr><td>A 股成交额</td><td>持续放大且科技/金融共振</td><td>A 股板块</td><td>从防守中观察修复转向进攻。</td></tr>
+              <tr><td>10Y 美债收益率(10年期美国国债收益率)</td><td>明显回落</td><td>美股科技、黄金、加密</td><td>估值压力缓和，修复质量提升。</td></tr>
+              <tr><td>美元指数</td><td>转弱</td><td>黄金、加密、新兴市场</td><td>黄金和风险资产修复概率上升。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>来源和数据缺口</h2>
+        <p>已确认数据源：Hyperliquid public API(加密永续公开接口)、Alternative.me 恐惧贪婪指数、Ethereum public RPC(以太坊公开节点)、Nasdaq ETF quote/historical API(纳斯达克 ETF 行情/历史接口)、腾讯 A 股公开行情、BLS(美国劳工统计局)日程、Fed(美联储)FOMC 日历、BEA(美国经济分析局)日程。</p>
+        <p>已解决缺口：加密永续价格/K线/资金费率(funding)/未平仓合约(OI)/盘口、ETH gas(以太坊 gas 费)、市场情绪代理、美股指数/板块/美元/长债/信用/黄金 ETF 代理、A 股代表个股报价。</p>
+        <p>仍待补缺口：A 股北向资金、融资余额、行业完整涨跌榜仍需增强；加密清算热力图(liquidation heatmap)、多空比例(long-short ratio)、ETF 资金流、链上/社交情绪仍需 Coinalyze、Farside、DeFiLlama、LunarCrush、Alva 等源继续接入。</p>
+        <p class="sources">
+          参考链接：
+          <a href="https://www.bls.gov/news.release/empsit.nr0.htm">BLS(美国劳工统计局)非农</a> /
+          <a href="https://www.bls.gov/schedule/news_release/cpi.htm">BLS(美国劳工统计局)CPI 日程</a> /
+          <a href="https://www.bls.gov/schedule/news_release/ppi.htm">BLS(美国劳工统计局)PPI 日程</a> /
+          <a href="https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm">Fed(美联储)FOMC 日历</a> /
+          <a href="https://www.bea.gov/news/schedule">BEA(美国经济分析局)日程</a> /
+          <a href="https://www.stats.gov.cn/english/">国家统计局</a>
+        </p>
+      </section>
+    </main>
+  </body>
+</html>
