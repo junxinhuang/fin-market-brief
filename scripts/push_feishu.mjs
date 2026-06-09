@@ -1,0 +1,48 @@
+#!/usr/bin/env node
+
+import { readFile } from "node:fs/promises";
+
+const webhook = process.env.FEISHU_WEBHOOK;
+
+if (!webhook) {
+  throw new Error("Missing FEISHU_WEBHOOK environment variable.");
+}
+
+function textBlock(lines) {
+  return lines.filter(Boolean).join("\n");
+}
+
+const summary = JSON.parse(await readFile("reports/daily/latest-summary.json", "utf8"));
+
+const message = textBlock([
+  `金融市场跟踪日报｜${summary.generatedAtBjt}`,
+  "",
+  `一句话结论：${summary.headline}`,
+  "",
+  "重点转向提醒：",
+  ...(summary.turns || []).map((line) => `- ${line}`),
+  "",
+  "今日核心操作含义：",
+  "- 加密：弱修复不是做多信号，BTC 未重新站稳关键成交量加权均价(VWAP)前不追反弹。",
+  "- 美股：CPI(消费者价格指数)前把科技反弹当等待确认，不把单日上涨当趋势反转。",
+  "- A 股：AI/半导体强于地产消费，属于结构修复；成交额和信用未确认前仍以轮动看待。",
+  "- 黄金：短线看美元和实际利率，中长期支撑仍来自央行购金和地缘风险。",
+  "",
+  `完整 HTML 报告：${summary.publicUrl}`,
+]);
+
+const res = await fetch(webhook, {
+  method: "POST",
+  headers: { "content-type": "application/json" },
+  body: JSON.stringify({
+    msg_type: "text",
+    content: { text: message },
+  }),
+});
+
+const body = await res.text();
+if (!res.ok) {
+  throw new Error(`Feishu webhook failed: ${res.status} ${body}`);
+}
+
+console.log(body);
