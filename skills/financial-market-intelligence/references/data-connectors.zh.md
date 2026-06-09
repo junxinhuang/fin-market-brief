@@ -61,25 +61,44 @@
 
 ### 美股
 
-状态：待正式接入。
+状态：已接入 ETF 代理行情，足够支撑日报中的指数、板块、风格和交叉资产判断；个股基本面和逐笔/实时深度仍待正式 API key。
+
+可用组件：
+
+- Nasdaq quote API ETF proxy。
+- 可复用脚本：`skills/financial-market-intelligence/scripts/us_market_snapshot.mjs`。
+
+已实测可返回：
+
+- ETF 最新收盘/最近成交价。
+- 单日涨跌额、涨跌幅。
+- 成交量。
+- 约 30 条历史日线，可计算 1 日、7 个交易日、30 日趋势。
+
+已实测可用标的：
+
+- 指数代理：SPY、QQQ、DIA、IWM。
+- 板块代理：XLK、XLF、XLE、XLV、XLY。
+- 黄金代理：GLD。
+- 解释变量：TLT、UUP、HYG、LQD、SMH、XBI、ARKK。
 
 测试结果：
 
+- Nasdaq ETF quote / historical JSON 接口在外网权限下可用。
 - Yahoo Finance chart 在当前环境返回 HTML 防护页，不适合作为稳定接口。
-
-建议接入：
-
-- Polygon.io
-- Tiingo
-- Alpha Vantage
-- Marketstack
-- Nasdaq Data Link
-- IEX Cloud，如账号可用
+- Stooq 在当前环境返回浏览器验证/防护页，不适合作为稳定接口。
 
 日报规则：
 
-- 在正式 key 接入前，美股行情和板块数据使用官方日历 + 可访问市场更新 + GitHub Pages 报告明确降低置信度。
-- 美股正式数据接口是下一优先级。
+- 美股指数判断必须优先跑 `us_market_snapshot.mjs`，至少覆盖 SPY、QQQ、DIA、IWM。
+- 美股板块判断必须覆盖 XLK、XLF、XLE、XLV、XLY；如讨论 AI/半导体，补充 SMH。
+- 利率/美元/信用环境必须补充 TLT、UUP、HYG、LQD，用于解释估值压力、风险偏好和资金风格。
+- 报告里不得再把美股行情泛称为“缺稳定数据源”；应写明“ETF 代理行情已接入”，并区分其局限：不是交易所官方指数点位，不含个股财报估值、盘前盘后和逐笔深度。
+
+后续增强：
+
+- Polygon.io / Tiingo / Alpha Vantage / Marketstack：用于个股、盘前盘后、拆分复权、公司基本面。
+- Nasdaq Data Link / FRED：用于利率、宏观和部分官方时间序列。
 
 ### 黄金
 
@@ -115,4 +134,3 @@
 ```
 
 未接入字段可以写“数据缺口”，但必须给替代指标和下一步接口方案。
-

@@ -79,29 +79,29 @@
     <main class="page">
       <header class="report-header">
         <p class="eyebrow">Daily Market Intelligence</p>
-        <h1>金融市场跟踪日报</h1>
+        <h1>金融市场跟踪日报：带数据接口验证版</h1>
         <div class="meta">
-          <span class="pill">数据截止：2026-06-09 12:42 BJT</span>
-          <span class="pill">版本：全量加法版</span>
-          <span class="pill">核心资产：加密 / A股 / 美股 / 黄金</span>
+          <span class="pill">数据截止：2026-06-09 17:51 BJT</span>
+          <span class="pill">版本：HTML 完全体 + Feishu 摘要</span>
+          <span class="pill">新增：Hyperliquid 加密数据 / Nasdaq 美股 ETF 代理</span>
         </div>
       </header>
 
       <section class="section bluf">
         <div>
-          <h2>Executive Summary</h2>
+          <h2>一句话结论</h2>
           <div class="headline-call">
-            亚太盘中风险资产有修复，但核心矛盾仍是美国通胀数据前的利率压力。
-            当前不是确认反转，策略上仍是防守中观察修复。
+            数据接入后，结论比上一版更清楚：美股盘前有修复、加密仍是弱反弹而非反转；
+            在 6/10 美国 CPI 前，主策略仍是防守中观察，不把反弹当趋势确认。
           </div>
         </div>
         <aside class="watch-box">
-          <strong>今日 4 个核心驱动</strong>
+          <strong>本轮已实际下钻的数据</strong>
           <ul>
-            <li>美国 CPI/PPI 即将发布，强非农后市场更怕通胀偏热。</li>
-            <li>中国 5 月 CPI/PPI 偏弱，提升政策预期，但也暴露需求和工业价格压力。</li>
-            <li>BTC/ETH ETF 资金流未持续修复，加密反弹质量仍不足。</li>
-            <li>美元和美债收益率仍是压制黄金、美股成长和加密的共同变量。</li>
+            <li>加密：Hyperliquid BTC/ETH/SOL 永续价格、K线、funding、OI、盘口、24h 成交。</li>
+            <li>美股：Nasdaq ETF 代理，覆盖 SPY/QQQ/DIA/IWM/板块/美元/长债/信用/黄金。</li>
+            <li>A 股：东方财富本轮刷新失败，沿用前次已验证接口数据并降置信度。</li>
+            <li>黄金：GLD 代理已刷新，短线仍受美元和利率约束。</li>
           </ul>
         </aside>
       </section>
@@ -112,22 +112,22 @@
           <div class="card">
             <p class="metric">Crypto</p>
             <p class="verdict"><span class="tag tag-risk">未转向</span></p>
-            <p>加密仍是偏空/弱修复。ETF 流和宏观利率环境没有给出趋势反转确认。</p>
+            <p>BTC 最新 mark 约 62,636，低于 1h VWAP 63,219 和 4h VWAP 64,200，说明当前修复仍弱。</p>
           </div>
           <div class="card">
             <p class="metric">A Shares</p>
             <p class="verdict"><span class="tag tag-warn">小幅修正</span></p>
-            <p>A 股从“偏空”修正为“防守中观察修复”，但尚未切回进攻。</p>
+            <p>A 股维持“政策预期支撑、基本面待验证”。数据刷新失败，结论不升级为进攻。</p>
           </div>
           <div class="card">
             <p class="metric">U.S. Equities</p>
-            <p class="verdict"><span class="tag tag-warn">谨慎</span></p>
-            <p>美股科技仍受利率压制，CPI 前的反弹先按修复处理。</p>
+            <p class="verdict"><span class="tag tag-warn">盘前修复</span></p>
+            <p>SPY +0.45%、QQQ +0.77%、SMH +1.91%，但 QQQ 7 个交易日仍 -3.59%。</p>
           </div>
           <div class="card">
             <p class="metric">Gold</p>
-            <p class="verdict"><span class="tag tag-warn">短弱长稳</span></p>
-            <p>黄金短线受美元和实际利率压制，中长期央行购金和地缘逻辑未坏。</p>
+            <p class="verdict"><span class="tag tag-neutral">弱修复</span></p>
+            <p>GLD +0.16%，但 7 个交易日 -3.40%、30 日 -7.59%，反弹质量不足。</p>
           </div>
         </div>
       </section>
@@ -137,13 +137,38 @@
         <div class="table-scroll">
           <table>
             <thead>
-              <tr><th>昨日判断</th><th>今日验证</th><th>结果</th><th>是否修正</th></tr>
+              <tr>
+                <th>上一版判断</th>
+                <th>本轮数据验证</th>
+                <th>结果</th>
+                <th>修正</th>
+              </tr>
             </thead>
             <tbody>
-              <tr><td>加密短期偏空</td><td>ETF 流仍弱，宏观利率压力未解除。</td><td><span class="tag tag-risk">已验证</span></td><td>维持偏空/弱修复。</td></tr>
-              <tr><td>A 股短期防守</td><td>6/9 早盘修复，但中国 CPI/PPI 偏弱说明基本面仍待确认。</td><td><span class="tag tag-warn">部分验证</span></td><td>修正为“防守中观察修复”。</td></tr>
-              <tr><td>美股科技受利率压制</td><td>强非农后的利率压力仍未消除，CPI 前反弹置信度不足。</td><td><span class="tag tag-risk">已验证</span></td><td>CPI 前不追科技急反弹。</td></tr>
-              <tr><td>黄金短期偏弱</td><td>美元和收益率仍压制金价，地缘和央行购金仅提供中长期托底。</td><td><span class="tag tag-risk">已验证</span></td><td>短线等待 CPI 确认。</td></tr>
+              <tr>
+                <td>加密短期偏空，不追反弹。</td>
+                <td>BTC 低于 1h/4h VWAP，ETH 接近前日价，SOL funding 为负；Fear & Greed 为 10，极度恐惧。</td>
+                <td><span class="tag tag-risk">正确</span></td>
+                <td>维持偏空/弱修复。</td>
+              </tr>
+              <tr>
+                <td>美股 CPI 前不追科技。</td>
+                <td>QQQ 和 SMH 盘前修复，但 7 日趋势仍偏弱，TLT 30 日 -1.92%、UUP 30 日 +2.11%。</td>
+                <td><span class="tag tag-warn">部分正确</span></td>
+                <td>短线从“偏空”修正为“盘前修复但未确认”。</td>
+              </tr>
+              <tr>
+                <td>黄金短线偏弱。</td>
+                <td>GLD 盘前 +0.16%，但 7 日 -3.40%、30 日 -7.59%。</td>
+                <td><span class="tag tag-risk">正确</span></td>
+                <td>维持短弱，中长期支撑暂未破坏。</td>
+              </tr>
+              <tr>
+                <td>A 股防守，等待政策和信用确认。</td>
+                <td>本轮东方财富接口刷新失败；沿用前次已验证的上证约 4004.46、成交额约 1.07 万亿口径。</td>
+                <td><span class="tag tag-neutral">待验证</span></td>
+                <td>不升级结论，保持防守观察。</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -154,43 +179,49 @@
         <div class="table-scroll">
           <table>
             <thead>
-              <tr><th>日期</th><th>事件</th><th>已知信息</th><th>市场预期 / 可能结果</th><th>我的结论</th></tr>
+              <tr>
+                <th>日期</th>
+                <th>事件</th>
+                <th>已知信息</th>
+                <th>可能结果</th>
+                <th>我的结论</th>
+              </tr>
             </thead>
             <tbody>
               <tr>
-                <td>6/9</td>
-                <td>中国 CPI/PPI</td>
-                <td>媒体和统计局口径显示：5 月 CPI 同比偏弱，PPI 同比继续承压，工业品价格压力仍在。</td>
-                <td>数据弱：政策预期升温但基本面弱；数据强：顺周期修复但宽松预期下降。</td>
-                <td>A 股不能只看盘中修复，仍需信用、成交额和政策确认。</td>
+                <td>6/10 20:30 BJT</td>
+                <td>美国 5 月 CPI</td>
+                <td>BLS 日历显示 CPI 于 6/10 08:30 ET 发布。</td>
+                <td>高于预期：美元/收益率上行，压加密、QQQ/SMH、GLD；低于预期：风险资产修复。</td>
+                <td>强非农后，CPI 前不追风险资产。低 CPI 才能把“弱反弹”升级为“可交易修复”。</td>
               </tr>
               <tr>
-                <td>6/10</td>
-                <td>美国 CPI</td>
-                <td>BLS 日程确认 5 月 CPI 于美东 6/10 08:30 发布。</td>
-                <td>高于预期：美债/美元上行，压加密、美股科技、黄金；低于预期：风险资产反弹。</td>
-                <td>强非农后，市场对热 CPI 更敏感，事前仍偏防守。</td>
-              </tr>
-              <tr>
-                <td>6/11</td>
-                <td>美国 PPI</td>
-                <td>BLS 日程确认 5 月 PPI 于美东 6/11 08:30 发布。</td>
-                <td>高于预期强化通胀粘性；低于预期缓和 CPI 后压力。</td>
-                <td>PPI 是 CPI 后第二确认点，不单独提前押方向。</td>
+                <td>6/11 20:30 BJT</td>
+                <td>美国 5 月 PPI</td>
+                <td>BLS 日历显示 PPI 于 6/11 08:30 ET 发布。</td>
+                <td>高 PPI 会强化通胀粘性；低 PPI 会缓和 CPI 后的二次压力。</td>
+                <td>PPI 是 CPI 后的确认项，不单独抢方向。</td>
               </tr>
               <tr>
                 <td>6/16-17</td>
                 <td>FOMC + SEP</td>
-                <td>Fed 日历确认会议并发布经济预测。</td>
-                <td>偏鹰：风险资产承压；偏鸽：风险资产和黄金修复。</td>
-                <td>强非农使 Fed 更难快速转鸽。</td>
+                <td>Fed 会议带经济预测和点阵图。</td>
+                <td>偏鹰：估值继续承压；偏鸽：美股成长和加密延续修复。</td>
+                <td>当前资金更怕“高利率更久”，SEP 是半月级方向锚。</td>
               </tr>
               <tr>
                 <td>6/25</td>
                 <td>PCE / GDP</td>
-                <td>BEA 日程显示 5 月 PCE 和 Q1 GDP 三读在 6/25 发布。</td>
-                <td>PCE 高继续压降息交易；PCE 低才缓和。</td>
-                <td>半月级方向仍看通胀链条。</td>
+                <td>BEA 日程显示 PCE 和 GDP 三读在 6/25 发布。</td>
+                <td>PCE 高：降息交易继续退潮；PCE 低：风险偏好改善。</td>
+                <td>若 CPI/PPI/PCE 连续降温，30 日趋势才有机会转中性偏多。</td>
+              </tr>
+              <tr>
+                <td>本周窗口</td>
+                <td>中国通胀、信用、政策窗口</td>
+                <td>A 股需要社融、信用、财政/产业政策共同确认。</td>
+                <td>数据弱但政策强：低位轮动；数据和政策同强：顺周期和科技修复。</td>
+                <td>A 股不是只看情绪，必须等成交额、信用和政策共振。</td>
               </tr>
             </tbody>
           </table>
@@ -198,163 +229,148 @@
       </section>
 
       <section class="section">
-        <h2>跨资产仪表盘</h2>
+        <h2>今日核心资产</h2>
         <div class="table-scroll">
           <table>
             <thead>
-              <tr><th>变量</th><th>当前状态</th><th>7日趋势</th><th>30日趋势</th><th>资产影响</th><th>信号判断</th></tr>
+              <tr>
+                <th>资产</th>
+                <th>今日状态</th>
+                <th>7日回顾</th>
+                <th>30日回顾</th>
+                <th>未来1日</th>
+                <th>未来7日</th>
+                <th>未来30日</th>
+                <th>未来半年</th>
+              </tr>
             </thead>
             <tbody>
-              <tr><td>美债收益率</td><td>强非农后仍是核心压力源</td><td>偏上行</td><td>高位震荡</td><td>压制 Nasdaq、BTC、黄金</td><td><span class="tag tag-risk">利空风险资产</span></td></tr>
-              <tr><td>美元指数</td><td>CPI 前仍有支撑</td><td>偏强</td><td>高位震荡</td><td>压黄金、压非美风险偏好</td><td><span class="tag tag-warn">偏压制</span></td></tr>
-              <tr><td>VIX / 波动率</td><td>美股大跌后风险溢价上升</td><td>抬升</td><td>仍可控</td><td>高 beta 资产承压</td><td><span class="tag tag-warn">谨慎</span></td></tr>
-              <tr><td>BTC / ETH</td><td>弱修复，ETF 流未确认</td><td>偏弱</td><td>偏弱</td><td>山寨更脆弱</td><td><span class="tag tag-risk">偏空</span></td></tr>
-              <tr><td>美股科技</td><td>利率敏感，CPI 前不追</td><td>回撤</td><td>趋势未完全破坏</td><td>影响全球科技链和 A 股成长</td><td><span class="tag tag-warn">等待确认</span></td></tr>
-              <tr><td>A 股</td><td>早盘修复但基本面仍弱</td><td>弱修复</td><td>震荡偏弱</td><td>政策预期支撑，盈利需确认</td><td><span class="tag tag-warn">防守中观察</span></td></tr>
-              <tr><td>黄金</td><td>短线被美元和实际利率压制</td><td>偏弱</td><td>高位震荡</td><td>CPI 低才更容易反弹</td><td><span class="tag tag-warn">短线谨慎</span></td></tr>
-              <tr><td>原油</td><td>若上行会加重通胀担忧</td><td>事件驱动</td><td>地缘敏感</td><td>影响 CPI/PPI 和 Fed 路径</td><td><span class="tag tag-neutral">观察项</span></td></tr>
+              <tr>
+                <td>加密</td>
+                <td>BTC 62,636；ETH 1,669；SOL 66.15。BTC 日内低于 1h/4h VWAP，Fear & Greed 10。</td>
+                <td><span class="tag tag-risk">弱修复</span> BTC 日线从 60,861 修到 62,631，但仍低于 4h VWAP。</td>
+                <td>BTC 约从 81,703 降至 62,631，30 日结构偏弱。</td>
+                <td>偏空/不追反弹</td>
+                <td>CPI 低才可转震荡修复</td>
+                <td>需要 BTC 站回 64,200-65,000 且 funding/OI 健康</td>
+                <td>中性偏多潜力仍在，但取决于流动性和 ETF/机构资金回流</td>
+              </tr>
+              <tr>
+                <td>A 股</td>
+                <td>本轮实时刷新失败；前次接口验证上证约 4004.46，成交额约 1.07 万亿。</td>
+                <td><span class="tag tag-neutral">待刷新</span></td>
+                <td>政策预期支撑，但基本面仍需信用和盈利确认。</td>
+                <td>防守观察</td>
+                <td>看政策和成交额</td>
+                <td>若信用改善，可从防守切轮动</td>
+                <td>中性偏多，但不是无条件进攻</td>
+              </tr>
+              <tr>
+                <td>美股</td>
+                <td>SPY 742.52 +0.45%；QQQ 721.60 +0.77%；SMH 609.61 +1.91%。</td>
+                <td>SPY -2.55%；QQQ -3.59%；SMH -1.59%。</td>
+                <td>SPY +3.36%；QQQ +7.80%；SMH +18.15%，长线 AI 仍强。</td>
+                <td>盘前修复但等 CPI</td>
+                <td>CPI 决定反弹质量</td>
+                <td>高波动，科技估值看 TLT/UUP</td>
+                <td>AI 主线仍强，但利率高位会压估值扩张</td>
+              </tr>
+              <tr>
+                <td>黄金</td>
+                <td>GLD 397.92 +0.16%。</td>
+                <td>GLD -3.40%。</td>
+                <td>GLD -7.59%，短线趋势偏弱。</td>
+                <td>中性偏弱</td>
+                <td>看 CPI 后美元和实际利率</td>
+                <td>若美元回落可修复，否则继续震荡</td>
+                <td>央行购金和地缘支撑仍在，中长期不悲观</td>
+              </tr>
             </tbody>
           </table>
         </div>
-        <p class="note">跨资产结论：当前信号不是全面 risk-on。A 股和亚太修复更像跌后修复；真正转向需要美债收益率回落、美元走弱、ETF 流改善和 CPI 低于预期共同确认。</p>
+      </section>
+      <section class="section">
+        <h2>加密专项：Hyperliquid 实时数据</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h3>BTC</h3>
+            <p>mark 62,636，mid 62,635.5，较前日价 63,479 低约 1.33%。funding +0.0010%/小时，OI 31,438 BTC，24h 名义成交约 26.96 亿美元。</p>
+            <p><strong>结论：</strong><span class="tag tag-risk">弱修复，未反转</span>。低于 1h VWAP 63,219 和 4h VWAP 64,200，站回 64,200-65,000 前不追。</p>
+          </div>
+          <div class="card">
+            <h3>ETH / SOL</h3>
+            <p>ETH mark 1,669.3，funding +0.0003%/小时，OI 690,979 ETH；SOL mark 66.15，funding -0.0012%/小时，OI 359.6 万 SOL。</p>
+            <p><strong>结论：</strong>ETH 中性偏弱，SOL 更弱。SOL funding 为负说明多头意愿不足或空头更积极。</p>
+          </div>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>指标</th><th>BTC</th><th>ETH</th><th>SOL</th><th>结论</th></tr></thead>
+            <tbody>
+              <tr><td>当前 mark</td><td>62,636</td><td>1,669.3</td><td>66.15</td><td>三者均不是强趋势突破。</td></tr>
+              <tr><td>1h VWAP</td><td>63,219</td><td>1,679.2</td><td>66.46</td><td>均低于 1h VWAP，短线卖压仍在。</td></tr>
+              <tr><td>4h VWAP</td><td>64,200</td><td>1,731.5</td><td>68.49</td><td>4h 结构偏弱，反弹尚未站稳。</td></tr>
+              <tr><td>Funding</td><td>+0.0010%</td><td>+0.0003%</td><td>-0.0012%</td><td>BTC/ETH 杠杆不拥挤，SOL 偏空。</td></tr>
+              <tr><td>盘口 spread</td><td>约 1 美元</td><td>约 0.1 美元</td><td>约 0.001 美元</td><td>流动性可用，盘口不是主要风险。</td></tr>
+              <tr><td>情绪</td><td colspan="3">Alternative.me Fear & Greed = 10，Extreme Fear</td><td>风险偏好很差，反弹容易反复。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="note"><strong>操作含义：</strong>“弱修复”不是做多信号，而是下跌后暂时止跌。BTC 只有站回 64,200-65,000，且 CPI 不热、ETF 流改善，才把 7 日判断从偏空改为中性。</p>
       </section>
 
       <section class="section">
-        <h2>今日核心资产矩阵</h2>
+        <h2>美股与黄金专项：Nasdaq ETF 代理数据</h2>
         <div class="table-scroll">
           <table>
-            <thead>
-              <tr><th>资产</th><th>今日状态</th><th>7日回顾</th><th>30日回顾</th><th>未来1日</th><th>未来7日</th><th>未来30日</th><th>未来半年</th><th>关键变量</th><th>操作含义</th><th>失效条件</th></tr>
-            </thead>
+            <thead><tr><th>类别</th><th>标的</th><th>最新状态</th><th>7个交易日</th><th>30日</th><th>我的结论</th></tr></thead>
             <tbody>
-              <tr><td>加密</td><td>BTC 弱修复，ETF 流未确认</td><td>偏弱</td><td>偏弱</td><td>偏空/弱修复</td><td>偏空震荡</td><td>CPI 低 + ETF 回流才转中性</td><td>中性偏多，但需流动性修复</td><td>ETF 流、资金费率、OI、CPI</td><td>不追反弹</td><td>BTC 站回关键区间 + ETF 连续流入</td></tr>
-              <tr><td>A 股</td><td>早盘修复，但 CPI/PPI 偏弱</td><td>弱修复</td><td>震荡偏弱</td><td>震荡修复</td><td>防守中观察修复</td><td>看信用、成交额和政策</td><td>中性偏多，盈利需确认</td><td>社融、成交额、政策、人民币</td><td>不追高科技，观察高股息和政策线</td><td>成交额放大 + 信用改善 + 科技放量</td></tr>
-              <tr><td>美股</td><td>科技回撤后等待 CPI</td><td>科技领跌</td><td>趋势未完全破坏</td><td>谨慎观望</td><td>CPI 决定反弹质量</td><td>高波动</td><td>AI 基本面支撑但估值受利率压制</td><td>CPI、10Y、美元、AI 权重股</td><td>CPI 前不追 Nasdaq/半导体</td><td>CPI 低于预期 + 收益率回落</td></tr>
-              <tr><td>黄金</td><td>短线受压，高位震荡</td><td>偏弱</td><td>高位震荡</td><td>偏空/等待确认</td><td>看 CPI/PPI</td><td>中性</td><td>央行购金和地缘仍支撑</td><td>实际利率、美元、ETF、地缘</td><td>不急抄底</td><td>美元回落 + 实际利率下行</td></tr>
+              <tr><td>大盘</td><td>SPY</td><td>742.52，+0.45%</td><td>-2.55%</td><td>+3.36%</td><td>盘前修复，但近期回撤未完全修复。</td></tr>
+              <tr><td>成长</td><td>QQQ</td><td>721.60，+0.77%</td><td>-3.59%</td><td>+7.80%</td><td>长期强，短线仍利率敏感。</td></tr>
+              <tr><td>半导体</td><td>SMH</td><td>609.61，+1.91%</td><td>-1.59%</td><td>+18.15%</td><td>AI 主线最强，但 CPI 前不追急拉。</td></tr>
+              <tr><td>小盘</td><td>IWM</td><td>286.40，+0.81%</td><td>-1.69%</td><td>+2.51%</td><td>融资成本敏感，仍不是主攻方向。</td></tr>
+              <tr><td>长债</td><td>TLT</td><td>84.83，+0.25%</td><td>-0.99%</td><td>-1.92%</td><td>利率压力未彻底解除。</td></tr>
+              <tr><td>美元</td><td>UUP</td><td>28.03，持平</td><td>+0.97%</td><td>+2.11%</td><td>美元偏强，压黄金和加密。</td></tr>
+              <tr><td>信用</td><td>HYG / LQD</td><td>HYG 持平，LQD +0.07%</td><td>HYG -0.38%，LQD -0.80%</td><td>HYG -1.20%，LQD -1.13%</td><td>信用未明显恶化，但也没给强 risk-on。</td></tr>
+              <tr><td>黄金</td><td>GLD</td><td>397.92，+0.16%</td><td>-3.40%</td><td>-7.59%</td><td>短线弱修复，中长期支撑仍看央行购金/地缘。</td></tr>
             </tbody>
           </table>
         </div>
+        <p class="note"><strong>操作含义：</strong>美股“盘前修复”是上涨，但不是趋势反转。CPI 低于预期 + TLT 企稳 + UUP 走弱，才是 QQQ/SMH 反弹质量提升的确认组合。</p>
       </section>
 
       <section class="section">
         <h2>A 股专项</h2>
         <div class="grid-2">
           <div class="card">
-            <h3>指数与资金结构</h3>
-            <p>6/9 早盘有修复，但 5 月 CPI/PPI 偏弱意味着基本面仍需要政策和信用数据确认。成交额、北向资金、融资余额是下一步关键下钻项。</p>
-            <p><strong>结论：</strong><span class="tag tag-warn">防守中观察修复</span></p>
+            <h3>本轮数据状态</h3>
+            <p>东方财富接口此前已实测可返回上证实时点位、成交额和历史 K 线；本轮刷新返回空连接，因此本版 A 股数据置信度低于加密和美股。</p>
           </div>
           <div class="card">
-            <h3>板块强弱</h3>
-            <p>科技/半导体/AI 反弹不能直接视为趋势反转；红利/高股息仍有降低组合波动的价值；地产链、消费、顺周期要等信用和需求数据。</p>
+            <h3>结论不升级</h3>
+            <p>在实时成交额、北向/资金流、行业涨跌未稳定刷新前，A 股仍按“政策预期支撑 + 基本面待确认”处理。</p>
           </div>
         </div>
         <div class="table-scroll">
           <table>
             <thead><tr><th>板块</th><th>当前判断</th><th>背景原因</th><th>操作含义</th><th>失效条件</th></tr></thead>
             <tbody>
-              <tr><td>科技 / 半导体 / AI</td><td>弱修复</td><td>受美股科技和国内风险偏好影响</td><td>不追高，等放量确认</td><td>连续放量上涨且政策催化增强</td></tr>
-              <tr><td>红利 / 高股息</td><td>相对防御</td><td>基本面弱时资金偏好低波动资产</td><td>作为降低波动配置</td><td>风险偏好明显修复、成长板块放量</td></tr>
-              <tr><td>金融 / 券商</td><td>弹性待确认</td><td>需要成交额和政策催化</td><td>观察不追涨</td><td>成交额持续放大</td></tr>
-              <tr><td>地产链 / 消费</td><td>基本面待验证</td><td>CPI/PPI 偏弱说明需求修复不足</td><td>等政策落地和销售数据</td><td>销售、社融和消费数据改善</td></tr>
-              <tr><td>新能源 / 顺周期</td><td>中性偏弱</td><td>工业价格和产能压力仍在</td><td>等价格和库存改善</td><td>PPI 和行业价格回升</td></tr>
+              <tr><td>科技/半导体/AI</td><td>观察修复</td><td>受美股 SMH 和国内政策预期影响</td><td>只做确认后参与，不追高</td><td>成交额放大 + 板块持续领涨</td></tr>
+              <tr><td>红利/高股息</td><td>相对防御</td><td>基本面不明时资金偏好低波动</td><td>用于降低组合波动，不等于一定上涨</td><td>风险偏好全面修复</td></tr>
+              <tr><td>金融/券商</td><td>待确认</td><td>需要成交额和政策催化</td><td>观察，不抢</td><td>市场成交额持续放大</td></tr>
+              <tr><td>地产链/消费</td><td>基本面待验证</td><td>需求和信用尚需数据确认</td><td>等政策落地和销售/社融改善</td><td>信用数据超预期</td></tr>
             </tbody>
           </table>
         </div>
       </section>
 
       <section class="section">
-        <h2>美股专项</h2>
-        <div class="grid-3">
-          <div class="card"><h3>MACRO</h3><p>强非农后，市场重新定价高利率更久。CPI 是本周最重要事件。</p></div>
-          <div class="card"><h3>FED POLICY</h3><p>FOMC 前，Fed 很难在就业强、通胀未确认降温的情况下快速转鸽。</p></div>
-          <div class="card"><h3>SECTOR ROTATION</h3><p>科技/AI/半导体利率敏感，小盘股对融资成本更敏感，防御板块更适合降波动。</p></div>
-        </div>
-        <div class="table-scroll">
-          <table>
-            <thead><tr><th>板块</th><th>判断</th><th>原因</th><th>操作含义</th></tr></thead>
-            <tbody>
-              <tr><td>科技 / AI / 半导体</td><td>谨慎</td><td>盈利长期逻辑未坏，但估值受利率压制</td><td>CPI 前不追急反弹</td></tr>
-              <tr><td>金融</td><td>中性</td><td>经济韧性利好信贷，但高利率带来信用风险</td><td>看收益率曲线和信用利差</td></tr>
-              <tr><td>能源</td><td>事件驱动</td><td>油价和地缘影响通胀链</td><td>作为通胀风险观察项</td></tr>
-              <tr><td>消费</td><td>分化</td><td>就业强支撑收入，通胀压实际购买力</td><td>看 CPI 和零售销售</td></tr>
-              <tr><td>小盘股</td><td>偏弱</td><td>融资成本敏感</td><td>降息预期未修复前不占优</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <section class="section">
-        <h2>加密专项</h2>
+        <h2>持续重要事项</h2>
         <div class="grid-2">
-          <div class="card">
-            <h3>ETF 流与杠杆</h3>
-            <p>BTC/ETH ETF 资金流未持续转正，说明机构买盘尚未确认。此前高 OI 和大额清算显示杠杆仍在出清阶段。</p>
-            <p><strong>影响：</strong><span class="tag tag-risk">利空 / 弱修复</span></p>
-          </div>
-          <div class="card">
-            <h3>宏观和链上</h3>
-            <p>强非农、CPI 前美债和美元压力对 BTC/ETH 不友好。稳定币供给、资金费率和 BTC dominance 需要继续作为日常下钻项。</p>
-          </div>
-        </div>
-        <div class="table-scroll">
-          <table>
-            <thead><tr><th>板块</th><th>判断</th><th>背景原因</th><th>操作含义</th></tr></thead>
-            <tbody>
-              <tr><td>BTC</td><td>弱修复</td><td>ETF 流未确认，宏观压制仍在</td><td>不追反弹，等关键区间站稳</td></tr>
-              <tr><td>ETH</td><td>弱于 BTC</td><td>缺少独立强催化</td><td>等待 ETF/生态收入/链上活跃确认</td></tr>
-              <tr><td>DeFi / L1</td><td>高 beta</td><td>风险偏好不稳时弹性向下</td><td>降低暴露</td></tr>
-              <tr><td>稳定币</td><td>观察项</td><td>供给扩张才代表链上流动性改善</td><td>作为转中性确认指标</td></tr>
-              <tr><td>Meme / 主题币</td><td>高风险</td><td>风险偏好差时最脆弱</td><td>不作为防守资产</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <section class="section">
-        <h2>黄金专项</h2>
-        <div class="grid-3">
-          <div class="card"><h3>利率驱动</h3><p>实际利率和名义收益率仍是短线压制。CPI 低于预期才更容易释放反弹。</p></div>
-          <div class="card"><h3>美元驱动</h3><p>美元走强对黄金不利；美元回落是黄金短线修复的必要条件之一。</p></div>
-          <div class="card"><h3>资金与避险</h3><p>央行购金、地缘风险和财政可持续性是中长期托底，但短线不一定抵消利率压力。</p></div>
-        </div>
-        <p class="note"><strong>综合判断：</strong>黄金短线偏弱/等待确认；中长期配置逻辑未坏。操作含义是不急抄底，等 CPI、美元和实际利率给方向。</p>
-      </section>
-
-      <section class="section">
-        <h2>重要新闻影响解释</h2>
-        <div class="table-scroll">
-          <table>
-            <thead><tr><th>新闻</th><th>What happened</th><th>Why it matters</th><th>Asset impact</th><th>Direction</th><th>Confidence</th><th>What changes the view</th></tr></thead>
-            <tbody>
-              <tr><td>美国强非农</td><td>5 月非农新增 17.2 万，失业率 4.3%。</td><td>削弱快速降息逻辑，推高利率压力。</td><td>美股科技、加密、黄金</td><td><span class="tag tag-risk">利空</span></td><td>高</td><td>CPI 明显低于预期。</td></tr>
-              <tr><td>美国 CPI 将发布</td><td>BLS 确认 6/10 发布 5 月 CPI。</td><td>决定强非农后的利率重定价是否继续。</td><td>全市场</td><td><span class="tag tag-warn">双向风险</span></td><td>高</td><td>实际数据与预期差。</td></tr>
-              <tr><td>中国 CPI/PPI 偏弱</td><td>5 月通胀和工业品价格偏弱。</td><td>提高宽松预期，但也说明需求和工业利润压力。</td><td>A 股、人民币、港股</td><td><span class="tag tag-warn">混合</span></td><td>中高</td><td>社融、成交额、政策落地。</td></tr>
-              <tr><td>ETF 流未确认</td><td>BTC/ETH ETF 资金流未持续转正。</td><td>机构资金未回流，反弹质量不足。</td><td>BTC、ETH、山寨</td><td><span class="tag tag-risk">利空</span></td><td>中</td><td>连续 2-3 日净流入。</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <section class="section">
-        <h2>机会与风险提醒</h2>
-        <div class="grid-2">
-          <div class="card">
-            <h3>可能机会窗口</h3>
-            <ul>
-              <li>美国 CPI 低于预期：BTC、美股科技、黄金可能出现修复。</li>
-              <li>A 股信用数据和政策同时改善：从防守轮动转向政策进攻。</li>
-              <li>BTC ETF 连续净流入：加密从偏空切中性。</li>
-            </ul>
-          </div>
-          <div class="card">
-            <h3>最大下行风险</h3>
-            <ul>
-              <li>CPI/PPI 继续偏热，利率和美元继续上行。</li>
-              <li>加密 ETF 流出扩大，杠杆再次清算。</li>
-              <li>A 股政策预期升温但成交和信用不配合。</li>
-            </ul>
-          </div>
+          <div class="card"><h3>美国通胀链</h3><p>CPI、PPI、PCE 是未来两周全市场定价核心。CPI 热则防守继续；CPI 冷才有修复窗口。</p></div>
+          <div class="card"><h3>Fed 利率路径</h3><p>强非农使 Fed 更难转鸽。FOMC + SEP 将决定半年维度风险资产估值空间。</p></div>
+          <div class="card"><h3>加密衍生品结构</h3><p>BTC/ETH/SOL 的 funding、OI、VWAP 和盘口已能每日刷新；下一步补 liquidation heatmap、long-short ratio、ETF flow。</p></div>
+          <div class="card"><h3>A 股政策与信用</h3><p>A 股要从防守转进攻，需要政策、信用、成交额和盈利共同确认。</p></div>
         </div>
       </section>
 
@@ -375,19 +391,10 @@
       </section>
 
       <section class="section">
-        <h2>持续重要事项</h2>
-        <div class="grid-2">
-          <div class="card"><h3>美国通胀链</h3><p>CPI、PPI、PCE 是未来两周全市场定价核心。CPI 热则防守继续；CPI 冷才有修复窗口。</p></div>
-          <div class="card"><h3>Fed 利率路径</h3><p>强非农使 Fed 更难转鸽。FOMC + SEP 将决定半年维度风险资产估值空间。</p></div>
-          <div class="card"><h3>BTC / ETH ETF 流</h3><p>机构资金未持续回流前，加密反弹质量不足，山寨更脆。</p></div>
-          <div class="card"><h3>A 股政策与信用</h3><p>中国 CPI/PPI 偏弱提高宽松预期，但也说明基本面仍弱，需要社融、成交额和政策落地确认。</p></div>
-        </div>
-      </section>
-
-      <section class="section">
         <h2>来源和数据缺口</h2>
-        <p>已确认来源包括 BLS 非农与 CPI/PPI 日程、Fed FOMC 日历、BEA 日程、国家统计局/媒体转述的中国 CPI/PPI 信息、AP/Reuters/Investing 市场更新、CryptoETF.today、CoinDesk 等。</p>
-        <p>数据缺口：当前尚未接入稳定行情 API，因此部分盘中价格、资金费率、OI、北向资金、成交额和 ETF 流采用可访问新闻和数据页面交叉确认，置信度低于正式行情源。下一步应接入稳定行情、ETF flow、Coinglass、A 股成交/资金流 API。</p>
+        <p>已确认数据源：Hyperliquid public API、Alternative.me Fear & Greed、Ethereum public RPC、Nasdaq ETF quote/historical API、BLS 日程、Fed FOMC 日历、BEA 日程。</p>
+        <p>已解决缺口：加密永续价格/K线/funding/OI/盘口、ETH gas、市场情绪代理、美股指数/板块/美元/长债/信用/黄金 ETF 代理。</p>
+        <p>仍待补缺口：A 股本轮刷新失败；加密 liquidation heatmap、long-short ratio、ETF flow、链上/社交情绪仍需 Coinglass/Coinalyze/Farside/Santiment/Alva 等源继续接入。</p>
         <p class="sources">
           参考链接：
           <a href="https://www.bls.gov/news.release/empsit.nr0.htm">BLS 非农</a> /
