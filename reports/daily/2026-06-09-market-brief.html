@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>金融市场跟踪日报</title>
+    <title>2026-06-09 金融市场跟踪日报</title>
     <style>
       :root {
         --bg: #f6f7f9;
@@ -13,270 +13,65 @@
         --line: #d9dee7;
         --soft: #eef2f7;
         --accent: #0f766e;
-        --accent-2: #1d4ed8;
         --risk: #b42318;
         --warn: #b54708;
         --good: #067647;
         --neutral: #475467;
-        --gold: #a16207;
       }
-
-      * {
-        box-sizing: border-box;
-      }
-
+      * { box-sizing: border-box; }
       body {
         margin: 0;
         background: var(--bg);
         color: var(--ink);
-        font-family:
-          -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
-          "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
         line-height: 1.55;
       }
-
-      .page {
-        max-width: 1180px;
-        margin: 0 auto;
-        padding: 32px 24px 56px;
-      }
-
-      .report-header {
-        border-top: 6px solid var(--accent);
+      .page { max-width: 1220px; margin: 0 auto; padding: 30px 22px 56px; }
+      .report-header, .section {
         background: var(--paper);
-        padding: 28px 32px;
-        box-shadow: 0 1px 2px rgba(16, 24, 40, 0.08);
-      }
-
-      .eyebrow {
-        margin: 0 0 8px;
-        color: var(--accent);
-        font-size: 13px;
-        font-weight: 700;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-      }
-
-      h1 {
-        margin: 0;
-        font-size: 34px;
-        line-height: 1.18;
-        letter-spacing: 0;
-      }
-
-      .meta {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-top: 16px;
-        color: var(--muted);
-        font-size: 14px;
-      }
-
-      .pill {
-        display: inline-flex;
-        align-items: center;
-        min-height: 28px;
-        padding: 4px 10px;
-        border: 1px solid var(--line);
-        background: #fafbfc;
-        border-radius: 6px;
-        font-weight: 600;
-      }
-
-      .section {
-        margin-top: 20px;
-        background: var(--paper);
-        padding: 24px 28px;
         box-shadow: 0 1px 2px rgba(16, 24, 40, 0.06);
       }
-
-      h2 {
-        margin: 0 0 16px;
-        font-size: 22px;
-        line-height: 1.25;
-        letter-spacing: 0;
-      }
-
-      h3 {
-        margin: 22px 0 10px;
-        font-size: 17px;
-        line-height: 1.3;
-        letter-spacing: 0;
-      }
-
-      .bluf {
-        display: grid;
-        grid-template-columns: 1.2fr 0.8fr;
-        gap: 22px;
-      }
-
-      .headline-call {
-        border-left: 5px solid var(--accent);
-        background: #f0fdfa;
-        padding: 18px 20px;
-        font-size: 19px;
-        font-weight: 750;
-      }
-
-      .watch-box {
-        border: 1px solid var(--line);
-        background: #fafbfc;
-        padding: 16px;
-      }
-
-      .watch-box ul,
-      .card ul {
-        margin: 8px 0 0;
-        padding-left: 20px;
-      }
-
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 14px;
-      }
-
-      th {
-        background: var(--soft);
-        color: #344054;
-        font-weight: 750;
-        text-align: left;
-      }
-
-      th,
-      td {
-        border-bottom: 1px solid var(--line);
-        padding: 11px 10px;
-        vertical-align: top;
-      }
-
-      tr:last-child td {
-        border-bottom: 0;
-      }
-
-      .tag {
-        display: inline-block;
-        padding: 2px 7px;
-        border-radius: 5px;
-        font-size: 12px;
-        font-weight: 750;
-        white-space: nowrap;
-      }
-
-      .tag-risk {
-        color: var(--risk);
-        background: #fee4e2;
-      }
-
-      .tag-warn {
-        color: var(--warn);
-        background: #fef0c7;
-      }
-
-      .tag-good {
-        color: var(--good);
-        background: #dcfae6;
-      }
-
-      .tag-neutral {
-        color: var(--neutral);
-        background: #eaecf0;
-      }
-
-      .grid-2 {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 16px;
-      }
-
-      .grid-4 {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 14px;
-      }
-
-      .card {
-        border: 1px solid var(--line);
-        padding: 16px;
-        background: #fff;
-      }
-
-      .card h3 {
-        margin-top: 0;
-      }
-
-      .metric {
-        color: var(--muted);
-        font-size: 13px;
-        font-weight: 650;
-      }
-
-      .verdict {
-        margin: 10px 0;
-        font-size: 18px;
-        font-weight: 800;
-      }
-
-      .muted {
-        color: var(--muted);
-      }
-
-      .sources {
-        color: var(--muted);
-        font-size: 13px;
-      }
-
-      .divider {
-        height: 1px;
-        background: var(--line);
-        margin: 18px 0;
-      }
-
+      .report-header { border-top: 6px solid var(--accent); padding: 28px 32px; }
+      .section { margin-top: 18px; padding: 24px 28px; }
+      .eyebrow { margin: 0 0 8px; color: var(--accent); font-size: 13px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+      h1 { margin: 0; font-size: 34px; line-height: 1.2; letter-spacing: 0; }
+      h2 { margin: 0 0 16px; font-size: 22px; letter-spacing: 0; }
+      h3 { margin: 18px 0 10px; font-size: 17px; letter-spacing: 0; }
+      p { margin: 0 0 10px; }
+      ul { margin: 8px 0 0; padding-left: 20px; }
+      .meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; color: var(--muted); font-size: 14px; }
+      .pill { display: inline-flex; align-items: center; min-height: 28px; padding: 4px 10px; border: 1px solid var(--line); background: #fafbfc; border-radius: 6px; font-weight: 700; }
+      .bluf { display: grid; grid-template-columns: 1.2fr .8fr; gap: 18px; }
+      .headline-call { border-left: 5px solid var(--accent); background: #f0fdfa; padding: 18px 20px; font-size: 19px; font-weight: 800; }
+      .watch-box { border: 1px solid var(--line); background: #fafbfc; padding: 16px; }
+      .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+      .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+      .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+      .card { border: 1px solid var(--line); background: #fff; padding: 16px; }
+      .card h3 { margin-top: 0; }
+      .metric { color: var(--muted); font-size: 13px; font-weight: 750; }
+      .verdict { margin: 8px 0 10px; font-size: 18px; font-weight: 850; }
+      .muted, .sources { color: var(--muted); }
+      .sources { font-size: 13px; }
+      .table-scroll { overflow-x: auto; }
+      table { width: 100%; border-collapse: collapse; font-size: 14px; }
+      th { background: var(--soft); color: #344054; font-weight: 800; text-align: left; }
+      th, td { border-bottom: 1px solid var(--line); padding: 10px 9px; vertical-align: top; }
+      tr:last-child td { border-bottom: 0; }
+      .tag { display: inline-block; padding: 2px 7px; border-radius: 5px; font-size: 12px; font-weight: 800; white-space: nowrap; }
+      .tag-risk { color: var(--risk); background: #fee4e2; }
+      .tag-warn { color: var(--warn); background: #fef0c7; }
+      .tag-good { color: var(--good); background: #dcfae6; }
+      .tag-neutral { color: var(--neutral); background: #eaecf0; }
+      .note { border-left: 4px solid var(--accent); background: #f8fafc; padding: 12px 14px; }
+      a { color: #0f766e; font-weight: 700; text-decoration: none; }
+      a:hover { text-decoration: underline; }
       @media (max-width: 900px) {
-        .page {
-          padding: 18px 12px 36px;
-        }
-
-        .report-header,
-        .section {
-          padding: 20px 16px;
-        }
-
-        h1 {
-          font-size: 28px;
-        }
-
-        .bluf,
-        .grid-2,
-        .grid-4 {
-          grid-template-columns: 1fr;
-        }
-
-        .table-scroll {
-          overflow-x: auto;
-        }
-
-        table {
-          min-width: 860px;
-        }
-      }
-
-      @media print {
-        body {
-          background: #fff;
-        }
-
-        .page {
-          max-width: none;
-          padding: 0;
-        }
-
-        .section,
-        .report-header {
-          box-shadow: none;
-          break-inside: avoid;
-        }
+        .page { padding: 18px 12px 36px; }
+        .report-header, .section { padding: 20px 16px; }
+        h1 { font-size: 28px; }
+        .bluf, .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+        table { min-width: 920px; }
       }
     </style>
   </head>
@@ -286,29 +81,55 @@
         <p class="eyebrow">Daily Market Intelligence</p>
         <h1>金融市场跟踪日报</h1>
         <div class="meta">
-          <span class="pill">数据截止：2026-06-09 11:16 BJT</span>
-          <span class="pill">版本：完全体</span>
+          <span class="pill">数据截止：2026-06-09 12:42 BJT</span>
+          <span class="pill">版本：全量加法版</span>
           <span class="pill">核心资产：加密 / A股 / 美股 / 黄金</span>
         </div>
       </header>
 
       <section class="section bluf">
         <div>
-          <h2>一句话结论</h2>
+          <h2>Executive Summary</h2>
           <div class="headline-call">
-            亚太风险资产盘中有修复，但主线仍是“高利率更久 + CPI/PPI 风险”。
-            当前不是确认反转，仍以防守和等待美国 CPI/PPI 为主。
+            亚太盘中风险资产有修复，但核心矛盾仍是美国通胀数据前的利率压力。
+            当前不是确认反转，策略上仍是防守中观察修复。
           </div>
         </div>
         <aside class="watch-box">
-          <strong>重点转向提醒</strong>
+          <strong>今日 4 个核心驱动</strong>
           <ul>
-            <li>加密：仍偏空，尚未转中性。</li>
-            <li>A股：早盘情绪有修复，但仍未确认切回进攻。</li>
-            <li>美股：科技仍受利率压制。</li>
-            <li>黄金：短线偏弱，中长期逻辑未坏。</li>
+            <li>美国 CPI/PPI 即将发布，强非农后市场更怕通胀偏热。</li>
+            <li>中国 5 月 CPI/PPI 偏弱，提升政策预期，但也暴露需求和工业价格压力。</li>
+            <li>BTC/ETH ETF 资金流未持续修复，加密反弹质量仍不足。</li>
+            <li>美元和美债收益率仍是压制黄金、美股成长和加密的共同变量。</li>
           </ul>
         </aside>
+      </section>
+
+      <section class="section">
+        <h2>重点转向提醒</h2>
+        <div class="grid-4">
+          <div class="card">
+            <p class="metric">Crypto</p>
+            <p class="verdict"><span class="tag tag-risk">未转向</span></p>
+            <p>加密仍是偏空/弱修复。ETF 流和宏观利率环境没有给出趋势反转确认。</p>
+          </div>
+          <div class="card">
+            <p class="metric">A Shares</p>
+            <p class="verdict"><span class="tag tag-warn">小幅修正</span></p>
+            <p>A 股从“偏空”修正为“防守中观察修复”，但尚未切回进攻。</p>
+          </div>
+          <div class="card">
+            <p class="metric">U.S. Equities</p>
+            <p class="verdict"><span class="tag tag-warn">谨慎</span></p>
+            <p>美股科技仍受利率压制，CPI 前的反弹先按修复处理。</p>
+          </div>
+          <div class="card">
+            <p class="metric">Gold</p>
+            <p class="verdict"><span class="tag tag-warn">短弱长稳</span></p>
+            <p>黄金短线受美元和实际利率压制，中长期央行购金和地缘逻辑未坏。</p>
+          </div>
+        </div>
       </section>
 
       <section class="section">
@@ -316,38 +137,13 @@
         <div class="table-scroll">
           <table>
             <thead>
-              <tr>
-                <th>昨日判断</th>
-                <th>今日验证</th>
-                <th>结果</th>
-                <th>是否修正</th>
-              </tr>
+              <tr><th>昨日判断</th><th>今日验证</th><th>结果</th><th>是否修正</th></tr>
             </thead>
             <tbody>
-              <tr>
-                <td>加密短期偏空</td>
-                <td>ETF 流仍弱，强非农后的宏观利率压力未解除。</td>
-                <td><span class="tag tag-risk">已验证</span></td>
-                <td>维持偏空。</td>
-              </tr>
-              <tr>
-                <td>A股短期防守</td>
-                <td>6/9 早盘出现修复，但昨日科技链回撤尚未被完全扭转。</td>
-                <td><span class="tag tag-warn">部分验证</span></td>
-                <td>从“偏空”小幅修正为“防守中观察修复”。</td>
-              </tr>
-              <tr>
-                <td>美股科技受利率压制</td>
-                <td>美股上一交易日科技领跌，亚太时段美股期货修复有限。</td>
-                <td><span class="tag tag-risk">已验证</span></td>
-                <td>CPI 前不追反弹。</td>
-              </tr>
-              <tr>
-                <td>黄金短期偏弱</td>
-                <td>美元和美债收益率仍压制金价，短线反弹缺少确认。</td>
-                <td><span class="tag tag-warn">部分验证</span></td>
-                <td>中长期仍看央行购金和地缘支撑。</td>
-              </tr>
+              <tr><td>加密短期偏空</td><td>ETF 流仍弱，宏观利率压力未解除。</td><td><span class="tag tag-risk">已验证</span></td><td>维持偏空/弱修复。</td></tr>
+              <tr><td>A 股短期防守</td><td>6/9 早盘修复，但中国 CPI/PPI 偏弱说明基本面仍待确认。</td><td><span class="tag tag-warn">部分验证</span></td><td>修正为“防守中观察修复”。</td></tr>
+              <tr><td>美股科技受利率压制</td><td>强非农后的利率压力仍未消除，CPI 前反弹置信度不足。</td><td><span class="tag tag-risk">已验证</span></td><td>CPI 前不追科技急反弹。</td></tr>
+              <tr><td>黄金短期偏弱</td><td>美元和收益率仍压制金价，地缘和央行购金仅提供中长期托底。</td><td><span class="tag tag-risk">已验证</span></td><td>短线等待 CPI 确认。</td></tr>
             </tbody>
           </table>
         </div>
@@ -358,207 +154,248 @@
         <div class="table-scroll">
           <table>
             <thead>
-              <tr>
-                <th>日期</th>
-                <th>事件</th>
-                <th>已知信息</th>
-                <th>可能结果</th>
-                <th>我的结论</th>
-              </tr>
+              <tr><th>日期</th><th>事件</th><th>已知信息</th><th>市场预期 / 可能结果</th><th>我的结论</th></tr>
             </thead>
             <tbody>
               <tr>
                 <td>6/9</td>
                 <td>中国 CPI/PPI</td>
-                <td>5月 CPI 同比下降 0.1%，PPI 同比下降 3.3%，显示内需和工业品价格仍偏弱。</td>
-                <td>数据弱：政策预期上升但基本面弱；顺周期和地产链仍缺确认。</td>
-                <td>A股不能只看早盘情绪修复，仍要等信用、成交额和政策落地确认。</td>
+                <td>媒体和统计局口径显示：5 月 CPI 同比偏弱，PPI 同比继续承压，工业品价格压力仍在。</td>
+                <td>数据弱：政策预期升温但基本面弱；数据强：顺周期修复但宽松预期下降。</td>
+                <td>A 股不能只看盘中修复，仍需信用、成交额和政策确认。</td>
               </tr>
               <tr>
                 <td>6/10</td>
                 <td>美国 CPI</td>
-                <td>BLS 确认 May CPI 于 6/10 08:30 ET 发布。</td>
-                <td>高于预期：利率/美元上行，压加密、美股科技、黄金；低于预期：风险资产反弹。</td>
-                <td>当前强非农后，市场更怕 CPI 热，事前偏防守。</td>
+                <td>BLS 日程确认 5 月 CPI 于美东 6/10 08:30 发布。</td>
+                <td>高于预期：美债/美元上行，压加密、美股科技、黄金；低于预期：风险资产反弹。</td>
+                <td>强非农后，市场对热 CPI 更敏感，事前仍偏防守。</td>
               </tr>
               <tr>
                 <td>6/11</td>
                 <td>美国 PPI</td>
-                <td>BLS 确认 May PPI 于 6/11 08:30 ET 发布。</td>
-                <td>高于预期强化通胀粘性；低于预期缓和压力。</td>
-                <td>CPI 后第二确认点，不单独抢方向。</td>
+                <td>BLS 日程确认 5 月 PPI 于美东 6/11 08:30 发布。</td>
+                <td>高于预期强化通胀粘性；低于预期缓和 CPI 后压力。</td>
+                <td>PPI 是 CPI 后第二确认点，不单独提前押方向。</td>
               </tr>
               <tr>
                 <td>6/16-17</td>
                 <td>FOMC + SEP</td>
-                <td>Fed 官网确认会议且带经济预测。</td>
-                <td>偏鹰：风险资产再跌；偏鸽：修复反弹。</td>
+                <td>Fed 日历确认会议并发布经济预测。</td>
+                <td>偏鹰：风险资产承压；偏鸽：风险资产和黄金修复。</td>
                 <td>强非农使 Fed 更难快速转鸽。</td>
               </tr>
               <tr>
                 <td>6/25</td>
                 <td>PCE / GDP</td>
-                <td>BEA 确认 May PCE 和 Q1 GDP 三读 6/25 发布。</td>
+                <td>BEA 日程显示 5 月 PCE 和 Q1 GDP 三读在 6/25 发布。</td>
                 <td>PCE 高继续压降息交易；PCE 低才缓和。</td>
                 <td>半月级方向仍看通胀链条。</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <p class="sources">来源：BLS、Federal Reserve、BEA、国家统计局、AP/Reuters/Investing 市场更新等。</p>
       </section>
 
       <section class="section">
-        <h2>今日核心资产</h2>
+        <h2>跨资产仪表盘</h2>
         <div class="table-scroll">
           <table>
             <thead>
-              <tr>
-                <th>资产</th>
-                <th>今日状态</th>
-                <th>7日回顾</th>
-                <th>30日回顾</th>
-                <th>未来1日</th>
-                <th>未来7日</th>
-                <th>未来30日</th>
-                <th>未来半年</th>
-              </tr>
+              <tr><th>变量</th><th>当前状态</th><th>7日趋势</th><th>30日趋势</th><th>资产影响</th><th>信号判断</th></tr>
             </thead>
             <tbody>
-              <tr>
-                <td>加密</td>
-                <td>BTC 仍在 6万-6.2万附近弱修复，ETF 流仍是拖累。</td>
-                <td><span class="tag tag-risk">偏弱</span></td>
-                <td><span class="tag tag-risk">偏弱</span></td>
-                <td>偏空/弱修复</td>
-                <td>偏空震荡</td>
-                <td>CPI 低 + ETF 回流才转中性</td>
-                <td>中性偏多，但要等流动性修复</td>
-              </tr>
-              <tr>
-                <td>A股</td>
-                <td>6/9 早盘有修复，但 5月 CPI/PPI 偏弱说明基本面仍待确认。</td>
-                <td><span class="tag tag-warn">弱修复</span></td>
-                <td>此前 CSI300 近4周约 -3.55%</td>
-                <td>震荡修复</td>
-                <td>防守中观察修复</td>
-                <td>看信用、成交额和政策</td>
-                <td>中性偏多，但盈利要确认</td>
-              </tr>
-              <tr>
-                <td>美股</td>
-                <td>6/5 美股大跌后，盘前/亚太时段修复有限。</td>
-                <td>科技领跌</td>
-                <td>年内趋势未破</td>
-                <td>谨慎观望</td>
-                <td>CPI 决定反弹质量</td>
-                <td>高波动</td>
-                <td>AI 仍强，但估值受利率压制</td>
-              </tr>
-              <tr>
-                <td>黄金</td>
-                <td>高位回落后弱修复，仍受美元和收益率压制。</td>
-                <td><span class="tag tag-risk">偏弱</span></td>
-                <td>高位震荡</td>
-                <td>偏空/等待确认</td>
-                <td>看 CPI/PPI</td>
-                <td>中性</td>
-                <td>央行购金和地缘仍支撑</td>
-              </tr>
+              <tr><td>美债收益率</td><td>强非农后仍是核心压力源</td><td>偏上行</td><td>高位震荡</td><td>压制 Nasdaq、BTC、黄金</td><td><span class="tag tag-risk">利空风险资产</span></td></tr>
+              <tr><td>美元指数</td><td>CPI 前仍有支撑</td><td>偏强</td><td>高位震荡</td><td>压黄金、压非美风险偏好</td><td><span class="tag tag-warn">偏压制</span></td></tr>
+              <tr><td>VIX / 波动率</td><td>美股大跌后风险溢价上升</td><td>抬升</td><td>仍可控</td><td>高 beta 资产承压</td><td><span class="tag tag-warn">谨慎</span></td></tr>
+              <tr><td>BTC / ETH</td><td>弱修复，ETF 流未确认</td><td>偏弱</td><td>偏弱</td><td>山寨更脆弱</td><td><span class="tag tag-risk">偏空</span></td></tr>
+              <tr><td>美股科技</td><td>利率敏感，CPI 前不追</td><td>回撤</td><td>趋势未完全破坏</td><td>影响全球科技链和 A 股成长</td><td><span class="tag tag-warn">等待确认</span></td></tr>
+              <tr><td>A 股</td><td>早盘修复但基本面仍弱</td><td>弱修复</td><td>震荡偏弱</td><td>政策预期支撑，盈利需确认</td><td><span class="tag tag-warn">防守中观察</span></td></tr>
+              <tr><td>黄金</td><td>短线被美元和实际利率压制</td><td>偏弱</td><td>高位震荡</td><td>CPI 低才更容易反弹</td><td><span class="tag tag-warn">短线谨慎</span></td></tr>
+              <tr><td>原油</td><td>若上行会加重通胀担忧</td><td>事件驱动</td><td>地缘敏感</td><td>影响 CPI/PPI 和 Fed 路径</td><td><span class="tag tag-neutral">观察项</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="note">跨资产结论：当前信号不是全面 risk-on。A 股和亚太修复更像跌后修复；真正转向需要美债收益率回落、美元走弱、ETF 流改善和 CPI 低于预期共同确认。</p>
+      </section>
+
+      <section class="section">
+        <h2>今日核心资产矩阵</h2>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr><th>资产</th><th>今日状态</th><th>7日回顾</th><th>30日回顾</th><th>未来1日</th><th>未来7日</th><th>未来30日</th><th>未来半年</th><th>关键变量</th><th>操作含义</th><th>失效条件</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>加密</td><td>BTC 弱修复，ETF 流未确认</td><td>偏弱</td><td>偏弱</td><td>偏空/弱修复</td><td>偏空震荡</td><td>CPI 低 + ETF 回流才转中性</td><td>中性偏多，但需流动性修复</td><td>ETF 流、资金费率、OI、CPI</td><td>不追反弹</td><td>BTC 站回关键区间 + ETF 连续流入</td></tr>
+              <tr><td>A 股</td><td>早盘修复，但 CPI/PPI 偏弱</td><td>弱修复</td><td>震荡偏弱</td><td>震荡修复</td><td>防守中观察修复</td><td>看信用、成交额和政策</td><td>中性偏多，盈利需确认</td><td>社融、成交额、政策、人民币</td><td>不追高科技，观察高股息和政策线</td><td>成交额放大 + 信用改善 + 科技放量</td></tr>
+              <tr><td>美股</td><td>科技回撤后等待 CPI</td><td>科技领跌</td><td>趋势未完全破坏</td><td>谨慎观望</td><td>CPI 决定反弹质量</td><td>高波动</td><td>AI 基本面支撑但估值受利率压制</td><td>CPI、10Y、美元、AI 权重股</td><td>CPI 前不追 Nasdaq/半导体</td><td>CPI 低于预期 + 收益率回落</td></tr>
+              <tr><td>黄金</td><td>短线受压，高位震荡</td><td>偏弱</td><td>高位震荡</td><td>偏空/等待确认</td><td>看 CPI/PPI</td><td>中性</td><td>央行购金和地缘仍支撑</td><td>实际利率、美元、ETF、地缘</td><td>不急抄底</td><td>美元回落 + 实际利率下行</td></tr>
             </tbody>
           </table>
         </div>
       </section>
 
       <section class="section">
-        <h2>核心资产下钻</h2>
-        <div class="grid-4">
-          <article class="card">
-            <p class="metric">Crypto</p>
-            <h3>加密货币</h3>
-            <p class="verdict"><span class="tag tag-risk">短期偏空</span></p>
-            <p>ETF 流偏利空，杠杆仍在出清，宏观环境仍偏压制。</p>
-            <p><strong>操作含义：</strong>不追反弹，反弹优先视为减仓或观望窗口。</p>
-            <p><strong>失效条件：</strong>BTC 站回 6.2万-6.5万 + ETF 连续净流入 + CPI 低于预期。</p>
-          </article>
-          <article class="card">
-            <p class="metric">China A-Shares</p>
-            <h3>中国 A股</h3>
-            <p class="verdict"><span class="tag tag-warn">防守轮动</span></p>
-            <p>早盘有修复，但 CPI/PPI 偏弱说明基本面尚未转强，红利/高股息仍相对防御。</p>
-            <p><strong>操作含义：</strong>防御不是一定上涨，而是跌时可能跌得少。</p>
-            <p><strong>失效条件：</strong>成交额放大、科技放量修复、信用数据改善、政策信号增强。</p>
-          </article>
-          <article class="card">
-            <p class="metric">U.S. Equities</p>
-            <h3>美股</h3>
-            <p class="verdict"><span class="tag tag-warn">科技谨慎</span></p>
-            <p>强非农推高利率预期，AI/半导体估值受压；CPI 前修复不能直接当反转。</p>
-            <p><strong>操作含义：</strong>CPI 前不追 Nasdaq 和半导体急反弹。</p>
-            <p><strong>失效条件：</strong>CPI 低于预期，美债收益率回落。</p>
-          </article>
-          <article class="card">
-            <p class="metric">Gold</p>
-            <h3>黄金</h3>
-            <p class="verdict"><span class="tag tag-warn">短弱长支撑</span></p>
-            <p>短线被美元和实际利率压制，长期有央行购金和地缘托底。</p>
-            <p><strong>操作含义：</strong>不急着抄底，等 CPI 后确认。</p>
-            <p><strong>失效条件：</strong>美元回落、实际利率下行或地缘升级。</p>
-          </article>
+        <h2>A 股专项</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h3>指数与资金结构</h3>
+            <p>6/9 早盘有修复，但 5 月 CPI/PPI 偏弱意味着基本面仍需要政策和信用数据确认。成交额、北向资金、融资余额是下一步关键下钻项。</p>
+            <p><strong>结论：</strong><span class="tag tag-warn">防守中观察修复</span></p>
+          </div>
+          <div class="card">
+            <h3>板块强弱</h3>
+            <p>科技/半导体/AI 反弹不能直接视为趋势反转；红利/高股息仍有降低组合波动的价值；地产链、消费、顺周期要等信用和需求数据。</p>
+          </div>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>板块</th><th>当前判断</th><th>背景原因</th><th>操作含义</th><th>失效条件</th></tr></thead>
+            <tbody>
+              <tr><td>科技 / 半导体 / AI</td><td>弱修复</td><td>受美股科技和国内风险偏好影响</td><td>不追高，等放量确认</td><td>连续放量上涨且政策催化增强</td></tr>
+              <tr><td>红利 / 高股息</td><td>相对防御</td><td>基本面弱时资金偏好低波动资产</td><td>作为降低波动配置</td><td>风险偏好明显修复、成长板块放量</td></tr>
+              <tr><td>金融 / 券商</td><td>弹性待确认</td><td>需要成交额和政策催化</td><td>观察不追涨</td><td>成交额持续放大</td></tr>
+              <tr><td>地产链 / 消费</td><td>基本面待验证</td><td>CPI/PPI 偏弱说明需求修复不足</td><td>等政策落地和销售数据</td><td>销售、社融和消费数据改善</td></tr>
+              <tr><td>新能源 / 顺周期</td><td>中性偏弱</td><td>工业价格和产能压力仍在</td><td>等价格和库存改善</td><td>PPI 和行业价格回升</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>美股专项</h2>
+        <div class="grid-3">
+          <div class="card"><h3>MACRO</h3><p>强非农后，市场重新定价高利率更久。CPI 是本周最重要事件。</p></div>
+          <div class="card"><h3>FED POLICY</h3><p>FOMC 前，Fed 很难在就业强、通胀未确认降温的情况下快速转鸽。</p></div>
+          <div class="card"><h3>SECTOR ROTATION</h3><p>科技/AI/半导体利率敏感，小盘股对融资成本更敏感，防御板块更适合降波动。</p></div>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>板块</th><th>判断</th><th>原因</th><th>操作含义</th></tr></thead>
+            <tbody>
+              <tr><td>科技 / AI / 半导体</td><td>谨慎</td><td>盈利长期逻辑未坏，但估值受利率压制</td><td>CPI 前不追急反弹</td></tr>
+              <tr><td>金融</td><td>中性</td><td>经济韧性利好信贷，但高利率带来信用风险</td><td>看收益率曲线和信用利差</td></tr>
+              <tr><td>能源</td><td>事件驱动</td><td>油价和地缘影响通胀链</td><td>作为通胀风险观察项</td></tr>
+              <tr><td>消费</td><td>分化</td><td>就业强支撑收入，通胀压实际购买力</td><td>看 CPI 和零售销售</td></tr>
+              <tr><td>小盘股</td><td>偏弱</td><td>融资成本敏感</td><td>降息预期未修复前不占优</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>加密专项</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h3>ETF 流与杠杆</h3>
+            <p>BTC/ETH ETF 资金流未持续转正，说明机构买盘尚未确认。此前高 OI 和大额清算显示杠杆仍在出清阶段。</p>
+            <p><strong>影响：</strong><span class="tag tag-risk">利空 / 弱修复</span></p>
+          </div>
+          <div class="card">
+            <h3>宏观和链上</h3>
+            <p>强非农、CPI 前美债和美元压力对 BTC/ETH 不友好。稳定币供给、资金费率和 BTC dominance 需要继续作为日常下钻项。</p>
+          </div>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>板块</th><th>判断</th><th>背景原因</th><th>操作含义</th></tr></thead>
+            <tbody>
+              <tr><td>BTC</td><td>弱修复</td><td>ETF 流未确认，宏观压制仍在</td><td>不追反弹，等关键区间站稳</td></tr>
+              <tr><td>ETH</td><td>弱于 BTC</td><td>缺少独立强催化</td><td>等待 ETF/生态收入/链上活跃确认</td></tr>
+              <tr><td>DeFi / L1</td><td>高 beta</td><td>风险偏好不稳时弹性向下</td><td>降低暴露</td></tr>
+              <tr><td>稳定币</td><td>观察项</td><td>供给扩张才代表链上流动性改善</td><td>作为转中性确认指标</td></tr>
+              <tr><td>Meme / 主题币</td><td>高风险</td><td>风险偏好差时最脆弱</td><td>不作为防守资产</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>黄金专项</h2>
+        <div class="grid-3">
+          <div class="card"><h3>利率驱动</h3><p>实际利率和名义收益率仍是短线压制。CPI 低于预期才更容易释放反弹。</p></div>
+          <div class="card"><h3>美元驱动</h3><p>美元走强对黄金不利；美元回落是黄金短线修复的必要条件之一。</p></div>
+          <div class="card"><h3>资金与避险</h3><p>央行购金、地缘风险和财政可持续性是中长期托底，但短线不一定抵消利率压力。</p></div>
+        </div>
+        <p class="note"><strong>综合判断：</strong>黄金短线偏弱/等待确认；中长期配置逻辑未坏。操作含义是不急抄底，等 CPI、美元和实际利率给方向。</p>
+      </section>
+
+      <section class="section">
+        <h2>重要新闻影响解释</h2>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>新闻</th><th>What happened</th><th>Why it matters</th><th>Asset impact</th><th>Direction</th><th>Confidence</th><th>What changes the view</th></tr></thead>
+            <tbody>
+              <tr><td>美国强非农</td><td>5 月非农新增 17.2 万，失业率 4.3%。</td><td>削弱快速降息逻辑，推高利率压力。</td><td>美股科技、加密、黄金</td><td><span class="tag tag-risk">利空</span></td><td>高</td><td>CPI 明显低于预期。</td></tr>
+              <tr><td>美国 CPI 将发布</td><td>BLS 确认 6/10 发布 5 月 CPI。</td><td>决定强非农后的利率重定价是否继续。</td><td>全市场</td><td><span class="tag tag-warn">双向风险</span></td><td>高</td><td>实际数据与预期差。</td></tr>
+              <tr><td>中国 CPI/PPI 偏弱</td><td>5 月通胀和工业品价格偏弱。</td><td>提高宽松预期，但也说明需求和工业利润压力。</td><td>A 股、人民币、港股</td><td><span class="tag tag-warn">混合</span></td><td>中高</td><td>社融、成交额、政策落地。</td></tr>
+              <tr><td>ETF 流未确认</td><td>BTC/ETH ETF 资金流未持续转正。</td><td>机构资金未回流，反弹质量不足。</td><td>BTC、ETH、山寨</td><td><span class="tag tag-risk">利空</span></td><td>中</td><td>连续 2-3 日净流入。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>机会与风险提醒</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h3>可能机会窗口</h3>
+            <ul>
+              <li>美国 CPI 低于预期：BTC、美股科技、黄金可能出现修复。</li>
+              <li>A 股信用数据和政策同时改善：从防守轮动转向政策进攻。</li>
+              <li>BTC ETF 连续净流入：加密从偏空切中性。</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>最大下行风险</h3>
+            <ul>
+              <li>CPI/PPI 继续偏热，利率和美元继续上行。</li>
+              <li>加密 ETF 流出扩大，杠杆再次清算。</li>
+              <li>A 股政策预期升温但成交和信用不配合。</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Watchlist</h2>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>观察对象</th><th>触发条件</th><th>影响资产</th><th>触发后结论如何变化</th></tr></thead>
+            <tbody>
+              <tr><td>美国 CPI</td><td>低于预期 / 高于预期</td><td>加密、美股、黄金、A 股情绪</td><td>低于预期：风险资产修复；高于预期：防守继续。</td></tr>
+              <tr><td>BTC ETF 流</td><td>连续 2-3 日净流入</td><td>BTC、ETH、山寨</td><td>加密从偏空转中性。</td></tr>
+              <tr><td>A 股成交额</td><td>持续放大且科技/金融共振</td><td>A 股板块</td><td>从防守中观察修复转向进攻。</td></tr>
+              <tr><td>10Y 美债收益率</td><td>明显回落</td><td>美股科技、黄金、加密</td><td>估值压力缓和，修复质量提升。</td></tr>
+              <tr><td>美元指数</td><td>转弱</td><td>黄金、加密、新兴市场</td><td>黄金和风险资产修复概率上升。</td></tr>
+            </tbody>
+          </table>
         </div>
       </section>
 
       <section class="section">
         <h2>持续重要事项</h2>
         <div class="grid-2">
-          <div class="card">
-            <h3>美国通胀链</h3>
-            <p>CPI、PPI、PCE 是未来两周全市场定价核心。CPI 热则防守继续；CPI 冷才有修复窗口。</p>
-          </div>
-          <div class="card">
-            <h3>BTC / ETH ETF 流</h3>
-            <p>机构资金未持续回流前，加密反弹质量不足，山寨币更脆。</p>
-          </div>
-          <div class="card">
-            <h3>美债收益率与美元</h3>
-            <p>收益率和美元继续上行，会同时压制 Nasdaq、BTC 和黄金。</p>
-          </div>
-          <div class="card">
-            <h3>A股政策与信用</h3>
-            <p>A股要从防守转进攻，需要政策、信用、成交额和盈利共同确认。5月 CPI/PPI 偏弱提高宽松预期，但也说明基本面仍弱。</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="section">
-        <h2>操作语言解释</h2>
-        <div class="grid-2">
-          <div>
-            <h3>防守</h3>
-            <p>不是清仓，而是减少高 beta 仓位，等待 CPI/PPI 给方向。</p>
-          </div>
-          <div>
-            <h3>相对防御</h3>
-            <p>不是一定上涨，而是在大盘下跌时可能跌得少，适合降低组合波动。</p>
-          </div>
-          <div>
-            <h3>反弹修复</h3>
-            <p>下跌后的技术反抽，不等于趋势反转。</p>
-          </div>
-          <div>
-            <h3>确认反转</h3>
-            <p>需要价格站回关键位、资金流改善、宏观数据配合。</p>
-          </div>
+          <div class="card"><h3>美国通胀链</h3><p>CPI、PPI、PCE 是未来两周全市场定价核心。CPI 热则防守继续；CPI 冷才有修复窗口。</p></div>
+          <div class="card"><h3>Fed 利率路径</h3><p>强非农使 Fed 更难转鸽。FOMC + SEP 将决定半年维度风险资产估值空间。</p></div>
+          <div class="card"><h3>BTC / ETH ETF 流</h3><p>机构资金未持续回流前，加密反弹质量不足，山寨更脆。</p></div>
+          <div class="card"><h3>A 股政策与信用</h3><p>中国 CPI/PPI 偏弱提高宽松预期，但也说明基本面仍弱，需要社融、成交额和政策落地确认。</p></div>
         </div>
       </section>
 
       <section class="section">
         <h2>来源和数据缺口</h2>
-        <p>
-          已确认来源包括 BLS 非农与 CPI/PPI 日程、Fed FOMC 日历、BEA 日程、国家统计局中国 CPI/PPI 信息、AP/Reuters/Investing 市场更新、CryptoETF.today 和 CoinDesk 等。
-        </p>
-        <p>
-          数据缺口：当前尚未接入稳定行情 API 和飞书文件/网页托管 API，因此报告链接仍为本地 HTML 路径；部分盘中价格采用可访问新闻与市场页面交叉确认，置信度低于正式行情源。
+        <p>已确认来源包括 BLS 非农与 CPI/PPI 日程、Fed FOMC 日历、BEA 日程、国家统计局/媒体转述的中国 CPI/PPI 信息、AP/Reuters/Investing 市场更新、CryptoETF.today、CoinDesk 等。</p>
+        <p>数据缺口：当前尚未接入稳定行情 API，因此部分盘中价格、资金费率、OI、北向资金、成交额和 ETF 流采用可访问新闻和数据页面交叉确认，置信度低于正式行情源。下一步应接入稳定行情、ETF flow、Coinglass、A 股成交/资金流 API。</p>
+        <p class="sources">
+          参考链接：
+          <a href="https://www.bls.gov/news.release/empsit.nr0.htm">BLS 非农</a> /
+          <a href="https://www.bls.gov/schedule/news_release/cpi.htm">BLS CPI 日程</a> /
+          <a href="https://www.bls.gov/schedule/news_release/ppi.htm">BLS PPI 日程</a> /
+          <a href="https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm">Fed FOMC 日历</a> /
+          <a href="https://www.bea.gov/news/schedule">BEA 日程</a> /
+          <a href="https://www.stats.gov.cn/english/">国家统计局</a>
         </p>
       </section>
     </main>
