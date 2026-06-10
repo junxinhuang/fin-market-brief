@@ -6,6 +6,10 @@ on:
     - cron: "13 1 * * *"
     # 09:43 Beijing time fallback. The guard step prevents duplicate reports.
     - cron: "43 1 * * *"
+    # 21:10 Beijing time evening report.
+    - cron: "10 13 * * *"
+    # 21:40 Beijing time evening fallback. The guard step prevents duplicates.
+    - cron: "40 13 * * *"
   workflow_dispatch:
 
 permissions:
@@ -33,6 +37,7 @@ jobs:
         id: daily_guard
         env:
           EVENT_NAME: ${{ github.event_name }}
+          EVENT_SCHEDULE: ${{ github.event.schedule }}
         run: |
           if [ "$EVENT_NAME" != "schedule" ]; then
             echo "skip=false" >> "$GITHUB_OUTPUT"
@@ -40,11 +45,21 @@ jobs:
           fi
 
           export TODAY_BJT="$(TZ=Asia/Shanghai date +%F)"
-          if [ -f reports/daily/latest-summary.json ] && node -e "const fs=require('fs'); const s=JSON.parse(fs.readFileSync('reports/daily/latest-summary.json','utf8')); const hm=Number((s.fileName || '').match(/^\d{4}-\d{2}-\d{2}-(\d{4})-/)?.[1] || 0); process.exit(s.date === process.env.TODAY_BJT && hm >= 900 ? 0 : 1)" ; then
-            echo "Report already exists for $TODAY_BJT; skip scheduled fallback."
+          if [ "$EVENT_SCHEDULE" = "10 13 * * *" ] || [ "$EVENT_SCHEDULE" = "40 13 * * *" ]; then
+            export SLOT_NAME="evening"
+            export SLOT_START_HM="2100"
+            export SLOT_END_HM="2359"
+          else
+            export SLOT_NAME="morning"
+            export SLOT_START_HM="900"
+            export SLOT_END_HM="1259"
+          fi
+
+          if [ -f reports/daily/latest-summary.json ] && node -e "const fs=require('fs'); const s=JSON.parse(fs.readFileSync('reports/daily/latest-summary.json','utf8')); const hm=Number((s.fileName || '').match(/^\d{4}-\d{2}-\d{2}-(\d{4})-/)?.[1] || 0); const start=Number(process.env.SLOT_START_HM); const end=Number(process.env.SLOT_END_HM); process.exit(s.date === process.env.TODAY_BJT && hm >= start && hm <= end ? 0 : 1)" ; then
+            echo "$SLOT_NAME report already exists for $TODAY_BJT; skip scheduled fallback."
             echo "skip=true" >> "$GITHUB_OUTPUT"
           else
-            echo "No report found for $TODAY_BJT; continue."
+            echo "No $SLOT_NAME report found for $TODAY_BJT; continue."
             echo "skip=false" >> "$GITHUB_OUTPUT"
           fi
 
