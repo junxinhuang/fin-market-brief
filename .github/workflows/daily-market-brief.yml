@@ -2,7 +2,10 @@ name: Daily Market Brief
 
 on:
   schedule:
-    - cron: "0 1 * * *"
+    # 09:13 Beijing time. Avoid the top-of-hour GitHub Actions load spike.
+    - cron: "13 1 * * *"
+    # 09:43 Beijing time fallback. The guard step prevents duplicate reports.
+    - cron: "43 1 * * *"
   workflow_dispatch:
 
 permissions:
@@ -26,10 +29,31 @@ jobs:
         with:
           node-version: "22"
 
+      - name: Check whether today's report already exists
+        id: daily_guard
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          if [ "$EVENT_NAME" != "schedule" ]; then
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          export TODAY_BJT="$(TZ=Asia/Shanghai date +%F)"
+          if [ -f reports/daily/latest-summary.json ] && node -e "const fs=require('fs'); const s=JSON.parse(fs.readFileSync('reports/daily/latest-summary.json','utf8')); process.exit(s.date === process.env.TODAY_BJT ? 0 : 1)" ; then
+            echo "Report already exists for $TODAY_BJT; skip scheduled fallback."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No report found for $TODAY_BJT; continue."
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Generate report
+        if: steps.daily_guard.outputs.skip != 'true'
         run: node scripts/generate_daily_market_brief.mjs
 
       - name: Commit generated report
+        if: steps.daily_guard.outputs.skip != 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -42,6 +66,7 @@ jobs:
           fi
 
       - name: Push Feishu notification
+        if: steps.daily_guard.outputs.skip != 'true'
         env:
           FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
         run: node scripts/push_feishu.mjs
