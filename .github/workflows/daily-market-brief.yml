@@ -40,7 +40,7 @@ jobs:
           fi
 
           export TODAY_BJT="$(TZ=Asia/Shanghai date +%F)"
-          if [ -f reports/daily/latest-summary.json ] && node -e "const fs=require('fs'); const s=JSON.parse(fs.readFileSync('reports/daily/latest-summary.json','utf8')); process.exit(s.date === process.env.TODAY_BJT ? 0 : 1)" ; then
+          if [ -f reports/daily/latest-summary.json ] && node -e "const fs=require('fs'); const s=JSON.parse(fs.readFileSync('reports/daily/latest-summary.json','utf8')); const hm=Number((s.fileName || '').match(/^\d{4}-\d{2}-\d{2}-(\d{4})-/)?.[1] || 0); process.exit(s.date === process.env.TODAY_BJT && hm >= 900 ? 0 : 1)" ; then
             echo "Report already exists for $TODAY_BJT; skip scheduled fallback."
             echo "skip=true" >> "$GITHUB_OUTPUT"
           else
