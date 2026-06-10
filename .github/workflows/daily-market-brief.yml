@@ -2,14 +2,9 @@ name: Daily Market Brief
 
 on:
   schedule:
-    # 09:13 Beijing time. Avoid the top-of-hour GitHub Actions load spike.
-    - cron: "13 1 * * *"
-    # 09:43 Beijing time fallback. The guard step prevents duplicate reports.
-    - cron: "43 1 * * *"
-    # 21:10 Beijing time evening report.
-    - cron: "10 13 * * *"
-    # 21:40 Beijing time evening fallback. The guard step prevents duplicates.
-    - cron: "40 13 * * *"
+    # Try every 10 minutes during the morning/evening Beijing-time windows.
+    # Guard logic below allows only one morning and one evening report per day.
+    - cron: "*/10 1,2,13,14 * * *"
   workflow_dispatch:
 
 permissions:
@@ -37,7 +32,6 @@ jobs:
         id: daily_guard
         env:
           EVENT_NAME: ${{ github.event_name }}
-          EVENT_SCHEDULE: ${{ github.event.schedule }}
         run: |
           if [ "$EVENT_NAME" != "schedule" ]; then
             echo "skip=false" >> "$GITHUB_OUTPUT"
@@ -45,14 +39,19 @@ jobs:
           fi
 
           export TODAY_BJT="$(TZ=Asia/Shanghai date +%F)"
-          if [ "$EVENT_SCHEDULE" = "10 13 * * *" ] || [ "$EVENT_SCHEDULE" = "40 13 * * *" ]; then
+          export NOW_HM="$(TZ=Asia/Shanghai date +%H%M)"
+          if [ "$NOW_HM" -ge 2100 ] && [ "$NOW_HM" -le 2230 ]; then
             export SLOT_NAME="evening"
             export SLOT_START_HM="2100"
-            export SLOT_END_HM="2359"
-          else
+            export SLOT_END_HM="2230"
+          elif [ "$NOW_HM" -ge 900 ] && [ "$NOW_HM" -le 1030 ]; then
             export SLOT_NAME="morning"
             export SLOT_START_HM="900"
-            export SLOT_END_HM="1259"
+            export SLOT_END_HM="1030"
+          else
+            echo "Current Beijing time $NOW_HM is outside report windows; skip."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
           fi
 
           if [ -f reports/daily/latest-summary.json ] && node -e "const fs=require('fs'); const s=JSON.parse(fs.readFileSync('reports/daily/latest-summary.json','utf8')); const hm=Number((s.fileName || '').match(/^\d{4}-\d{2}-\d{2}-(\d{4})-/)?.[1] || 0); const start=Number(process.env.SLOT_START_HM); const end=Number(process.env.SLOT_END_HM); process.exit(s.date === process.env.TODAY_BJT && hm >= start && hm <= end ? 0 : 1)" ; then
