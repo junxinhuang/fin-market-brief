@@ -45,9 +45,9 @@ function reportContext(now) {
       label: "早报",
       title: "金融市场跟踪早报",
       focus:
-        "早报重点承接昨夜美股收盘、黄金/美元/美债和加密夜盘，并给出 A 股开盘后的主线确认。",
-      aShareFrame: "A 股：以昨日收盘和今日开盘初期代表股为主，晚报会补当天收盘验证。",
-      usFrame: "美股：以刚收盘的上一交易日 ETF 数据为主，是早报最重要的海外定价锚。",
+        "早报重点承接昨夜美股最近有效收盘、黄金/美元/美债最近有效报价、加密夜盘，并用 A 股最近有效收盘做国内定价锚。",
+      aShareFrame: "A 股：使用最近一个已经确认有数据的有效收盘/报价点；早报默认不强行取当日刚开盘数据。",
+      usFrame: "美股：使用最近一个已经确认有数据的有效收盘/报价点，是早报最重要的海外定价锚。",
     };
   }
   if (hm >= 2100 && hm <= 2230) {
@@ -56,9 +56,9 @@ function reportContext(now) {
       label: "晚报",
       title: "金融市场跟踪晚报",
       focus:
-        "晚报重点复盘当天 A 股收盘和白天政策/板块反应，并给出美股盘前/开盘初期的风险校准。",
-      aShareFrame: "A 股：以当天收盘后代表股表现为主，并与早盘判断做偏差检查。",
-      usFrame: "美股：以盘前/开盘初期 ETF 报价和上一交易日收盘数据为主，次日早报验证完整收盘。",
+        "晚报重点复盘当天 A 股最近有效收盘和白天政策/板块反应；美股不强取刚开盘空字段，统一使用最近有效收盘/报价。",
+      aShareFrame: "A 股：使用最近一个已经确认有数据的有效收盘/报价点；若当天已收盘则自然使用当天收盘。",
+      usFrame: "美股：使用最近一个已经确认有数据的有效收盘/报价点；晚报默认不强行取刚开盘或盘前空字段。",
     };
   }
   return {
@@ -66,9 +66,9 @@ function reportContext(now) {
     label: "手动补发",
     title: "金融市场跟踪日报",
     focus:
-      "本次为手动补发/测试运行，数据按触发时点刷新；若在重大数据发布后运行，必须按已发布状态处理。",
-    aShareFrame: "A 股：若已收盘，按当天收盘代表股；若盘中，按当前可得盘口快照。",
-    usFrame: "美股：若已开盘，按当前 ETF 快照；若未开盘，以上一交易日和盘前代理为主。",
+      "本次为手动补发/测试运行，数据按触发时点刷新；若在重大数据发布后运行，必须按已发布状态处理，并优先使用最近有效数据点。",
+    aShareFrame: "A 股：使用最近一个已经确认有数据的有效收盘/报价点，不因休市、假期或开盘前空字段写成缺失。",
+    usFrame: "美股：使用最近一个已经确认有数据的有效收盘/报价点，不因休市、假期或盘前空字段写成缺失。",
   };
 }
 
@@ -339,13 +339,13 @@ const cpiActionText =
 
 const usConclusion =
   context.slot === "morning"
-    ? `早报以美股刚收盘数据为核心：SPY ${pct(spy.percentChange)}，QQQ ${pct(qqq.percentChange)}，SMH ${pct(smh.percentChange)}。${cpiActionText}`
-    : `晚报以美股盘前/开盘初期和上一交易日数据为代理：SPY ${pct(spy.percentChange)}，QQQ ${pct(qqq.percentChange)}，SMH ${pct(smh.percentChange)}。${cpiActionText}`;
+    ? `早报以美股最近有效收盘/报价为核心：SPY ${pct(spy.percentChange)}，QQQ ${pct(qqq.percentChange)}，SMH ${pct(smh.percentChange)}。${cpiActionText}`
+    : `晚报以美股最近有效收盘/报价为核心，不强行使用刚开盘空字段：SPY ${pct(spy.percentChange)}，QQQ ${pct(qqq.percentChange)}，SMH ${pct(smh.percentChange)}。${cpiActionText}`;
 
 const aShareConclusion =
   context.slot === "morning"
-    ? `早报看昨日收盘和今日开盘初期：AI/半导体 ${aiLine || "缺失"}；地产消费 ${propertyLine || "缺失"}。`
-    : `晚报看当天 A 股收盘后代表股：AI/半导体 ${aiLine || "缺失"}；地产消费 ${propertyLine || "缺失"}；新能源/顺周期 ${newEnergyLine || "缺失"}。`;
+    ? `早报看 A 股最近有效收盘/报价，默认不强取刚开盘空字段：AI/半导体 ${aiLine || "缺失"}；地产消费 ${propertyLine || "缺失"}。`
+    : `晚报看 A 股最近有效收盘/报价；若当天已收盘则使用当天收盘代表股：AI/半导体 ${aiLine || "缺失"}；地产消费 ${propertyLine || "缺失"}；新能源/顺周期 ${newEnergyLine || "缺失"}。`;
 
 const headlineText =
   cpi.status === "pending"
@@ -440,7 +440,7 @@ const html = `<!doctype html>
         ${renderTable(["上一份判断", "本轮数据验证", "结果", "修正"], [
           ["加密偏空/弱修复，不追反弹。", `BTC 价格 ${fmt(btc.mark, 0)}，低于 4小时 VWAP ${fmt(btc.h4Vwap, 0)}；恐惧贪婪指数 ${fearGreed.value ?? "缺失"}。`, "正确", "维持偏空/弱修复。"],
           ["美股通胀数据决定修复质量。", `${htmlEscape(cpi.knownInfo)} ${htmlEscape(macroReaction)}`, cpi.status === "pending" ? "待验证" : "已切换为发布后验证", cpi.status === "pending" ? "继续等待 CPI 实际值。" : "不再使用“CPI 前”逻辑，改看发布后市场吸收。"],
-          ["A 股防守观察。", `${htmlEscape(aShareConclusion)}`, "部分正确", "修正为结构修复，不是全面进攻；晚报以收盘验证早报。"],
+          ["A 股防守观察。", `${htmlEscape(aShareConclusion)}`, "部分正确", "修正为结构修复，不是全面进攻；早晚报均以最近有效收盘/报价做验证。"],
           ["黄金短线弱。", `GLD 7个交易日 ${pct(gld.sevenTradingDayPct)}，30日 ${pct(gld.thirtyCalendarDayPct)}。`, "正确", "维持短线谨慎，中长期支撑待观察。"],
         ])}
         <p class="note">${htmlEscape(previousNote)}</p>
@@ -459,10 +459,10 @@ const html = `<!doctype html>
       <section class="section">
         <h2>今日核心资产</h2>
         ${renderTable(["资产", "今日状态", "7日回顾", "30日回顾", "未来1日", "未来7日", "未来30日", "未来半年"], [
-          ["加密", `BTC ${fmt(btc.mark, 0)}；ETH ${fmt(eth.mark)}；SOL ${fmt(sol.mark)}。BTC ${btc.h4Vwap && btc.mark < btc.h4Vwap ? "低于" : "接近/高于"} 4小时 VWAP。`, "按 24小时和夜盘实时数据刷新，早晚报都用最新永续数据。", "BTC 30日结构偏弱，风险偏好仍差。", cpi.status === "pending" ? "偏空/不追反弹" : "看 CPI 后风险偏好吸收", "BTC 站回 4小时 VWAP 且资金费率/OI 健康才转中性", "需要宏观不再压制且 ETF/机构资金改善", "中性偏多潜力仍在，但取决于流动性和 ETF/机构资金回流"],
-          ["A 股", aShareConclusion, context.slot === "evening" ? "晚报已覆盖当天收盘代表股。" : "早报覆盖昨日收盘和今日开盘初期，晚报补收盘验证。", "政策预期支撑，但基本面仍需信用和盈利确认。", "防守观察", "看政策、成交额、代表股扩散", "若信用改善，可从防守切轮动", "中性偏多，但不是无条件进攻"],
+          ["加密", `BTC ${fmt(btc.mark, 0)}；ETH ${fmt(eth.mark)}；SOL ${fmt(sol.mark)}。BTC ${btc.h4Vwap && btc.mark < btc.h4Vwap ? "低于" : "接近/高于"} 4小时 VWAP。`, "24小时连续交易，早晚报都用最新可得永续数据。", "BTC 30日结构偏弱，风险偏好仍差。", cpi.status === "pending" ? "偏空/不追反弹" : "看 CPI 后风险偏好吸收", "BTC 站回 4小时 VWAP 且资金费率/OI 健康才转中性", "需要宏观不再压制且 ETF/机构资金改善", "中性偏多潜力仍在，但取决于流动性和 ETF/机构资金回流"],
+          ["A 股", aShareConclusion, "使用最近一个已经确认有数据的有效收盘/报价点；早报不强取刚开盘，假期/周末沿用最近有效交易日。", "政策预期支撑，但基本面仍需信用和盈利确认。", "防守观察", "看政策、成交额、代表股扩散", "若信用改善，可从防守切轮动", "中性偏多，但不是无条件进攻"],
           ["美股", `SPY ${fmt(spy.last)} ${pct(spy.percentChange)}；QQQ ${fmt(qqq.last)} ${pct(qqq.percentChange)}；SMH ${fmt(smh.last)} ${pct(smh.percentChange)}。${context.usFrame}`, `SPY ${pct(spy.sevenTradingDayPct)}；QQQ ${pct(qqq.sevenTradingDayPct)}；SMH ${pct(smh.sevenTradingDayPct)}。`, `SPY ${pct(spy.thirtyCalendarDayPct)}；QQQ ${pct(qqq.thirtyCalendarDayPct)}；SMH ${pct(smh.thirtyCalendarDayPct)}。`, cpi.status === "pending" ? "等待 CPI" : "看 CPI 后吸收", cpi.status === "pending" ? "CPI 决定反弹质量" : "PPI/FOMC 确认 CPI 后方向", "高波动，科技估值看 TLT/UUP", "AI 主线仍强，但利率高位会压估值扩张"],
-          ["黄金", `GLD ${fmt(gld.last)} ${pct(gld.percentChange)}。早晚报均取最新 ETF 代理快照。`, `GLD ${pct(gld.sevenTradingDayPct)}。`, `GLD ${pct(gld.thirtyCalendarDayPct)}。`, cpi.status === "pending" ? "看 CPI 后美元和实际利率" : "看 CPI 后美元/实际利率吸收", "若美元回落可修复，否则继续震荡", "中性，等待实际利率方向", "央行购金和地缘支撑仍在，中长期不悲观"],
+          ["黄金", `GLD ${fmt(gld.last)} ${pct(gld.percentChange)}。使用最近有效 ETF 代理报价/收盘。`, `GLD ${pct(gld.sevenTradingDayPct)}。`, `GLD ${pct(gld.thirtyCalendarDayPct)}。`, cpi.status === "pending" ? "看 CPI 后美元和实际利率" : "看 CPI 后美元/实际利率吸收", "若美元回落可修复，否则继续震荡", "中性，等待实际利率方向", "央行购金和地缘支撑仍在，中长期不悲观"],
         ])}
       </section>
 
@@ -542,7 +542,7 @@ const html = `<!doctype html>
       <section class="section">
         <h2>来源和数据缺口</h2>
         <p>已确认数据源：Hyperliquid public API(加密永续公开接口)、Alternative.me 恐惧贪婪指数、Ethereum public RPC(以太坊公开节点)、Nasdaq ETF quote/historical API(纳斯达克 ETF 行情/历史接口)、腾讯 A 股公开行情、BLS(美国劳工统计局)日程/API、Fed(美联储)FOMC 日历、BEA(美国经济分析局)日程。</p>
-        <p>早晚报数据时点规则：早报以美股刚收盘和 A 股开盘初期为主；晚报以当天 A 股收盘、加密实时数据、黄金/美元/长债 ETF 代理和美股盘前/开盘初期为主。加密和黄金每次均取最新可得数据。</p>
+        <p>早晚报数据时点规则：所有资产统一使用最近一个已经确认有数据的有效交易/报价点。早报 A 股默认使用最近有效收盘/报价，不强取当日刚开盘；晚报美股默认使用最近有效收盘/报价，不强取刚开盘或盘前空字段；周末和假期沿用最近有效交易日并注明口径。加密为连续交易，每次取最新可得永续数据。</p>
         <p>已解决缺口：加密永续价格/K线/资金费率/未平仓合约/盘口、ETH gas、市场情绪代理、美股指数/板块/美元/长债/信用/黄金 ETF 代理、A 股代表个股报价。</p>
         <p>仍待补缺口：A 股北向资金、融资余额、行业完整涨跌榜仍需增强；加密清算热力图、多空比例、ETF 资金流、链上/社交情绪仍需 Coinalyze、Farside、DeFiLlama、LunarCrush、Alva 等源继续接入。宏观数据若 BLS API 超时，会明确标注并使用跨资产反应作为临时代理。</p>
         <p class="sources">本报告由 GitHub Actions 云端生成。归档链接：${htmlEscape(publicUrl)}</p>

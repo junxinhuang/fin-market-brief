@@ -58,17 +58,20 @@ async function fetchSymbol(symbol) {
   const previous = closes.at(-2);
   const weekAgo = closes.at(-6) ?? closes[0];
   const monthAgo = closes[0];
+  const oneDayPct = previous && latest ? Number(pct(previous.close, latest.close)) : null;
+  const last = parseNumber(primary.lastSalePrice) ?? latest?.close ?? null;
 
   return {
     symbol,
-    last: parseNumber(primary.lastSalePrice) ?? latest?.close ?? null,
+    last,
     netChange: parseNumber(primary.netChange),
-    percentChange: parseNumber(primary.percentageChange),
+    percentChange: parseNumber(primary.percentageChange) ?? oneDayPct,
     volume: parseNumber(primary.volume) ?? latest?.volume ?? null,
     marketStatus: primary.marketStatus ?? null,
     lastTradeTimestamp: primary.lastTradeTimestamp ?? latest?.date ?? null,
+    latestHistoricalDate: latest?.date ?? null,
     historyRows: closes.length,
-    oneDayPct: previous && latest ? Number(pct(previous.close, latest.close)) : null,
+    oneDayPct,
     sevenTradingDayPct: weekAgo && latest ? Number(pct(weekAgo.close, latest.close)) : null,
     thirtyCalendarDayPct: monthAgo && latest ? Number(pct(monthAgo.close, latest.close)) : null,
   };
