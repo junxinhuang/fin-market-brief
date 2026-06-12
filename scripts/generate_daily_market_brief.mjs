@@ -88,6 +88,11 @@ function pct(value) {
   return `${n >= 0 ? "+" : ""}${n.toFixed(2)}%`;
 }
 
+function usdYi(value) {
+  if (!isNum(value)) return "缺失";
+  return `${fmt(Number(value) / 1e8)} 亿美元`;
+}
+
 function isNum(value) {
   return value !== null && value !== undefined && Number.isFinite(Number(value));
 }
@@ -398,6 +403,9 @@ const fearGreed =
   ethRaw?.sentiment?.fearGreed?.data?.[0] ??
   solRaw?.sentiment?.fearGreed?.data?.[0] ??
   {};
+const stablecoins = btcRaw?.onchainLiquidity?.stablecoins ?? {};
+const btcLongShort = btcRaw?.externalDerivatives?.longShortRatio ?? {};
+const btcLiquidations = btcRaw?.externalDerivatives?.liquidationOrders ?? {};
 
 const spy = findUs(us, "SPY");
 const qqq = findUs(us, "QQQ");
@@ -425,6 +433,18 @@ const goldRatesDollarScore =
   (isNum(gld.percentChange) ? Number(gld.percentChange) : 0) +
   (isNum(tlt.percentChange) ? Number(tlt.percentChange) : 0) -
   (isNum(uup.percentChange) ? Number(uup.percentChange) : 0);
+const stablecoinImpulse =
+  isNum(stablecoins.change7dPct)
+    ? Number(stablecoins.change7dPct)
+    : isNum(stablecoins.change1dPct)
+      ? Number(stablecoins.change1dPct)
+      : null;
+const stablecoinTone =
+  isNum(stablecoinImpulse) && stablecoinImpulse > 0.2
+    ? "链上美元流动性扩张"
+    : isNum(stablecoinImpulse) && stablecoinImpulse < -0.2
+      ? "链上美元流动性收缩"
+      : "链上美元流动性中性";
 
 const previousNote = await previousReportNote(fileName);
 const publicUrl = `${pagesBase}/${outputPath}`;
@@ -588,6 +608,18 @@ const watchRows = [
         : "情绪仍不足，反弹容易反复。",
   },
   {
+    name: "稳定币总供给",
+    current: `${usdYi(stablecoins.totalUsd)}；1日 ${pct(stablecoins.change1dPct)}，7日 ${pct(stablecoins.change7dPct)}，30日 ${pct(stablecoins.change30dPct)}`,
+    state: metricState({ value: stablecoinImpulse, goodAbove: 0.2, badBelow: -0.2 }),
+    threshold: "7日增速 > +0.2% 代表链上美元扩张；< -0.2% 代表流动性收缩。",
+    conclusion:
+      stablecoinTone === "链上美元流动性扩张"
+        ? "对加密中期风险偏好形成支撑。"
+        : stablecoinTone === "链上美元流动性收缩"
+          ? "链上购买力收缩，反弹更容易失败。"
+          : "链上购买力没有明显扩张，BTC 修复仍需要价格结构确认。",
+  },
+  {
     name: "QQQ/SMH 科技强度",
     current: `QQQ ${pct(qqq.percentChange)}，SMH ${pct(smh.percentChange)}`,
     state: metricState({ value: qqqSmhLeadership, goodAbove: 1, badBelow: -0.5 }),
@@ -698,6 +730,7 @@ const html = `<!doctype html>
           <ul>
             <li>CPI(消费者价格指数)已发布，PPI(生产者价格指数)偏热，降息交易被压住。</li>
             <li>BTC(比特币)相对 4小时 VWAP(成交量加权均价)：${pct(btcVwapGap)}；资金费率(funding)：${pct(btcFundingPct)}。</li>
+            <li>稳定币总供给 ${usdYi(stablecoins.totalUsd)}，7日变化 ${pct(stablecoins.change7dPct)}，判断为${stablecoinTone}。</li>
             <li>QQQ(纳指100 ETF) ${pct(qqq.percentChange)}，SMH(半导体 ETF) ${pct(smh.percentChange)}，科技仍是美股核心支撑。</li>
             <li>TLT(长期美债 ETF) ${pct(tlt.percentChange)}，UUP(美元 ETF) ${pct(uup.percentChange)}，决定黄金和估值压力。</li>
           </ul>
@@ -731,7 +764,7 @@ const html = `<!doctype html>
       <section class="section">
         <h2>今日核心资产</h2>
         ${renderTable(["资产", "今日状态", "7日回顾", "30日回顾", "未来1日", "未来7日", "未来30日", "未来半年"], [
-          ["加密", `BTC ${fmt(btc.mark, 0)}；ETH ${fmt(eth.mark)}；SOL ${fmt(sol.mark)}。BTC 相对 4h VWAP ${pct(btcVwapGap)}，funding ${pct(btcFundingPct)}，恐惧贪婪 ${fearGreedValue ?? "缺失"}。`, `BTC 当前结构 ${cryptoDirection}；ETH 相对 4h VWAP ${pct(ethVwapGap)}；SOL 相对 4h VWAP ${pct(solVwapGap)}。`, "PPI 偏热压制中期风险偏好，30日仍按高波动震荡处理。", cryptoDirection === "偏空震荡" ? "偏空震荡，不追反弹" : "中性修复，小仓位观察", cryptoDirection === "中性修复" ? "若价格继续站稳 VWAP，7日可转中性偏多" : "7日仍偏防守，等待价格重新站稳 VWAP", "通胀链未连续降温前，30日不做趋势性追多。", "半年维度仍有机构配置潜力，但必须等宏观利率压力下降和链上/ETF 资金恢复。"],
+          ["加密", `BTC ${fmt(btc.mark, 0)}；ETH ${fmt(eth.mark)}；SOL ${fmt(sol.mark)}。BTC 相对 4h VWAP ${pct(btcVwapGap)}，funding ${pct(btcFundingPct)}，恐惧贪婪 ${fearGreedValue ?? "缺失"}；稳定币7日 ${pct(stablecoins.change7dPct)}。`, `BTC 当前结构 ${cryptoDirection}；ETH 相对 4h VWAP ${pct(ethVwapGap)}；SOL 相对 4h VWAP ${pct(solVwapGap)}；${stablecoinTone}。`, "PPI 偏热压制中期风险偏好，30日仍按高波动震荡处理；若稳定币继续收缩，反弹质量要打折。", cryptoDirection === "偏空震荡" ? "偏空震荡，不追反弹" : "中性修复，小仓位观察", cryptoDirection === "中性修复" && stablecoinTone !== "链上美元流动性收缩" ? "若价格继续站稳 VWAP，7日可转中性偏多" : "7日仍偏防守，等待价格结构和链上美元流动性同时改善", "通胀链未连续降温前，30日不做趋势性追多；稳定币扩张才上调胜率。", "半年维度仍有机构配置潜力，但必须等宏观利率压力下降和链上/ETF 资金恢复。"],
           ["美股", `SPY ${fmt(spy.last)} ${pct(spy.percentChange)}；QQQ ${fmt(qqq.last)} ${pct(qqq.percentChange)}；SMH ${fmt(smh.last)} ${pct(smh.percentChange)}；TLT ${pct(tlt.percentChange)}；UUP ${pct(uup.percentChange)}。`, `SPY ${pct(spy.sevenTradingDayPct)}；QQQ ${pct(qqq.sevenTradingDayPct)}；SMH ${pct(smh.sevenTradingDayPct)}。科技强于大盘，主线仍在。`, `SPY ${pct(spy.thirtyCalendarDayPct)}；QQQ ${pct(qqq.thirtyCalendarDayPct)}；SMH ${pct(smh.thirtyCalendarDayPct)}。AI/半导体是主要强势来源。`, equityDirection === "科技带动修复" ? "偏多但不追估值" : "震荡偏强，控制追高", `PPI 偏热后 7日上限由 FOMC + SEP 决定；当前 ${equityDirection}。`, "30日仍以科技盈利主线对抗利率压力，若 TLT 转强、UUP 转弱才上调。", "AI 主线仍是半年级支撑，但利率高位会持续压制估值扩张。"],
           ["黄金", `GLD ${fmt(gld.last)} ${pct(gld.percentChange)}；TLT ${pct(tlt.percentChange)}；UUP ${pct(uup.percentChange)}；黄金压力组合：${goldDirection}。`, `GLD ${pct(gld.sevenTradingDayPct)}，短线修复质量由 TLT/UUP 确认。`, `GLD ${pct(gld.thirtyCalendarDayPct)}，30日仍是利率与美元主导。`, goldDirection === "修复增强" ? "可继续修复" : "震荡，不追高", goldDirection === "利率美元压制" ? "7日偏弱，等待美元或长债转向" : "7日区间修复", "30日中性，只有实际利率压力下降才转偏多。", "央行购金和地缘支撑仍在，中长期不悲观，但短中期受实际利率约束。"],
         ])}
@@ -760,6 +793,7 @@ const html = `<!doctype html>
           ["资金费率(funding)", pct((btc.funding ?? 0) * 100), pct((eth.funding ?? 0) * 100), pct((sol.funding ?? 0) * 100), "资金费率不极端，暂非拥挤多头。"],
           ["24小时名义成交", `${fmt((btc.volumeUsd ?? 0) / 1e8)} 亿美元`, `${fmt((eth.volumeUsd ?? 0) / 1e8)} 亿美元`, `${fmt((sol.volumeUsd ?? 0) / 1e8)} 亿美元`, "流动性可用，但需看方向确认。"],
           ["情绪", `恐惧贪婪指数 ${fearGreed.value ?? "缺失"}，${fearGreed.value_classification ?? "缺失"}`, "同左", "同左", "风险偏好偏弱，反弹容易反复。"],
+          ["稳定币流动性", `总供给 ${usdYi(stablecoins.totalUsd)}；1日 ${pct(stablecoins.change1dPct)}；7日 ${pct(stablecoins.change7dPct)}；30日 ${pct(stablecoins.change30dPct)}`, "DeFiLlama 稳定币口径", stablecoinTone, stablecoinTone === "链上美元流动性收缩" ? "链上购买力收缩，BTC 站上 VWAP 的信号需要打折。" : stablecoinTone === "链上美元流动性扩张" ? "链上购买力扩张，若价格结构确认，可上调加密修复质量。" : "链上购买力中性，价格结构仍是短线主导。"],
         ])}
         <p class="note"><strong>操作含义：</strong>“弱修复”不是做多信号，而是下跌后暂时止跌。BTC 只有站回关键 VWAP，且宏观数据发布后的风险偏好改善、ETF 资金流改善，才把 7日判断从偏空改为中性。当前宏观状态：${htmlEscape(cpi.statusLabel)}。</p>
       </section>
@@ -784,6 +818,7 @@ const html = `<!doctype html>
           <div class="card"><h3>美国通胀链</h3><p>CPI 环比 ${pct(cpi.headlineMom)}、核心环比 ${pct(cpi.coreMom)}；PPI 环比 ${pct(ppi.headlineMom)}、同比 ${pct(ppi.headlineYoy)}。结论：通胀链偏粘，降息交易不能主动加仓，只能等 PCE/FOMC 给二次确认。</p></div>
           <div class="card"><h3>Fed(美联储)利率路径</h3><p>FOMC + SEP 位于 ${eventStatus("2026-06-16")}。PPI 偏热后，点阵图偏鹰概率高于偏鸽；对美股估值、黄金和加密都是上限约束。</p></div>
           <div class="card"><h3>加密衍生品结构</h3><p>BTC 相对 4h VWAP ${pct(btcVwapGap)}，funding ${pct(btcFundingPct)}，OI(未平仓合约) ${fmt(btc.oi, 0)} BTC，24小时成交 ${fmt((btc.volumeUsd ?? 0) / 1e8)} 亿美元。结论：杠杆不算极端，但价格没站稳前只算弱修复。</p></div>
+          <div class="card"><h3>链上美元流动性</h3><p>稳定币总供给 ${usdYi(stablecoins.totalUsd)}，1日 ${pct(stablecoins.change1dPct)}，7日 ${pct(stablecoins.change7dPct)}，30日 ${pct(stablecoins.change30dPct)}。结论：${stablecoinTone}，这是加密 30日趋势能否从震荡转修复的重要确认项。</p></div>
           <div class="card"><h3>美元、长债与信用</h3><p>TLT ${pct(tlt.percentChange)}，UUP ${pct(uup.percentChange)}，HYG-LQD 信用差 ${pct(creditImpulse)}。结论：若 TLT 不转强、UUP 不转弱，黄金和高估值科技的持续上行空间有限。</p></div>
         </div>
       </section>
@@ -795,10 +830,10 @@ const html = `<!doctype html>
 
       <section class="section">
         <h2>来源和数据缺口</h2>
-        <p>已确认数据源：Hyperliquid public API(加密永续公开接口)、Alternative.me 恐惧贪婪指数、Ethereum public RPC(以太坊公开节点)、Nasdaq ETF quote/historical API(纳斯达克 ETF 行情/历史接口)、BLS(美国劳工统计局)日程/API、Fed(美联储)FOMC 日历、BEA(美国经济分析局)日程。</p>
+        <p>已确认数据源：Hyperliquid public API(加密永续公开接口)、DeFiLlama stablecoins API(稳定币流动性)、Alternative.me 恐惧贪婪指数、Ethereum public RPC(以太坊公开节点)、Nasdaq ETF quote/historical API(纳斯达克 ETF 行情/历史接口)、BLS(美国劳工统计局)日程/API、Fed(美联储)FOMC 日历、BEA(美国经济分析局)日程。</p>
         <p>数据时点规则：所有资产统一使用最近一个已确认有效的交易/报价点；周末和假期沿用最近有效交易日并注明口径。加密为连续交易，每次取最新可得永续数据。</p>
-        <p>已解决缺口：加密永续价格/K线/资金费率/未平仓合约/盘口、ETH gas、市场情绪代理、美股指数/板块/美元/长债/信用/黄金 ETF 代理。</p>
-        <p>仍待补缺口：加密清算热力图、多空比例、ETF 资金流、链上/社交情绪仍需 Coinalyze、Farside、DeFiLlama、LunarCrush、Alva 等源继续接入。宏观数据若 BLS API 超时，会明确标注并使用跨资产反应作为临时代理。</p>
+        <p>已解决缺口：加密永续价格/K线/资金费率/未平仓合约/盘口、ETH gas、市场情绪代理、稳定币总供给及 1日/7日/30日变化、美股指数/板块/美元/长债/信用/黄金 ETF 代理。</p>
+        <p>仍待补缺口：跨市场清算热力图、稳定多空比例、BTC/ETH 现货 ETF 资金流、链上钱包流和社交情绪仍需 Coinalyze/Coinglass/Farside 稳定镜像/LunarCrush/Santiment/Alva 等源继续接入；Binance public 多空比和强平流已做可选连接，但当前网络环境超时，不作为硬依赖。</p>
         <p class="sources">本报告由 GitHub Actions 云端生成。归档链接：${htmlEscape(publicUrl)}</p>
       </section>
     </main>
