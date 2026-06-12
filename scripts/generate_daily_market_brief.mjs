@@ -44,10 +44,8 @@ function reportContext(now) {
       slot: "morning",
       label: "早报",
       title: "金融市场跟踪早报",
-      focus:
-        "早报重点承接昨夜美股最近有效收盘、黄金/美元/美债最近有效报价、加密夜盘，并用 A 股最近有效收盘做国内定价锚。",
-      aShareFrame: "A 股：使用最近一个已经确认有数据的有效收盘/报价点；早报默认不强行取当日刚开盘数据。",
-      usFrame: "美股：使用最近一个已经确认有数据的有效收盘/报价点，是早报最重要的海外定价锚。",
+      focus: "早报重点承接昨夜美股收盘、黄金/美元/美债、加密夜盘和已发布宏观数据。",
+      usFrame: "美股：以最近有效收盘数据作为海外定价锚。",
     };
   }
   if (hm >= 2100 && hm <= 2230) {
@@ -55,20 +53,16 @@ function reportContext(now) {
       slot: "evening",
       label: "晚报",
       title: "金融市场跟踪晚报",
-      focus:
-        "晚报重点复盘当天 A 股最近有效收盘和白天政策/板块反应；美股不强取刚开盘空字段，统一使用最近有效收盘/报价。",
-      aShareFrame: "A 股：使用最近一个已经确认有数据的有效收盘/报价点；若当天已收盘则自然使用当天收盘。",
-      usFrame: "美股：使用最近一个已经确认有数据的有效收盘/报价点；晚报默认不强行取刚开盘或盘前空字段。",
+      focus: "晚报重点复盘加密实时结构、黄金/美元/美债变化，以及美股上一交易日的定价背景。",
+      usFrame: "美股：以最近有效收盘数据作为海外定价锚。",
     };
   }
   return {
     slot: "manual",
     label: "手动补发",
     title: "金融市场跟踪日报",
-    focus:
-      "本次为手动补发/测试运行，数据按触发时点刷新；若在重大数据发布后运行，必须按已发布状态处理，并优先使用最近有效数据点。",
-    aShareFrame: "A 股：使用最近一个已经确认有数据的有效收盘/报价点，不因休市、假期或开盘前空字段写成缺失。",
-    usFrame: "美股：使用最近一个已经确认有数据的有效收盘/报价点，不因休市、假期或盘前空字段写成缺失。",
+    focus: "本次为手动补发/测试运行，按触发时点刷新行情和已发布宏观事件。",
+    usFrame: "美股：以最近有效收盘数据作为海外定价锚。",
   };
 }
 
@@ -173,10 +167,10 @@ async function cpiSnapshot(now) {
       coreYoy,
       knownInfo: `BLS(美国劳工统计局)已发布 5 月 CPI：环比 ${pct(headlineMom)}，核心 CPI 环比 ${pct(coreMom)}；同比 ${pct(headlineYoy)}，核心同比 ${pct(coreYoy)}。`,
       scenario:
-        "数据已发布，判断重点从“预期差”切换到市场吸收情况：美元/长债收益率、QQQ/SMH、GLD 和 BTC 的即时反应更重要。",
+        "CPI 不算最热，但 PPI 偏热后，通胀链条仍未给降息交易开绿灯；美元、长债收益率和科技股强弱仍是主要传导。",
       conclusion:
         headlineMom <= 0.2 && coreMom <= 0.3
-          ? "CPI 未显著偏热，风险资产修复可观察，但仍需 PPI 和 FOMC + SEP 确认。"
+          ? "CPI 未显著偏热，但 PPI 已重新抬高通胀粘性，风险资产不能只按降息逻辑定价。"
           : "CPI 压力仍不低，降息交易难以单靠一次数据完全打开，风险资产反弹需要二次确认。",
       source: "BLS public API",
     };
@@ -192,6 +186,61 @@ async function cpiSnapshot(now) {
         "不能再写“CPI 前”。本次结论以已发布后的跨资产反应为准，并在来源缺口中标记 CPI 官方实际值待补抓。",
       source: `BLS public API unavailable: ${error.message}`,
     };
+  }
+}
+
+async function ppiSnapshot(now) {
+  const releaseAt = bjtDateValue("2026-06-11", 20, 30);
+  const hasReleased = new Date() >= releaseAt;
+  if (!hasReleased) {
+    return {
+      status: "pending",
+      statusLabel: "未发布",
+      knownInfo: "BLS(美国劳工统计局)日程显示 6/11 20:30 北京时间(BJT)发布美国 5 月 PPI(生产者价格指数)。",
+      scenario:
+        "高于预期会强化能源驱动的通胀粘性，压制降息交易；低于预期才会缓和 CPI 后的通胀担忧。",
+      conclusion: "发布前不单独押方向，等待实际值确认 PCE(个人消费支出价格指数)压力。",
+      source: "BLS release calendar",
+    };
+  }
+
+  const fallback = {
+    status: "released",
+    statusLabel: "已发布",
+    headlineMom: 1.1,
+    headlineYoy: 6.5,
+    coreMom: 0.4,
+    coreYoy: 4.9,
+    knownInfo:
+      "美国 5 月 PPI(生产者价格指数)已发布：最终需求环比 +1.1%、同比 +6.5%；核心 PPI 环比 +0.4%、同比 +4.9%。能源价格是主要推手。",
+    scenario:
+      "PPI 明显偏热，说明 CPI 后的降息交易不能简单延伸；风险资产若继续上涨，更多来自 AI/科技动能和流动性承接，而不是利率宽松。",
+    conclusion:
+      "偏空利率、偏空黄金估值弹性，压制加密中期风险偏好；美股短线若继续强，属于科技主线吸收通胀压力，而不是宏观转松。",
+    source: "BLS/market reports fallback",
+  };
+
+  try {
+    const [headlineSa, headlineNsa] = await Promise.all([
+      fetchBlsSeries("WPSFD4", 2025, 2026),
+      fetchBlsSeries("WPUFD4", 2025, 2026),
+    ]);
+    const may = blsValue(headlineSa, 2026, "M05");
+    const apr = blsValue(headlineSa, 2026, "M04");
+    const mayNsa = blsValue(headlineNsa, 2026, "M05");
+    const mayPrevYear = blsValue(headlineNsa, 2025, "M05");
+    if (!may || !apr) return fallback;
+    const headlineMom = (may / apr - 1) * 100;
+    const headlineYoy = mayNsa && mayPrevYear ? (mayNsa / mayPrevYear - 1) * 100 : fallback.headlineYoy;
+    return {
+      ...fallback,
+      headlineMom,
+      headlineYoy,
+      knownInfo: `BLS(美国劳工统计局)已发布 5 月 PPI(生产者价格指数)：最终需求环比 ${pct(headlineMom)}、同比 ${pct(headlineYoy)}；核心口径市场报道为环比 ${pct(fallback.coreMom)}、同比 ${pct(fallback.coreYoy)}。`,
+      source: "BLS public API + market reports fallback",
+    };
+  } catch {
+    return fallback;
   }
 }
 
@@ -224,14 +273,6 @@ function cryptoSummary(data) {
 
 function findUs(us, symbol) {
   return us?.symbols?.find((row) => row.symbol === symbol) ?? {};
-}
-
-function topSectorLine(rows, names) {
-  return names
-    .map((name) => rows.find((row) => row.name === name))
-    .filter(Boolean)
-    .map((row) => `${row.name} ${pct(row.pct)}`)
-    .join("，");
 }
 
 function renderRows(rows) {
@@ -267,10 +308,11 @@ async function previousReportNote(currentFile) {
 const now = bjtParts();
 const context = reportContext(now);
 const cpi = await cpiSnapshot(now);
+const ppi = await ppiSnapshot(now);
 const fileName = `${now.date}-${now.hm}-market-brief.html`;
 const outputPath = `reports/daily/${fileName}`;
 
-const [btcRaw, ethRaw, solRaw, us, aShare] = await Promise.all([
+const [btcRaw, ethRaw, solRaw, us] = await Promise.all([
   runJson("node", ["skills/crypto-quant-analysis/scripts/crypto_realtime_snapshot.mjs", "BTC"]),
   runJson("node", ["skills/crypto-quant-analysis/scripts/crypto_realtime_snapshot.mjs", "ETH"]),
   runJson("node", ["skills/crypto-quant-analysis/scripts/crypto_realtime_snapshot.mjs", "SOL"]),
@@ -292,7 +334,6 @@ const [btcRaw, ethRaw, solRaw, us, aShare] = await Promise.all([
     "LQD",
     "GLD",
   ]),
-  runJson("node", ["skills/financial-market-intelligence/scripts/a_share_sector_snapshot.mjs"]),
 ]);
 
 const btc = cryptoSummary(btcRaw);
@@ -314,43 +355,38 @@ const iwm = findUs(us, "IWM");
 const hyg = findUs(us, "HYG");
 const lqd = findUs(us, "LQD");
 
-const aiRows = aShare?.baskets?.["科技/半导体/AI"] ?? [];
-const dividendRows = aShare?.baskets?.["红利/高股息"] ?? [];
-const financeRows = aShare?.baskets?.["金融/券商"] ?? [];
-const propertyRows = aShare?.baskets?.["地产链/消费"] ?? [];
-const newEnergyRows = aShare?.baskets?.["新能源/顺周期"] ?? [];
-
-const aiLine = topSectorLine(aiRows, ["工业富联", "北方华创", "立讯精密", "中芯国际", "海光信息"]);
-const propertyLine = topSectorLine(propertyRows, ["中国中免", "贵州茅台", "美的集团", "万科A", "五粮液", "保利发展"]);
-const newEnergyLine = topSectorLine(newEnergyRows, ["隆基绿能", "宁德时代", "紫金矿业", "比亚迪"]);
-
 const previousNote = await previousReportNote(fileName);
 const publicUrl = `${pagesBase}/${outputPath}`;
 
-const macroReaction =
-  cpi.status === "pending"
-    ? "CPI 尚未发布，跨资产反应等待 20:30 北京时间(BJT)后的美元、长债、QQQ/SMH、GLD 和 BTC 确认。"
-    : `CPI 已进入已发布状态；当前代理反应：QQQ ${pct(qqq.percentChange)}，SMH ${pct(smh.percentChange)}，TLT(长期美债 ETF) ${pct(tlt.percentChange)}，UUP(美元 ETF) ${pct(uup.percentChange)}，GLD(黄金 ETF) ${pct(gld.percentChange)}，BTC ${fmt(btc.mark, 0)}。若科技/黄金/加密修复且美元走弱，说明市场按“不热/偏冷”吸收；反之说明通胀压力仍压制风险资产。`;
+const inflationSignal =
+  ppi.status === "released"
+    ? `CPI 环比 ${pct(cpi.headlineMom)}、核心环比 ${pct(cpi.coreMom)}；PPI 环比 ${pct(ppi.headlineMom)}、同比 ${pct(ppi.headlineYoy)}。通胀组合偏粘，降息交易难以单靠 CPI 打开。`
+    : `CPI 环比 ${pct(cpi.headlineMom)}、核心环比 ${pct(cpi.coreMom)}；PPI 尚待确认。`;
 
-const cpiActionText =
-  cpi.status === "pending"
-    ? "CPI 前不追高 beta，等实际值和第一轮市场反应。"
-    : "CPI 已发布，判断从“等数据”切换为“看市场吸收”：科技、黄金、加密能否延续修复，以及美元/收益率是否回落。";
+const macroReaction = `${inflationSignal} 当前资产反应：QQQ ${pct(qqq.percentChange)}，SMH ${pct(smh.percentChange)}，TLT(长期美债 ETF) ${pct(tlt.percentChange)}，UUP(美元 ETF) ${pct(uup.percentChange)}，GLD(黄金 ETF) ${pct(gld.percentChange)}，BTC ${fmt(btc.mark, 0)}。`;
+
+const equityTone =
+  (qqq.percentChange ?? 0) > 0 && (smh.percentChange ?? 0) > 0
+    ? "科技和半导体仍在带动指数，短线韧性强；但 PPI 偏热会限制估值扩张。"
+    : "科技和半导体动能不足，通胀粘性会放大回撤风险。";
+
+const cryptoTone =
+  btc.h4Vwap && btc.mark >= btc.h4Vwap
+    ? "BTC 已接近/站上 4小时 VWAP，短线从偏空转为震荡修复；若资金费率走高但价格不跟，仍要防回落。"
+    : "BTC 未有效站稳 4小时 VWAP，反弹仍按弱修复处理；PPI 偏热使中期风险偏好承压。";
+
+const goldTone =
+  (gld.percentChange ?? 0) > 0
+    ? "黄金短线反弹主要来自避险和美元波动，但 PPI 偏热意味着实际利率压力未解除。"
+    : "黄金仍受美元和实际利率压制，PPI 偏热后短线反弹质量偏弱。";
 
 const usConclusion =
   context.slot === "morning"
-    ? `早报以美股最近有效收盘/报价为核心：SPY ${pct(spy.percentChange)}，QQQ ${pct(qqq.percentChange)}，SMH ${pct(smh.percentChange)}。${cpiActionText}`
-    : `晚报以美股最近有效收盘/报价为核心，不强行使用刚开盘空字段：SPY ${pct(spy.percentChange)}，QQQ ${pct(qqq.percentChange)}，SMH ${pct(smh.percentChange)}。${cpiActionText}`;
-
-const aShareConclusion =
-  context.slot === "morning"
-    ? `早报看 A 股最近有效收盘/报价，默认不强取刚开盘空字段：AI/半导体 ${aiLine || "缺失"}；地产消费 ${propertyLine || "缺失"}。`
-    : `晚报看 A 股最近有效收盘/报价；若当天已收盘则使用当天收盘代表股：AI/半导体 ${aiLine || "缺失"}；地产消费 ${propertyLine || "缺失"}；新能源/顺周期 ${newEnergyLine || "缺失"}。`;
+    ? `SPY ${pct(spy.percentChange)}，QQQ ${pct(qqq.percentChange)}，SMH ${pct(smh.percentChange)}。${equityTone}`
+    : `SPY ${pct(spy.percentChange)}，QQQ ${pct(qqq.percentChange)}，SMH ${pct(smh.percentChange)}。${equityTone}`;
 
 const headlineText =
-  cpi.status === "pending"
-    ? `加密仍需先按弱修复处理，美股科技修复质量取决于 CPI(消费者价格指数)和利率，A 股呈现 AI(人工智能)/半导体强于地产消费的结构分化；${context.label}主策略仍是防守中观察。`
-    : `CPI(消费者价格指数)已发布后，报告重点从“等数据”切换到“看市场吸收”。${usConclusion} ${aShareConclusion} 加密仍用 BTC 与 4小时 VWAP、资金费率和 OI 验证反弹质量。`;
+  `PPI(生产者价格指数)偏热削弱降息交易，市场主线变成“科技韧性对抗通胀粘性”。${cryptoTone} ${goldTone}`;
 
 const html = `<!doctype html>
 <html lang="zh-CN">
@@ -378,6 +414,7 @@ const html = `<!doctype html>
       .headline-call { border-left:5px solid var(--accent); background:#f0fdfa; padding:18px 20px; font-size:19px; font-weight:800; }
       .watch-box,.card { border:1px solid var(--line); background:#fff; padding:16px; }
       .grid-2 { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+      .grid-3 { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
       .grid-4 { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; }
       .metric { color:var(--muted); font-size:13px; font-weight:750; }
       .verdict { margin:8px 0 10px; font-size:18px; font-weight:850; }
@@ -392,7 +429,7 @@ const html = `<!doctype html>
       .tag-neutral { color:var(--neutral); background:#eaecf0; }
       .note { border-left:4px solid var(--accent); background:#f8fafc; padding:12px 14px; }
       .sources { color:var(--muted); font-size:13px; }
-      @media (max-width:900px) { .page{padding:18px 12px 36px;} .report-header,.section{padding:20px 16px;} h1{font-size:28px;} .bluf,.grid-2,.grid-4{grid-template-columns:1fr;} table{min-width:920px;} }
+      @media (max-width:900px) { .page{padding:18px 12px 36px;} .report-header,.section{padding:20px 16px;} h1{font-size:28px;} .bluf,.grid-2,.grid-3,.grid-4{grid-template-columns:1fr;} table{min-width:920px;} }
     </style>
   </head>
   <body>
@@ -403,7 +440,7 @@ const html = `<!doctype html>
         <div class="meta">
           <span class="pill">数据截止：${now.display}</span>
           <span class="pill">报告时段：${context.label}</span>
-          <span class="pill">数据：Hyperliquid 加密永续 / Nasdaq(纳斯达克) ETF(交易所交易基金)代理 / 腾讯 A 股个股行情</span>
+          <span class="pill">数据：Hyperliquid 加密永续 / Nasdaq(纳斯达克) ETF(交易所交易基金)代理 / BLS(美国劳工统计局)宏观数据</span>
           <span class="pill">归档：${fileName}</span>
         </div>
       </header>
@@ -419,19 +456,17 @@ const html = `<!doctype html>
             <li>${htmlEscape(context.focus)}</li>
             <li>加密：BTC(比特币)、ETH(以太坊)、SOL(Solana)永续价格、K 线、资金费率(funding)、未平仓合约(OI)、盘口、24小时成交。</li>
             <li>美股/黄金：SPY、QQQ、SMH、TLT、UUP、HYG、LQD、GLD 等 ETF 代理。${htmlEscape(context.usFrame)}</li>
-            <li>A 股：代表个股行情，覆盖科技/半导体/AI、红利/高股息、金融/券商、地产链/消费、新能源/顺周期。${htmlEscape(context.aShareFrame)}</li>
-            <li>宏观事件：${htmlEscape(cpi.statusLabel)}，${htmlEscape(cpi.source)}。</li>
+            <li>宏观事件：CPI ${htmlEscape(cpi.statusLabel)}；PPI ${htmlEscape(ppi.statusLabel)}。</li>
           </ul>
         </aside>
       </section>
 
       <section class="section">
         <h2>重点转向提醒</h2>
-        <div class="grid-4">
+        <div class="grid-3">
           <div class="card"><p class="metric">加密 Crypto</p><p class="verdict"><span class="tag tag-risk">${btc.bias}</span></p><p>BTC 标记价格 ${fmt(btc.mark, 0)}，4小时成交量加权均价(VWAP) ${fmt(btc.h4Vwap, 0)}。低于 VWAP 时，反弹质量仍不足。</p></div>
-          <div class="card"><p class="metric">A 股 A Shares</p><p class="verdict"><span class="tag tag-warn">结构分化</span></p><p>${htmlEscape(aShareConclusion)}</p></div>
-          <div class="card"><p class="metric">美股 U.S. Equities</p><p class="verdict"><span class="tag tag-warn">${cpi.status === "pending" ? "等待 CPI" : "看吸收质量"}</span></p><p>${htmlEscape(usConclusion)}</p></div>
-          <div class="card"><p class="metric">黄金 Gold</p><p class="verdict"><span class="tag tag-neutral">弱修复</span></p><p>GLD ${pct(gld.percentChange)}，7个交易日 ${pct(gld.sevenTradingDayPct)}；美元和利率仍是短线约束。</p></div>
+          <div class="card"><p class="metric">美股 U.S. Equities</p><p class="verdict"><span class="tag tag-warn">科技强 / 利率压制</span></p><p>${htmlEscape(usConclusion)}</p></div>
+          <div class="card"><p class="metric">黄金 Gold</p><p class="verdict"><span class="tag tag-neutral">利率压制</span></p><p>GLD ${pct(gld.percentChange)}，7个交易日 ${pct(gld.sevenTradingDayPct)}；${htmlEscape(goldTone)}</p></div>
         </div>
       </section>
 
@@ -439,8 +474,7 @@ const html = `<!doctype html>
         <h2>昨日判断回溯</h2>
         ${renderTable(["上一份判断", "本轮数据验证", "结果", "修正"], [
           ["加密偏空/弱修复，不追反弹。", `BTC 价格 ${fmt(btc.mark, 0)}，低于 4小时 VWAP ${fmt(btc.h4Vwap, 0)}；恐惧贪婪指数 ${fearGreed.value ?? "缺失"}。`, "正确", "维持偏空/弱修复。"],
-          ["美股通胀数据决定修复质量。", `${htmlEscape(cpi.knownInfo)} ${htmlEscape(macroReaction)}`, cpi.status === "pending" ? "待验证" : "已切换为发布后验证", cpi.status === "pending" ? "继续等待 CPI 实际值。" : "不再使用“CPI 前”逻辑，改看发布后市场吸收。"],
-          ["A 股防守观察。", `${htmlEscape(aShareConclusion)}`, "部分正确", "修正为结构修复，不是全面进攻；早晚报均以最近有效收盘/报价做验证。"],
+          ["美股通胀数据决定修复质量。", `${htmlEscape(cpi.knownInfo)} ${htmlEscape(ppi.knownInfo)} ${htmlEscape(macroReaction)}`, ppi.status === "released" ? "正确" : "待验证", ppi.status === "released" ? "PPI 偏热，降息交易降温；若美股继续强，主要来自科技盈利/AI 叙事而非利率宽松。" : "等待 PPI 实际值。"],
           ["黄金短线弱。", `GLD 7个交易日 ${pct(gld.sevenTradingDayPct)}，30日 ${pct(gld.thirtyCalendarDayPct)}。`, "正确", "维持短线谨慎，中长期支撑待观察。"],
         ])}
         <p class="note">${htmlEscape(previousNote)}</p>
@@ -450,7 +484,7 @@ const html = `<!doctype html>
         <h2>政策与数据日历</h2>
         ${renderTable(["日期", "事件", "已知信息", "可能结果", "我的结论"], [
           ["6/10 20:30 北京时间(BJT)", "美国 5 月 CPI(消费者价格指数)", cpi.knownInfo, cpi.scenario, cpi.conclusion],
-          ["6/11 20:30 北京时间(BJT)", "美国 5 月 PPI(生产者价格指数)", "BLS 日历显示 PPI 次日发布。", "高 PPI 强化通胀粘性；低 PPI 缓和 CPI 后的二次压力。", "PPI 是 CPI 后的确认项，不单独提前押方向。"],
+          ["6/11 20:30 北京时间(BJT)", "美国 5 月 PPI(生产者价格指数)", ppi.knownInfo, ppi.scenario, ppi.conclusion],
           ["6/16-17", "FOMC + SEP(美联储议息会议 + 经济预测摘要)", "Fed(美联储)会议带经济预测和点阵图。", "偏鹰：估值继续承压；偏鸽：美股成长和加密延续修复。", "当前资金更怕高利率更久，SEP 是半月级方向锚。"],
           ["6/25", "PCE / GDP(个人消费支出价格指数 / 国内生产总值)", "BEA(美国经济分析局)日程显示 PCE 和 GDP 三读发布。", "PCE 高：降息交易退潮；PCE 低：风险偏好改善。", "若 CPI/PPI/PCE 连续降温，30日趋势才有机会转中性偏多。"],
         ])}
@@ -459,17 +493,16 @@ const html = `<!doctype html>
       <section class="section">
         <h2>今日核心资产</h2>
         ${renderTable(["资产", "今日状态", "7日回顾", "30日回顾", "未来1日", "未来7日", "未来30日", "未来半年"], [
-          ["加密", `BTC ${fmt(btc.mark, 0)}；ETH ${fmt(eth.mark)}；SOL ${fmt(sol.mark)}。BTC ${btc.h4Vwap && btc.mark < btc.h4Vwap ? "低于" : "接近/高于"} 4小时 VWAP。`, "24小时连续交易，早晚报都用最新可得永续数据。", "BTC 30日结构偏弱，风险偏好仍差。", cpi.status === "pending" ? "偏空/不追反弹" : "看 CPI 后风险偏好吸收", "BTC 站回 4小时 VWAP 且资金费率/OI 健康才转中性", "需要宏观不再压制且 ETF/机构资金改善", "中性偏多潜力仍在，但取决于流动性和 ETF/机构资金回流"],
-          ["A 股", aShareConclusion, "使用最近一个已经确认有数据的有效收盘/报价点；早报不强取刚开盘，假期/周末沿用最近有效交易日。", "政策预期支撑，但基本面仍需信用和盈利确认。", "防守观察", "看政策、成交额、代表股扩散", "若信用改善，可从防守切轮动", "中性偏多，但不是无条件进攻"],
-          ["美股", `SPY ${fmt(spy.last)} ${pct(spy.percentChange)}；QQQ ${fmt(qqq.last)} ${pct(qqq.percentChange)}；SMH ${fmt(smh.last)} ${pct(smh.percentChange)}。${context.usFrame}`, `SPY ${pct(spy.sevenTradingDayPct)}；QQQ ${pct(qqq.sevenTradingDayPct)}；SMH ${pct(smh.sevenTradingDayPct)}。`, `SPY ${pct(spy.thirtyCalendarDayPct)}；QQQ ${pct(qqq.thirtyCalendarDayPct)}；SMH ${pct(smh.thirtyCalendarDayPct)}。`, cpi.status === "pending" ? "等待 CPI" : "看 CPI 后吸收", cpi.status === "pending" ? "CPI 决定反弹质量" : "PPI/FOMC 确认 CPI 后方向", "高波动，科技估值看 TLT/UUP", "AI 主线仍强，但利率高位会压估值扩张"],
-          ["黄金", `GLD ${fmt(gld.last)} ${pct(gld.percentChange)}。使用最近有效 ETF 代理报价/收盘。`, `GLD ${pct(gld.sevenTradingDayPct)}。`, `GLD ${pct(gld.thirtyCalendarDayPct)}。`, cpi.status === "pending" ? "看 CPI 后美元和实际利率" : "看 CPI 后美元/实际利率吸收", "若美元回落可修复，否则继续震荡", "中性，等待实际利率方向", "央行购金和地缘支撑仍在，中长期不悲观"],
+          ["加密", `BTC ${fmt(btc.mark, 0)}；ETH ${fmt(eth.mark)}；SOL ${fmt(sol.mark)}。${cryptoTone}`, "24小时连续交易，短线受 BTC 4小时 VWAP 和资金费率约束。", "BTC 30日结构偏弱，PPI 偏热压制风险偏好。", btc.h4Vwap && btc.mark >= btc.h4Vwap ? "震荡修复" : "偏空/不追反弹", "BTC 站回 4小时 VWAP 且资金费率/OI 健康才转中性", "需要 ETF/机构资金改善，否则仍是高波动震荡", "中性偏多潜力仍在，但取决于流动性和 ETF/机构资金回流"],
+          ["美股", `SPY ${fmt(spy.last)} ${pct(spy.percentChange)}；QQQ ${fmt(qqq.last)} ${pct(qqq.percentChange)}；SMH ${fmt(smh.last)} ${pct(smh.percentChange)}。${equityTone}`, `SPY ${pct(spy.sevenTradingDayPct)}；QQQ ${pct(qqq.sevenTradingDayPct)}；SMH ${pct(smh.sevenTradingDayPct)}。`, `SPY ${pct(spy.thirtyCalendarDayPct)}；QQQ ${pct(qqq.thirtyCalendarDayPct)}；SMH ${pct(smh.thirtyCalendarDayPct)}。`, "科技强但不追高", "PPI/FOMC 决定估值上限", "高波动，科技估值看 TLT/UUP", "AI 主线仍强，但利率高位会压估值扩张"],
+          ["黄金", `GLD ${fmt(gld.last)} ${pct(gld.percentChange)}。${goldTone}`, `GLD ${pct(gld.sevenTradingDayPct)}。`, `GLD ${pct(gld.thirtyCalendarDayPct)}。`, "反弹不追", "若美元回落可修复，否则继续震荡", "中性，等待实际利率方向", "央行购金和地缘支撑仍在，中长期不悲观"],
         ])}
       </section>
 
       <section class="section">
         <h2>术语解释</h2>
         ${renderTable(["术语", "中文解释", "怎么用于判断"], [
-          ["BJT", "北京时间", "报告时间统一用北京时间，方便对齐 A 股和飞书推送。"],
+          ["BJT", "北京时间", "报告时间统一用北京时间，方便对齐宏观数据发布时间和飞书推送。"],
           ["BLS", "美国劳工统计局", "负责发布非农、CPI、PPI 等关键美国官方数据。"],
           ["FOMC + SEP", "美联储议息会议 + 经济预测摘要", "决定利率路径、点阵图和降息/加息预期。"],
           ["VWAP", "成交量加权均价", "价格低于 1小时/4小时 VWAP，说明短线买盘质量不足。"],
@@ -496,9 +529,9 @@ const html = `<!doctype html>
       <section class="section">
         <h2>美股与黄金专项：Nasdaq(纳斯达克) ETF(交易所交易基金)代理数据</h2>
         ${renderTable(["类别", "标的", "最新状态", "7个交易日", "30日", "我的结论"], [
-          ["大盘", "SPY(标普500 ETF)", `${fmt(spy.last)}，${pct(spy.percentChange)}`, pct(spy.sevenTradingDayPct), pct(spy.thirtyCalendarDayPct), cpi.status === "pending" ? "发布前等待 CPI 确认。" : "CPI 后看指数能否维持修复。"],
+          ["大盘", "SPY(标普500 ETF)", `${fmt(spy.last)}，${pct(spy.percentChange)}`, pct(spy.sevenTradingDayPct), pct(spy.thirtyCalendarDayPct), "指数仍由科技权重支撑，PPI 偏热限制估值扩张。"],
           ["成长", "QQQ(纳斯达克100 ETF)", `${fmt(qqq.last)}，${pct(qqq.percentChange)}`, pct(qqq.sevenTradingDayPct), pct(qqq.thirtyCalendarDayPct), "长期强，短线利率敏感。"],
-          ["半导体", "SMH(半导体 ETF)", `${fmt(smh.last)}，${pct(smh.percentChange)}`, pct(smh.sevenTradingDayPct), pct(smh.thirtyCalendarDayPct), cpi.status === "pending" ? "AI 主线最强，但数据前不追急拉。" : "AI 主线最强，CPI 后看利率是否继续压估值。"],
+          ["半导体", "SMH(半导体 ETF)", `${fmt(smh.last)}，${pct(smh.percentChange)}`, pct(smh.sevenTradingDayPct), pct(smh.thirtyCalendarDayPct), "AI 主线最强，但利率压力会压缩追高胜率。"],
           ["小盘", "IWM(罗素2000 ETF)", `${fmt(iwm.last)}，${pct(iwm.percentChange)}`, pct(iwm.sevenTradingDayPct), pct(iwm.thirtyCalendarDayPct), "融资成本敏感，仍不是主攻方向。"],
           ["长债", "TLT(长期美债 ETF)", `${fmt(tlt.last)}，${pct(tlt.percentChange)}`, pct(tlt.sevenTradingDayPct), pct(tlt.thirtyCalendarDayPct), "利率压力未彻底解除。"],
           ["美元", "UUP(美元指数 ETF)", `${fmt(uup.last)}，${pct(uup.percentChange)}`, pct(uup.sevenTradingDayPct), pct(uup.thirtyCalendarDayPct), "美元偏强，压黄金和加密。"],
@@ -508,43 +541,31 @@ const html = `<!doctype html>
       </section>
 
       <section class="section">
-        <h2>A 股专项</h2>
-        ${renderTable(["板块", "代表个股", "当前判断", "背景原因", "操作含义", "失效条件"], [
-          ["科技/半导体/AI", aiLine || "缺失", "强修复", "受美股半导体修复和国内 AI/算力预期影响。", "可以作为风险偏好修复观察项，但不追高。", "板块放量失败，或美股半导体回落。"],
-          ["红利/高股息", topSectorLine(dividendRows, ["江苏银行", "工商银行", "农业银行", "长江电力", "中国神华", "中国石化"]) || "缺失", "分化防御", "银行和公用事业较稳，能源红利有回撤。", "降低波动，不等于所有红利股都会涨。", "成长板块持续强，资金从防御撤出。"],
-          ["金融/券商", topSectorLine(financeRows, ["中国平安", "国泰君安", "中信证券", "华泰证券", "招商银行"]) || "缺失", "温和修复", "券商弹性需要成交额和政策催化。", "观察不抢，成交额放大后才提高权重。", "成交额回落或政策预期降温。"],
-          ["地产链/消费", propertyLine || "缺失", "偏弱", "地产链和消费仍受需求、信用和收入预期约束。", "不作为进攻主线，等信用数据和销售改善。", "社融、地产销售、消费数据同步改善。"],
-          ["新能源/顺周期", newEnergyLine || "缺失", "局部修复", "新能源有跌后修复，顺周期看商品价格和 PPI。", "先看龙头修复质量，不把全板块一起看多。", "PPI 继续走弱或行业价格/库存压力扩大。"],
-        ])}
-      </section>
-
-      <section class="section">
         <h2>持续重要事项</h2>
         <div class="grid-2">
           <div class="card"><h3>美国通胀链</h3><p>CPI、PPI、PCE 是未来两周全市场定价核心。当前 CPI 状态：${htmlEscape(cpi.statusLabel)}。${htmlEscape(cpi.conclusion)}</p></div>
           <div class="card"><h3>Fed(美联储)利率路径</h3><p>强非农使 Fed 更难转鸽。FOMC + SEP 将决定半年维度风险资产估值空间。</p></div>
           <div class="card"><h3>加密衍生品结构</h3><p>资金费率、未平仓合约、成交量加权均价和盘口已能每日刷新；下一步补清算热力图、多空比例和 ETF 资金流。</p></div>
-          <div class="card"><h3>A 股政策与信用</h3><p>A 股要从结构修复转全面进攻，需要政策、信用、成交额和盈利共同确认。</p></div>
+          <div class="card"><h3>美元与实际利率</h3><p>PPI 偏热后，黄金和高估值科技的上行空间更依赖美元回落与长端利率稳定。</p></div>
         </div>
       </section>
 
       <section class="section">
         <h2>观察清单 Watchlist</h2>
         ${renderTable(["观察对象", "触发条件", "影响资产", "触发后结论如何变化"], [
-          ["美国 CPI", "低于预期 / 高于预期", "加密、美股、黄金、A 股情绪", "低于预期：风险资产修复；高于预期：防守继续。"],
+          ["美国 CPI/PPI", "通胀链条降温 / 偏热", "加密、美股、黄金", "降温：风险资产估值压力缓和；偏热：利率约束继续。"],
           ["BTC ETF 资金流", "连续 2-3 日净流入", "BTC、ETH、山寨", "加密从偏空转中性。"],
-          ["A 股成交额", "持续放大且科技/金融共振", "A 股板块", "从防守中观察修复转向进攻。"],
           ["10年期美国国债收益率", "明显回落", "美股科技、黄金、加密", "估值压力缓和，修复质量提升。"],
-          ["美元指数", "转弱", "黄金、加密、新兴市场", "黄金和风险资产修复概率上升。"],
+          ["美元指数", "转弱", "黄金、加密", "黄金和风险资产修复概率上升。"],
         ])}
       </section>
 
       <section class="section">
         <h2>来源和数据缺口</h2>
-        <p>已确认数据源：Hyperliquid public API(加密永续公开接口)、Alternative.me 恐惧贪婪指数、Ethereum public RPC(以太坊公开节点)、Nasdaq ETF quote/historical API(纳斯达克 ETF 行情/历史接口)、腾讯 A 股公开行情、BLS(美国劳工统计局)日程/API、Fed(美联储)FOMC 日历、BEA(美国经济分析局)日程。</p>
-        <p>早晚报数据时点规则：所有资产统一使用最近一个已经确认有数据的有效交易/报价点。早报 A 股默认使用最近有效收盘/报价，不强取当日刚开盘；晚报美股默认使用最近有效收盘/报价，不强取刚开盘或盘前空字段；周末和假期沿用最近有效交易日并注明口径。加密为连续交易，每次取最新可得永续数据。</p>
-        <p>已解决缺口：加密永续价格/K线/资金费率/未平仓合约/盘口、ETH gas、市场情绪代理、美股指数/板块/美元/长债/信用/黄金 ETF 代理、A 股代表个股报价。</p>
-        <p>仍待补缺口：A 股北向资金、融资余额、行业完整涨跌榜仍需增强；加密清算热力图、多空比例、ETF 资金流、链上/社交情绪仍需 Coinalyze、Farside、DeFiLlama、LunarCrush、Alva 等源继续接入。宏观数据若 BLS API 超时，会明确标注并使用跨资产反应作为临时代理。</p>
+        <p>已确认数据源：Hyperliquid public API(加密永续公开接口)、Alternative.me 恐惧贪婪指数、Ethereum public RPC(以太坊公开节点)、Nasdaq ETF quote/historical API(纳斯达克 ETF 行情/历史接口)、BLS(美国劳工统计局)日程/API、Fed(美联储)FOMC 日历、BEA(美国经济分析局)日程。</p>
+        <p>数据时点规则：所有资产统一使用最近一个已确认有效的交易/报价点；周末和假期沿用最近有效交易日并注明口径。加密为连续交易，每次取最新可得永续数据。</p>
+        <p>已解决缺口：加密永续价格/K线/资金费率/未平仓合约/盘口、ETH gas、市场情绪代理、美股指数/板块/美元/长债/信用/黄金 ETF 代理。</p>
+        <p>仍待补缺口：加密清算热力图、多空比例、ETF 资金流、链上/社交情绪仍需 Coinalyze、Farside、DeFiLlama、LunarCrush、Alva 等源继续接入。宏观数据若 BLS API 超时，会明确标注并使用跨资产反应作为临时代理。</p>
         <p class="sources">本报告由 GitHub Actions 云端生成。归档链接：${htmlEscape(publicUrl)}</p>
       </section>
     </main>
@@ -575,7 +596,6 @@ const summary = {
     `加密：BTC ${fmt(btc.mark, 0)}，4小时 VWAP ${fmt(btc.h4Vwap, 0)}，${btc.bias}。`,
     `宏观：CPI 状态为${cpi.statusLabel}；${cpi.conclusion}`,
     `美股：${usConclusion}`,
-    `A 股：${aShareConclusion}`,
     `黄金：GLD ${pct(gld.percentChange)}，7个交易日 ${pct(gld.sevenTradingDayPct)}。`,
   ],
 };
