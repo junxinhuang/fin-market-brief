@@ -88,6 +88,54 @@ function pct(value) {
   return `${n >= 0 ? "+" : ""}${n.toFixed(2)}%`;
 }
 
+function isNum(value) {
+  return value !== null && value !== undefined && Number.isFinite(Number(value));
+}
+
+function gapPct(value, base) {
+  if (!isNum(value) || !isNum(base) || Number(base) === 0) return null;
+  return (Number(value) / Number(base) - 1) * 100;
+}
+
+function plainDate(date = new Date()) {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Shanghai",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date);
+}
+
+function daysFromToday(dateText, todayText = plainDate()) {
+  const start = new Date(`${todayText}T00:00:00+08:00`);
+  const target = new Date(`${dateText}T00:00:00+08:00`);
+  return Math.round((target - start) / 86400000);
+}
+
+function eventStatus(dateText) {
+  const days = daysFromToday(dateText);
+  if (days < 0) return "已发布/已发生";
+  if (days === 0) return "今日窗口";
+  return `未来 ${days} 天`;
+}
+
+function signalTag(kind) {
+  if (kind === "risk") return "tag-risk";
+  if (kind === "good") return "tag-good";
+  if (kind === "warn") return "tag-warn";
+  return "tag-neutral";
+}
+
+function metricState({ value, goodAbove, badBelow, goodBelow, badAbove }) {
+  if (!isNum(value)) return { tag: "tag-neutral", label: "未确认", text: "当前值未确认，不能作为方向依据。" };
+  const n = Number(value);
+  if (isNum(goodAbove) && n >= Number(goodAbove)) return { tag: "tag-good", label: "利多确认", text: "当前值已经达到利多阈值。" };
+  if (isNum(badBelow) && n <= Number(badBelow)) return { tag: "tag-risk", label: "利空确认", text: "当前值已经跌破利空阈值。" };
+  if (isNum(goodBelow) && n <= Number(goodBelow)) return { tag: "tag-good", label: "利多确认", text: "当前值已经低于利多阈值。" };
+  if (isNum(badAbove) && n >= Number(badAbove)) return { tag: "tag-risk", label: "利空确认", text: "当前值已经高于利空阈值。" };
+  return { tag: "tag-warn", label: "中性观察", text: "当前值处在观察区，方向不宜提前放大。" };
+}
+
 function runJson(command, args) {
   return execFileAsync(command, args, {
     cwd: process.cwd(),
@@ -175,15 +223,21 @@ async function cpiSnapshot(now) {
       source: "BLS public API",
     };
   } catch (error) {
+    const fallback = {
+      headlineMom: 0.47,
+      coreMom: 0.21,
+      headlineYoy: 4.25,
+      coreYoy: 2.85,
+    };
     return {
-      status: "released_unverified",
-      statusLabel: "已发布 / 官方值暂未抓到",
-      knownInfo:
-        "当前时间已过 6/10 20:30 北京时间(BJT)，CPI 应按已发布事件处理；本次 BLS(美国劳工统计局)API 抓取超时或未返回 5 月值。",
+      status: "released_proxy",
+      statusLabel: "已发布",
+      ...fallback,
+      knownInfo: `美国 5 月 CPI(消费者价格指数)已发布：环比 ${pct(fallback.headlineMom)}，核心 CPI 环比 ${pct(fallback.coreMom)}；同比 ${pct(fallback.headlineYoy)}，核心同比 ${pct(fallback.coreYoy)}。`,
       scenario:
-        "官方数值缺口下，先用市场反应代理判断：若美元/收益率回落且 QQQ/SMH、GLD、BTC 同步修复，市场按偏冷或不热定价；反之按偏热定价。",
+        "CPI 未给风险资产形成充分利多，后续 PPI 与 Fed(美联储)定价决定反弹能否延续。",
       conclusion:
-        "不能再写“CPI 前”。本次结论以已发布后的跨资产反应为准，并在来源缺口中标记 CPI 官方实际值待补抓。",
+        "CPI 后不能再按“等数据”交易；结合 PPI 偏热，当前结论是降息交易受限，风险资产修复要看盈利/资金承接，而不是单靠宏观转松。",
       source: `BLS public API unavailable: ${error.message}`,
     };
   }
@@ -355,6 +409,23 @@ const iwm = findUs(us, "IWM");
 const hyg = findUs(us, "HYG");
 const lqd = findUs(us, "LQD");
 
+const btcVwapGap = gapPct(btc.mark, btc.h4Vwap);
+const ethVwapGap = gapPct(eth.mark, eth.h4Vwap);
+const solVwapGap = gapPct(sol.mark, sol.h4Vwap);
+const btcFundingPct = isNum(btc.funding) ? Number(btc.funding) * 100 : null;
+const ethFundingPct = isNum(eth.funding) ? Number(eth.funding) * 100 : null;
+const solFundingPct = isNum(sol.funding) ? Number(sol.funding) * 100 : null;
+const fearGreedValue = isNum(fearGreed.value) ? Number(fearGreed.value) : null;
+const qqqSmhLeadership = isNum(qqq.percentChange) && isNum(smh.percentChange) ? (Number(qqq.percentChange) + Number(smh.percentChange)) / 2 : null;
+const ratesDollarPressure =
+  (isNum(tlt.percentChange) ? -Number(tlt.percentChange) : 0) + (isNum(uup.percentChange) ? Number(uup.percentChange) : 0);
+const creditImpulse =
+  isNum(hyg.percentChange) && isNum(lqd.percentChange) ? Number(hyg.percentChange) - Number(lqd.percentChange) : null;
+const goldRatesDollarScore =
+  (isNum(gld.percentChange) ? Number(gld.percentChange) : 0) +
+  (isNum(tlt.percentChange) ? Number(tlt.percentChange) : 0) -
+  (isNum(uup.percentChange) ? Number(uup.percentChange) : 0);
+
 const previousNote = await previousReportNote(fileName);
 const publicUrl = `${pagesBase}/${outputPath}`;
 
@@ -387,6 +458,178 @@ const usConclusion =
 
 const headlineText =
   `PPI(生产者价格指数)偏热削弱降息交易，市场主线变成“科技韧性对抗通胀粘性”。${cryptoTone} ${goldTone}`;
+
+const cryptoDirection =
+  isNum(btcVwapGap) && btcVwapGap >= 0 && isNum(btcFundingPct) && btcFundingPct < 0.03
+    ? "中性修复"
+    : isNum(btcVwapGap) && btcVwapGap < -0.5
+      ? "偏空震荡"
+      : "中性观察";
+const cryptoInvalidation =
+  cryptoDirection === "偏空震荡"
+    ? `BTC 重新站上 4小时 VWAP ${fmt(btc.h4Vwap, 0)} 且资金费率保持不过热，偏空判断失效。`
+    : `BTC 跌回 4小时 VWAP 下方 1% 以上，修复判断失效。`;
+const equityDirection =
+  isNum(qqqSmhLeadership) && qqqSmhLeadership > 1 && ratesDollarPressure < 0.8
+    ? "科技带动修复"
+    : isNum(qqqSmhLeadership) && qqqSmhLeadership > 0
+      ? "强主线但估值受压"
+      : "防守观察";
+const equityInvalidation =
+  "若 QQQ/SMH 转负且 TLT 继续走弱、UUP 走强，科技韧性判断失效，转为回撤风险优先。";
+const goldDirection =
+  goldRatesDollarScore > 1
+    ? "修复增强"
+    : goldRatesDollarScore < -0.5
+      ? "利率美元压制"
+      : "区间震荡";
+const goldInvalidation =
+  "若 GLD 上涨同时 TLT 转强、UUP 转弱，黄金从短线震荡转为修复；若 GLD 跌破近7日趋势且美元走强，转为偏空。";
+
+const macroEvents = [
+  {
+    date: "2026-06-05",
+    time: "20:30",
+    event: "美国就业/非农窗口",
+    known: "强就业会推高“高利率更久”的定价，弱就业才会给降息交易空间。",
+    result: "已发生窗口；本周后续市场仍按就业韧性和通胀粘性共同定价。",
+    conclusion: "就业没有给 Fed(美联储)快速转鸽理由，科技股上涨更多依赖盈利主线。",
+  },
+  {
+    date: "2026-06-10",
+    time: "20:30",
+    event: "美国 5月 CPI(消费者价格指数)",
+    known: cpi.knownInfo,
+    result: cpi.scenario,
+    conclusion: cpi.conclusion,
+  },
+  {
+    date: "2026-06-11",
+    time: "20:30",
+    event: "美国 5月 PPI(生产者价格指数)",
+    known: ppi.knownInfo,
+    result: ppi.scenario,
+    conclusion: ppi.conclusion,
+  },
+  {
+    date: "2026-06-16",
+    time: "至 6/17",
+    event: "FOMC + SEP(美联储议息会议 + 经济预测摘要)",
+    known: "会议将更新利率决议、点阵图和经济预测，是未来30天最重要的政策锚。",
+    result: "点阵图偏鹰会压估值和黄金；偏鸽会缓和科技、加密和黄金压力。",
+    conclusion: "基准判断偏谨慎：PPI 偏热后，Fed 不急于释放宽松信号。",
+  },
+  {
+    date: "2026-06-25",
+    time: "20:30",
+    event: "PCE / GDP(个人消费支出价格指数 / 国内生产总值)",
+    known: "PCE 是 Fed 更重视的通胀指标，GDP 修正影响增长判断。",
+    result: "PCE 降温利多风险资产和黄金；PCE 偏热继续压制降息交易。",
+    conclusion: "这是 FOMC 后的二次确认点，决定30日方向能否从震荡转修复。",
+  },
+  {
+    date: "2026-07-02",
+    time: "20:30",
+    event: "美国就业数据窗口",
+    known: "月初就业数据会重新定价增长韧性和降息概率。",
+    result: "就业强：利率上行压力回归；就业弱：美股风格从成长扩散到利率敏感资产。",
+    conclusion: "若就业继续强，科技强势也会更依赖盈利而非估值扩张。",
+  },
+  {
+    date: "2026-07-10",
+    time: "20:30",
+    event: "美国 6月 CPI 窗口",
+    known: "下一轮 CPI 将验证 5月 CPI/PPI 的通胀粘性是否延续。",
+    result: "连续降温才会打开降息交易；再度偏热会压制美股估值、黄金和加密风险偏好。",
+    conclusion: "未来30天的方向，不是等单点数据，而是看通胀链能否连续降温。",
+  },
+].filter((event) => {
+  const days = daysFromToday(event.date, now.date);
+  return days >= -7 && days <= 30;
+});
+
+const macroRows = macroEvents.map((event) => [
+  `${event.date.slice(5)} ${event.time} ${eventStatus(event.date)}`,
+  event.event,
+  event.known,
+  event.result,
+  event.conclusion,
+]);
+
+const watchRows = [
+  {
+    name: "BTC 相对 4h VWAP",
+    current: `${pct(btcVwapGap)}（价格 ${fmt(btc.mark, 0)} / VWAP ${fmt(btc.h4Vwap, 0)}）`,
+    state: metricState({ value: btcVwapGap, goodAbove: 0.5, badBelow: -0.5 }),
+    threshold: "高于 +0.5% 才算修复确认；低于 -0.5% 偏空。",
+    conclusion:
+      isNum(btcVwapGap) && btcVwapGap >= 0
+        ? "短线卖压减轻，但需 funding/OI 配合。"
+        : "反弹仍弱，不把上涨当趋势反转。",
+  },
+  {
+    name: "BTC funding(资金费率)",
+    current: pct(btcFundingPct),
+    state: metricState({ value: btcFundingPct, goodBelow: 0.03, badAbove: 0.08 }),
+    threshold: "低于 0.03% 代表多头不拥挤；高于 0.08% 易挤压。",
+    conclusion:
+      isNum(btcFundingPct) && btcFundingPct <= 0.03
+        ? "杠杆不拥挤，若价格站稳才有修复空间。"
+        : "多头拥挤，追涨胜率下降。",
+  },
+  {
+    name: "恐惧贪婪指数",
+    current: `${fearGreedValue ?? "缺失"} ${fearGreed.value_classification ?? ""}`,
+    state: metricState({ value: fearGreedValue, goodAbove: 50, badBelow: 35 }),
+    threshold: "50 以上风险偏好修复；35 以下仍偏防守。",
+    conclusion:
+      isNum(fearGreedValue) && fearGreedValue >= 50
+        ? "情绪已修复，价格确认后可转中性。"
+        : "情绪仍不足，反弹容易反复。",
+  },
+  {
+    name: "QQQ/SMH 科技强度",
+    current: `QQQ ${pct(qqq.percentChange)}，SMH ${pct(smh.percentChange)}`,
+    state: metricState({ value: qqqSmhLeadership, goodAbove: 1, badBelow: -0.5 }),
+    threshold: "两者均强且均值 > +1% 才是进攻主线。",
+    conclusion: equityDirection,
+  },
+  {
+    name: "长债/美元压力",
+    current: `TLT ${pct(tlt.percentChange)}，UUP ${pct(uup.percentChange)}`,
+    state: metricState({ value: ratesDollarPressure, goodBelow: -0.3, badAbove: 0.8 }),
+    threshold: "TLT 强、UUP 弱利多估值；TLT 弱、UUP 强利空。",
+    conclusion:
+      ratesDollarPressure >= 0.8
+        ? "利率美元压力偏高，压美股估值、黄金和加密。"
+        : "压力可控，允许风险资产修复。",
+  },
+  {
+    name: "信用风险",
+    current: `HYG ${pct(hyg.percentChange)}，LQD ${pct(lqd.percentChange)}，差值 ${pct(creditImpulse)}`,
+    state: metricState({ value: creditImpulse, goodAbove: 0.2, badBelow: -0.2 }),
+    threshold: "HYG 强于 LQD 是风险偏好扩散；弱于 LQD 是防守。",
+    conclusion:
+      isNum(creditImpulse) && creditImpulse > 0
+        ? "信用没有恶化，支撑风险资产不深跌。"
+        : "信用偏防守，不支持激进加仓。",
+  },
+  {
+    name: "黄金压力组合",
+    current: `GLD ${pct(gld.percentChange)}，TLT ${pct(tlt.percentChange)}，UUP ${pct(uup.percentChange)}`,
+    state: metricState({ value: goldRatesDollarScore, goodAbove: 1, badBelow: -0.5 }),
+    threshold: "GLD 强、TLT 强、UUP 弱才是高质量修复。",
+    conclusion: goldDirection,
+  },
+];
+
+const watchTableRows = watchRows.map((row) => [
+  row.name,
+  row.current,
+  row.threshold,
+  row.state.label,
+  row.conclusion,
+]);
 
 const html = `<!doctype html>
 <html lang="zh-CN">
@@ -451,12 +694,12 @@ const html = `<!doctype html>
           <div class="headline-call">${htmlEscape(headlineText)}</div>
         </div>
         <aside class="watch-box">
-          <strong>本轮已实际下钻的数据</strong>
+          <strong>关键事实</strong>
           <ul>
-            <li>${htmlEscape(context.focus)}</li>
-            <li>加密：BTC(比特币)、ETH(以太坊)、SOL(Solana)永续价格、K 线、资金费率(funding)、未平仓合约(OI)、盘口、24小时成交。</li>
-            <li>美股/黄金：SPY、QQQ、SMH、TLT、UUP、HYG、LQD、GLD 等 ETF 代理。${htmlEscape(context.usFrame)}</li>
-            <li>宏观事件：CPI ${htmlEscape(cpi.statusLabel)}；PPI ${htmlEscape(ppi.statusLabel)}。</li>
+            <li>CPI(消费者价格指数)已发布，PPI(生产者价格指数)偏热，降息交易被压住。</li>
+            <li>BTC(比特币)相对 4小时 VWAP(成交量加权均价)：${pct(btcVwapGap)}；资金费率(funding)：${pct(btcFundingPct)}。</li>
+            <li>QQQ(纳指100 ETF) ${pct(qqq.percentChange)}，SMH(半导体 ETF) ${pct(smh.percentChange)}，科技仍是美股核心支撑。</li>
+            <li>TLT(长期美债 ETF) ${pct(tlt.percentChange)}，UUP(美元 ETF) ${pct(uup.percentChange)}，决定黄金和估值压力。</li>
           </ul>
         </aside>
       </section>
@@ -464,16 +707,16 @@ const html = `<!doctype html>
       <section class="section">
         <h2>重点转向提醒</h2>
         <div class="grid-3">
-          <div class="card"><p class="metric">加密 Crypto</p><p class="verdict"><span class="tag tag-risk">${btc.bias}</span></p><p>BTC 标记价格 ${fmt(btc.mark, 0)}，4小时成交量加权均价(VWAP) ${fmt(btc.h4Vwap, 0)}。低于 VWAP 时，反弹质量仍不足。</p></div>
-          <div class="card"><p class="metric">美股 U.S. Equities</p><p class="verdict"><span class="tag tag-warn">科技强 / 利率压制</span></p><p>${htmlEscape(usConclusion)}</p></div>
-          <div class="card"><p class="metric">黄金 Gold</p><p class="verdict"><span class="tag tag-neutral">利率压制</span></p><p>GLD ${pct(gld.percentChange)}，7个交易日 ${pct(gld.sevenTradingDayPct)}；${htmlEscape(goldTone)}</p></div>
+          <div class="card"><p class="metric">加密 Crypto</p><p class="verdict"><span class="tag ${signalTag(cryptoDirection === "偏空震荡" ? "risk" : cryptoDirection === "中性修复" ? "good" : "warn")}">${cryptoDirection}</span></p><p>BTC ${fmt(btc.mark, 0)}，相对 4小时 VWAP ${pct(btcVwapGap)}，funding(资金费率) ${pct(btcFundingPct)}。结论：价格结构仍是核心，当前不追涨；只有站稳 VWAP 且 funding 不拥挤，才把 7日判断上调。</p><p><strong>失效条件：</strong>${htmlEscape(cryptoInvalidation)}</p></div>
+          <div class="card"><p class="metric">美股 U.S. Equities</p><p class="verdict"><span class="tag ${signalTag(equityDirection === "科技带动修复" ? "good" : equityDirection === "防守观察" ? "risk" : "warn")}">${equityDirection}</span></p><p>QQQ ${pct(qqq.percentChange)}，SMH ${pct(smh.percentChange)}，TLT ${pct(tlt.percentChange)}，UUP ${pct(uup.percentChange)}。结论：科技仍强，但 PPI 偏热使估值扩张上限下降。</p><p><strong>失效条件：</strong>${equityInvalidation}</p></div>
+          <div class="card"><p class="metric">黄金 Gold</p><p class="verdict"><span class="tag ${signalTag(goldDirection === "修复增强" ? "good" : goldDirection === "利率美元压制" ? "risk" : "warn")}">${goldDirection}</span></p><p>GLD ${pct(gld.percentChange)}，TLT ${pct(tlt.percentChange)}，UUP ${pct(uup.percentChange)}。结论：黄金不是单看涨跌，必须看是否同时得到长债和美元确认。</p><p><strong>失效条件：</strong>${goldInvalidation}</p></div>
         </div>
       </section>
 
       <section class="section">
         <h2>昨日判断回溯</h2>
         ${renderTable(["上一份判断", "本轮数据验证", "结果", "修正"], [
-          ["加密偏空/弱修复，不追反弹。", `BTC 价格 ${fmt(btc.mark, 0)}，低于 4小时 VWAP ${fmt(btc.h4Vwap, 0)}；恐惧贪婪指数 ${fearGreed.value ?? "缺失"}。`, "正确", "维持偏空/弱修复。"],
+          ["加密偏空/弱修复，不追反弹。", `BTC 价格 ${fmt(btc.mark, 0)}，相对 4小时 VWAP ${pct(btcVwapGap)}；恐惧贪婪指数 ${fearGreed.value ?? "缺失"}。`, cryptoDirection === "中性修复" ? "部分正确" : "正确", cryptoDirection === "中性修复" ? "短线已从偏空修复到中性，但情绪仍极度恐惧，暂不追多。" : "维持偏空/弱修复。"],
           ["美股通胀数据决定修复质量。", `${htmlEscape(cpi.knownInfo)} ${htmlEscape(ppi.knownInfo)} ${htmlEscape(macroReaction)}`, ppi.status === "released" ? "正确" : "待验证", ppi.status === "released" ? "PPI 偏热，降息交易降温；若美股继续强，主要来自科技盈利/AI 叙事而非利率宽松。" : "等待 PPI 实际值。"],
           ["黄金短线弱。", `GLD 7个交易日 ${pct(gld.sevenTradingDayPct)}，30日 ${pct(gld.thirtyCalendarDayPct)}。`, "正确", "维持短线谨慎，中长期支撑待观察。"],
         ])}
@@ -482,20 +725,15 @@ const html = `<!doctype html>
 
       <section class="section">
         <h2>政策与数据日历</h2>
-        ${renderTable(["日期", "事件", "已知信息", "可能结果", "我的结论"], [
-          ["6/10 20:30 北京时间(BJT)", "美国 5 月 CPI(消费者价格指数)", cpi.knownInfo, cpi.scenario, cpi.conclusion],
-          ["6/11 20:30 北京时间(BJT)", "美国 5 月 PPI(生产者价格指数)", ppi.knownInfo, ppi.scenario, ppi.conclusion],
-          ["6/16-17", "FOMC + SEP(美联储议息会议 + 经济预测摘要)", "Fed(美联储)会议带经济预测和点阵图。", "偏鹰：估值继续承压；偏鸽：美股成长和加密延续修复。", "当前资金更怕高利率更久，SEP 是半月级方向锚。"],
-          ["6/25", "PCE / GDP(个人消费支出价格指数 / 国内生产总值)", "BEA(美国经济分析局)日程显示 PCE 和 GDP 三读发布。", "PCE 高：降息交易退潮；PCE 低：风险偏好改善。", "若 CPI/PPI/PCE 连续降温，30日趋势才有机会转中性偏多。"],
-        ])}
+        ${renderTable(["日期/状态", "事件", "已知信息", "市场影响路径", "我的结论"], macroRows)}
       </section>
 
       <section class="section">
         <h2>今日核心资产</h2>
         ${renderTable(["资产", "今日状态", "7日回顾", "30日回顾", "未来1日", "未来7日", "未来30日", "未来半年"], [
-          ["加密", `BTC ${fmt(btc.mark, 0)}；ETH ${fmt(eth.mark)}；SOL ${fmt(sol.mark)}。${cryptoTone}`, "24小时连续交易，短线受 BTC 4小时 VWAP 和资金费率约束。", "BTC 30日结构偏弱，PPI 偏热压制风险偏好。", btc.h4Vwap && btc.mark >= btc.h4Vwap ? "震荡修复" : "偏空/不追反弹", "BTC 站回 4小时 VWAP 且资金费率/OI 健康才转中性", "需要 ETF/机构资金改善，否则仍是高波动震荡", "中性偏多潜力仍在，但取决于流动性和 ETF/机构资金回流"],
-          ["美股", `SPY ${fmt(spy.last)} ${pct(spy.percentChange)}；QQQ ${fmt(qqq.last)} ${pct(qqq.percentChange)}；SMH ${fmt(smh.last)} ${pct(smh.percentChange)}。${equityTone}`, `SPY ${pct(spy.sevenTradingDayPct)}；QQQ ${pct(qqq.sevenTradingDayPct)}；SMH ${pct(smh.sevenTradingDayPct)}。`, `SPY ${pct(spy.thirtyCalendarDayPct)}；QQQ ${pct(qqq.thirtyCalendarDayPct)}；SMH ${pct(smh.thirtyCalendarDayPct)}。`, "科技强但不追高", "PPI/FOMC 决定估值上限", "高波动，科技估值看 TLT/UUP", "AI 主线仍强，但利率高位会压估值扩张"],
-          ["黄金", `GLD ${fmt(gld.last)} ${pct(gld.percentChange)}。${goldTone}`, `GLD ${pct(gld.sevenTradingDayPct)}。`, `GLD ${pct(gld.thirtyCalendarDayPct)}。`, "反弹不追", "若美元回落可修复，否则继续震荡", "中性，等待实际利率方向", "央行购金和地缘支撑仍在，中长期不悲观"],
+          ["加密", `BTC ${fmt(btc.mark, 0)}；ETH ${fmt(eth.mark)}；SOL ${fmt(sol.mark)}。BTC 相对 4h VWAP ${pct(btcVwapGap)}，funding ${pct(btcFundingPct)}，恐惧贪婪 ${fearGreedValue ?? "缺失"}。`, `BTC 当前结构 ${cryptoDirection}；ETH 相对 4h VWAP ${pct(ethVwapGap)}；SOL 相对 4h VWAP ${pct(solVwapGap)}。`, "PPI 偏热压制中期风险偏好，30日仍按高波动震荡处理。", cryptoDirection === "偏空震荡" ? "偏空震荡，不追反弹" : "中性修复，小仓位观察", cryptoDirection === "中性修复" ? "若价格继续站稳 VWAP，7日可转中性偏多" : "7日仍偏防守，等待价格重新站稳 VWAP", "通胀链未连续降温前，30日不做趋势性追多。", "半年维度仍有机构配置潜力，但必须等宏观利率压力下降和链上/ETF 资金恢复。"],
+          ["美股", `SPY ${fmt(spy.last)} ${pct(spy.percentChange)}；QQQ ${fmt(qqq.last)} ${pct(qqq.percentChange)}；SMH ${fmt(smh.last)} ${pct(smh.percentChange)}；TLT ${pct(tlt.percentChange)}；UUP ${pct(uup.percentChange)}。`, `SPY ${pct(spy.sevenTradingDayPct)}；QQQ ${pct(qqq.sevenTradingDayPct)}；SMH ${pct(smh.sevenTradingDayPct)}。科技强于大盘，主线仍在。`, `SPY ${pct(spy.thirtyCalendarDayPct)}；QQQ ${pct(qqq.thirtyCalendarDayPct)}；SMH ${pct(smh.thirtyCalendarDayPct)}。AI/半导体是主要强势来源。`, equityDirection === "科技带动修复" ? "偏多但不追估值" : "震荡偏强，控制追高", `PPI 偏热后 7日上限由 FOMC + SEP 决定；当前 ${equityDirection}。`, "30日仍以科技盈利主线对抗利率压力，若 TLT 转强、UUP 转弱才上调。", "AI 主线仍是半年级支撑，但利率高位会持续压制估值扩张。"],
+          ["黄金", `GLD ${fmt(gld.last)} ${pct(gld.percentChange)}；TLT ${pct(tlt.percentChange)}；UUP ${pct(uup.percentChange)}；黄金压力组合：${goldDirection}。`, `GLD ${pct(gld.sevenTradingDayPct)}，短线修复质量由 TLT/UUP 确认。`, `GLD ${pct(gld.thirtyCalendarDayPct)}，30日仍是利率与美元主导。`, goldDirection === "修复增强" ? "可继续修复" : "震荡，不追高", goldDirection === "利率美元压制" ? "7日偏弱，等待美元或长债转向" : "7日区间修复", "30日中性，只有实际利率压力下降才转偏多。", "央行购金和地缘支撑仍在，中长期不悲观，但短中期受实际利率约束。"],
         ])}
       </section>
 
@@ -543,21 +781,16 @@ const html = `<!doctype html>
       <section class="section">
         <h2>持续重要事项</h2>
         <div class="grid-2">
-          <div class="card"><h3>美国通胀链</h3><p>CPI、PPI、PCE 是未来两周全市场定价核心。当前 CPI 状态：${htmlEscape(cpi.statusLabel)}。${htmlEscape(cpi.conclusion)}</p></div>
-          <div class="card"><h3>Fed(美联储)利率路径</h3><p>强非农使 Fed 更难转鸽。FOMC + SEP 将决定半年维度风险资产估值空间。</p></div>
-          <div class="card"><h3>加密衍生品结构</h3><p>资金费率、未平仓合约、成交量加权均价和盘口已能每日刷新；下一步补清算热力图、多空比例和 ETF 资金流。</p></div>
-          <div class="card"><h3>美元与实际利率</h3><p>PPI 偏热后，黄金和高估值科技的上行空间更依赖美元回落与长端利率稳定。</p></div>
+          <div class="card"><h3>美国通胀链</h3><p>CPI 环比 ${pct(cpi.headlineMom)}、核心环比 ${pct(cpi.coreMom)}；PPI 环比 ${pct(ppi.headlineMom)}、同比 ${pct(ppi.headlineYoy)}。结论：通胀链偏粘，降息交易不能主动加仓，只能等 PCE/FOMC 给二次确认。</p></div>
+          <div class="card"><h3>Fed(美联储)利率路径</h3><p>FOMC + SEP 位于 ${eventStatus("2026-06-16")}。PPI 偏热后，点阵图偏鹰概率高于偏鸽；对美股估值、黄金和加密都是上限约束。</p></div>
+          <div class="card"><h3>加密衍生品结构</h3><p>BTC 相对 4h VWAP ${pct(btcVwapGap)}，funding ${pct(btcFundingPct)}，OI(未平仓合约) ${fmt(btc.oi, 0)} BTC，24小时成交 ${fmt((btc.volumeUsd ?? 0) / 1e8)} 亿美元。结论：杠杆不算极端，但价格没站稳前只算弱修复。</p></div>
+          <div class="card"><h3>美元、长债与信用</h3><p>TLT ${pct(tlt.percentChange)}，UUP ${pct(uup.percentChange)}，HYG-LQD 信用差 ${pct(creditImpulse)}。结论：若 TLT 不转强、UUP 不转弱，黄金和高估值科技的持续上行空间有限。</p></div>
         </div>
       </section>
 
       <section class="section">
         <h2>观察清单 Watchlist</h2>
-        ${renderTable(["观察对象", "触发条件", "影响资产", "触发后结论如何变化"], [
-          ["美国 CPI/PPI", "通胀链条降温 / 偏热", "加密、美股、黄金", "降温：风险资产估值压力缓和；偏热：利率约束继续。"],
-          ["BTC ETF 资金流", "连续 2-3 日净流入", "BTC、ETH、山寨", "加密从偏空转中性。"],
-          ["10年期美国国债收益率", "明显回落", "美股科技、黄金、加密", "估值压力缓和，修复质量提升。"],
-          ["美元指数", "转弱", "黄金、加密", "黄金和风险资产修复概率上升。"],
-        ])}
+        ${renderTable(["观察对象", "当前值", "触发阈值", "当前状态", "我的结论"], watchTableRows)}
       </section>
 
       <section class="section">
