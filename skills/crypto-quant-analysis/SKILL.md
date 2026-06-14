@@ -20,7 +20,7 @@ This skill is for research and decision support. Do not present analysis as fina
    - Objective: signal discovery, strategy design, backtest review, live-market read, risk check, or post-trade review.
 
 2. Gather data before conclusions:
-   - Use Surf as the primary live crypto data source when the `surf` CLI is available. Run `surf sync` at session start, inspect `surf <command> --help` for unfamiliar endpoints, and prefer the snapshot script at `scripts/surf_realtime_snapshot.sh` for BTC/ETH/SOL contract views.
+   - Use the multi-source crypto route. Prefer `scripts/crypto_realtime_snapshot.mjs` for BTC/ETH/SOL contract views; it uses Hyperliquid public API for perpetual price, K-lines, funding, OI, 24h volume, and order book, plus Ethereum public RPC, Alternative.me sentiment proxy, and DeFiLlama stablecoin liquidity.
    - Real-time market block is mandatory for any crypto trading or market call:
      - Current price with timestamp, exchange, instrument, and spot/perp basis.
      - 1h/4h/1d K-line structure.
@@ -29,10 +29,13 @@ This skill is for research and decision support. Do not present analysis as fina
      - Liquidation heatmap or nearest liquidation clusters.
      - Volume and VWAP.
      - Order book depth and spread.
+     - Stablecoin supply/flow as the default chain-wide liquidity proxy.
    - Price and K-line structure.
    - Volume, volatility, liquidity, order book depth if available.
    - Funding rates, open interest, liquidations, basis, and long/short positioning.
    - BTC dominance, ETH/BTC, stablecoin supply/flows, exchange reserves, ETF flows when relevant.
+   - Stablecoin liquidity rule: use total supply plus 1d/7d/30d changes to decide whether chain-dollar liquidity is expanding, neutral, or contracting. Do not upgrade a 7d/30d bullish crypto view if price is recovering but stablecoin supply is contracting.
+   - Optional derivative supplements: Binance public long/short ratio and force-order liquidation flow can be used when reachable, but they are proxies. They must not replace a true Coinglass/Coinalyze liquidation heatmap.
    - Macro cross-checks: DXY, U.S. yields, equity risk appetite, liquidity conditions.
    - News/regulation/security events for idiosyncratic tokens.
 
@@ -66,6 +69,7 @@ Use this workflow when the user asks for a crypto information hub, market monito
    - 24h/7d/30d performance, realized volatility, volume, liquidity, and major exchange spread.
    - Funding, open interest, liquidations, basis, and options skew if available.
    - BTC dominance, ETH/BTC, SOL/ETH, stablecoin supply/flows, ETF flows, and exchange reserves.
+   - Default stablecoin check: total stablecoin supply plus 1d/7d/30d changes from DeFiLlama; classify chain-dollar liquidity as expanding, neutral, or contracting before upgrading any 7d/30d bullish crypto view.
    - Wallet/on-chain flows, whale transfers, social/news sentiment, regulatory/security events, and prediction-market odds where relevant.
 
 2. Classify the market regime:
@@ -197,7 +201,7 @@ Use this workflow when the user asks for a crypto information hub, market monito
 
 ## Bundled Scripts
 
-- `scripts/surf_realtime_snapshot.sh ETH`: fetches Surf exchange price, 1h/4h/1d K-lines, funding history, order book depth, liquidation chart, and futures snapshot for a symbol. Use it before giving contract strategies when Surf is available.
+- `scripts/crypto_realtime_snapshot.mjs ETH`: fetches real-time perpetual price, 1h/4h/1d K-lines, funding history, OI, 24h volume, order book depth/spread, Ethereum gas, Alternative.me sentiment, DeFiLlama stablecoin liquidity, and optional Binance public long/short/liquidation proxies. It explicitly marks unavailable fields such as true cross-market liquidation heatmap, stable long/short ratio, ETF flow, and Ethereum social sentiment when no direct source is configured.
 
 Use existing `financial-market-intelligence` for broad cross-asset news synthesis. Use existing `market-data-deep-diver` when the immediate task is to fetch or search current market variables.
 

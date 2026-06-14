@@ -14,6 +14,8 @@ Act as the umbrella coordinator for market intelligence work. Keep all subdomain
 - Every item is tagged using the shared taxonomy.
 - Cross-asset transmission is considered before conclusions are written.
 - Confidence and follow-up checks are explicit.
+- Daily reports default to the final full report structure. Do not simplify, remove sections, or use temporary "version" labels unless the user explicitly asks for a short note or experiment.
+- Daily reports must use the latest confirmed valid data point for every asset. Do not force pre-open, just-opened, premarket, weekend, or holiday fields when they are empty; use the most recent valid close/quote and label the data timing clearly.
 
 ## Workflow
 
@@ -56,6 +58,14 @@ Act as the umbrella coordinator for market intelligence work. Keep all subdomain
    - Use explicit confidence.
    - Include sources when browsing or source material is used.
    - End with a watchlist or follow-up checklist when useful.
+   - For daily reports, follow `references/report-output-format.zh.md` exactly:
+     - Preserve all required modules.
+     - Avoid visible "版本/新增/验证版" wording in the report header.
+     - Expand English abbreviations with Chinese explanations on first use.
+     - Include A-share sector representative stock data when available.
+     - Use data connectors before writing conclusions.
+     - For A-shares in the morning, default to the latest valid close/quote rather than the just-opened session if fields are empty.
+     - For U.S. equities in the evening, default to the latest valid close/quote rather than premarket or just-opened fields if they are empty.
 
 ## Subdomain Routing
 

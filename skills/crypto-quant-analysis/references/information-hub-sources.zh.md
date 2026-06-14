@@ -6,16 +6,21 @@
 
 ## 当前本地集成状态
 
-- Surf skill 已作为主 crypto 数据源集成：价格、K线、funding、OI/long-short、清算、盘口、钱包、社交、链上、预测市场、新闻。
+- Surf 已移除，不再作为数据源。
+- Hyperliquid public API 已作为主实时永续数据源：价格、mark/mid、1h/4h/1d K线、funding history、OI、24h volume、盘口深度。
+- Ethereum public RPC 已作为 Ethereum gas 数据源。
+- Alternative.me Fear & Greed 已作为全市场情绪代理源。
+- Polymarket Gamma API 已作为预测市场搜索入口，但当前网络环境偶发超时，查询时需要重试。
+- BingX 官方 `swap-market` / `swap-ws-market` skills 已安装作为参考；当前环境直连 BingX REST 返回 CloudFront 403，不作为主源。
 - Alva skill 已作为备用研究/回测/持久化监控能力集成：适合后续做 feed、dashboard、Altra 回测和通知系统。
-- 本地可用 Surf CLI 路径：`/Users/junxinhuang/.local/bin/surf`。
 - 项目级路由规则：见工作区 `AGENTS.md`。
-- 快照脚本：`scripts/surf_realtime_snapshot.sh ETH`。
+- 快照脚本：`scripts/crypto_realtime_snapshot.mjs ETH`。
 
 ## 外部项目借鉴
 
 - Binance Skills Hub：借鉴其按功能拆分 skill 的方式，将 token 搜索、交易、钱包、DeFi、信号和数据查询分成可路由模块。
-- Surf Skills：借鉴其多 endpoint 信息入口，覆盖价格、钱包、社交、链上和预测市场数据。
+- BingX API AI Skills：借鉴其按永续/现货/WebSocket 拆分市场数据 skill 的方式，覆盖永续价格、深度、K线、funding、OI 和 ticker。
+- Polymarket agents：借鉴其 Gamma/CLOB API 入口，用于预测市场搜索和事件概率。
 - Moss Trade Bot Skills：借鉴其自然语言策略生成、回测、paper/live 验证闭环，但不要默认自动实盘下单。
 - Vibe-Trading：借鉴其 crypto trading desk、多 agent 投研、链上分析和策略回测工作流。
 - Alva Skills：借鉴其 crypto spot/futures OHLCV、funding、OI、long/short、exchange flows、on-chain 指标覆盖。
@@ -37,38 +42,29 @@
 
 缺失任何一项时，不要用其他指标假装替代；明确写 `缺失/未验证`。
 
-### Surf 命令映射
+### 当前主路由
 
 ```bash
-surf sync
-surf exchange-price --pair ETH/USDT --type swap --exchange binance --json
-surf exchange-klines --pair ETH/USDT --type swap --exchange binance --interval 1h --limit 24 --json
-surf exchange-klines --pair ETH/USDT --type swap --exchange binance --interval 4h --limit 18 --json
-surf exchange-klines --pair ETH/USDT --type swap --exchange binance --interval 1d --limit 30 --json
-surf exchange-funding-history --pair ETH/USDT --exchange binance --limit 12 --json
-surf exchange-depth --pair ETH/USDT --type swap --exchange binance --limit 50 --json
-surf market-liquidation-chart --symbol ETH --interval 1h --exchange Binance --limit 24 --json
-surf market-futures --json
+node skills/crypto-quant-analysis/scripts/crypto_realtime_snapshot.mjs ETH
 ```
 
-Use `market-futures` locally filtered to the requested symbol for current open interest, current funding, long/short ratio, and 24h volume. Use `exchange-funding-history` for exchange-specific funding history.
+The snapshot script returns:
 
-For wallet/social/on-chain/prediction-market:
+- `realtime`: mark/mid/oracle/prevDay, funding, OI, 24h notional volume.
+- `klines`: 1h/4h/1d candles and VWAP approximation.
+- `fundingHistory`: recent funding history.
+- `orderBook`: best bid/ask, spread, top depth.
+- `ethereumGas`: current gas price via public RPC.
+- `sentiment.fearGreed`: market-wide fear/greed proxy.
+- `unavailable`: fields that still need dedicated providers.
 
-```bash
-surf wallet-detail --address <address> --chain ethereum --json
-surf wallet-transfers --address <address> --chain ethereum --limit 50 --json
-surf social-sentiment --q ethereum --json
-surf social-mindshare --q ethereum --interval 1h --json
-surf search-social-posts --q "Ethereum ETH" --limit 20 --json
-surf onchain-gas-price --chain ethereum --json
-surf catalog search "ethereum dex trades"
-surf search-prediction-market --q "ethereum" --limit 20 --json
-```
+### Optional provider gaps
 
-Always run `surf <command> --help` before first use in a session because flags and enum values vary by endpoint.
-
-Prediction-market search can return semantically unrelated markets when a broad ticker/project keyword is used. For trading decisions, use specific event keywords such as `"Ethereum ETF"`, `"ETH staking"`, `"SEC crypto"`, or filter by `--category`/`--platform` when available. Do not treat unrelated returned markets as sentiment.
+- Liquidation heatmap: requires Coinglass, Coinalyze, exchange force-order stream, or a dedicated liquidation API.
+- Long/short ratio: requires Binance/OKX/Coinglass/BingX when reachable.
+- Ethereum social sentiment: requires LunarCrush, Santiment, X/Reddit API, Alva, or another dedicated social data source.
+- Wallet intelligence and exchange flows: requires Nansen, Arkham, Glassnode, CryptoQuant, Alva, or custom on-chain indexing.
+- Prediction market search: Polymarket Gamma endpoint is known, but may timeout in this environment; retry or use a proxy if needed.
 
 ### 价格与K线
 

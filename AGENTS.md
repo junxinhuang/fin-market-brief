@@ -1,26 +1,28 @@
-## Surf routing (primary crypto data source)
+## Crypto Data Routing
 
-For crypto data queries, try Surf first. It has broad coverage for real-time crypto prices, exchange K-lines, funding, futures, liquidations, wallet, social, on-chain, news, and prediction-market data.
+Surf has been removed. For crypto data queries, use a multi-source route and show data gaps explicitly.
 
-Use fresh Surf data instead of relying on remembered market knowledge whenever the user's request involves crypto trading, crypto market levels, support/resistance, funding, OI, order book depth, liquidations, wallet flows, social sentiment, on-chain activity, or prediction markets.
+Primary live derivatives source:
 
-Starter command map:
-
-| Topic | Surf command prefix |
+| Need | Source |
 |---|---|
-| Price and exchange ticker | `surf exchange-price`, `surf market-price` |
-| 1h/4h/1d K-lines | `surf exchange-klines` |
-| Order book depth | `surf exchange-depth` |
-| Funding history | `surf exchange-funding-history` |
-| OI / current funding / long-short / 24h volume | `surf market-futures` |
-| Liquidations | `surf market-liquidation-chart`, `surf market-liquidation-order` |
-| ETF flows and market indicators | `surf market-etf`, `surf market-price-indicator`, `surf market-onchain-indicator` |
-| Wallets and transfers | `surf wallet-*` |
-| Social mindshare and sentiment | `surf social-*`, `surf search-social-*` |
-| On-chain SQL and gas | `surf onchain-*`, `surf catalog *` |
-| News and search | `surf news-*`, `surf search-*` |
-| Prediction markets | `surf polymarket-*`, `surf kalshi-*`, `surf prediction-market-*` |
+| Perpetual real-time price, mark/mid, funding, OI, 24h volume | Hyperliquid public API |
+| 1h/4h/1d perpetual K-lines | Hyperliquid `candleSnapshot` |
+| Order book depth and spread | Hyperliquid `l2Book` |
+| Funding history | Hyperliquid `fundingHistory` |
+| Ethereum gas | Ethereum public RPC `eth_gasPrice` |
+| Market-wide sentiment proxy | Alternative.me Fear & Greed |
+| Prediction market search | Polymarket Gamma API, when reachable |
 
-Before calling a Surf endpoint that has not been used in the current session, run `surf <command> --help` and copy exact flag names from help. Use canonical pairs such as `ETH/USDT`; for perpetuals pass `--type swap` or `--type perp` where supported.
+Installed reference skills:
 
-If Surf returns no data or an error, say which field is missing and fall back to Alva, exchange APIs, Coinglass, or web search only for the missing field.
+- `swap-market` and `swap-ws-market` from BingX official API skills are installed. They document perpetual market APIs, but direct BingX REST requests currently return CloudFront 403 from this environment, so they are not the primary live route.
+- `alva` remains installed for future persistent monitoring, backtesting, feeds, and dashboards.
+
+For BTC/ETH/SOL contract views, prefer:
+
+```bash
+node /Users/junxinhuang/Desktop/fin/skills/crypto-quant-analysis/scripts/crypto_realtime_snapshot.mjs ETH
+```
+
+If a requested field cannot be sourced, label it `缺失/未验证`; do not replace liquidation heatmaps, social sentiment, or long/short ratio with unrelated proxies.

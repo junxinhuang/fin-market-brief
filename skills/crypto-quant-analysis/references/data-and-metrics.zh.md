@@ -20,10 +20,24 @@
 ## 链上与资金流
 
 - Exchange reserves/netflow：交易所净流入偏潜在卖压，净流出偏持有意愿，但需结合价格确认。
-- Stablecoin supply/flows：稳定币市值、交易所稳定币余额、铸造/销毁。
+- Stablecoin supply/flows：稳定币市值、交易所稳定币余额、铸造/销毁。日报默认使用 DeFiLlama stablecoins API 的总供给和 1日/7日/30日变化作为链上美元流动性代理。
 - Active addresses/transactions/fees：链上活跃度，需注意刷量和链间差异。
 - Whale flows：大额转账需要确认是否为交易所、托管、内部调拨。
 - ETF flows：BTC/ETH ETF 净流入、成交额、溢折价和持仓变化。
+
+## 稳定币流动性解释
+
+- 7日稳定币总供给增速 > +0.2%：链上美元流动性扩张，对加密 7日/30日风险偏好偏利多。
+- 7日稳定币总供给增速 < -0.2%：链上美元流动性收缩，BTC/ETH 即使站上 VWAP，也要降低反弹质量判断。
+- 1日扩张但 7日/30日收缩：短线有补流动性，但中期购买力仍不足，结论偏中性或谨慎。
+- 稳定币指标不能单独作为买入信号，必须和价格结构、funding、OI、宏观美元/利率一起判断。
+
+## 可选衍生品补充源
+
+- Binance public long/short ratio：可作为账户多空情绪代理，但不同交易所口径差异大，不能单独决定方向。
+- Binance force-order liquidation flow：可作为近期强平订单代理，但不是跨市场 liquidation heatmap。
+- Coinalyze/Coinglass：优先用于真正的清算热力图、多空比例和跨交易所衍生品结构；若需要 key，应标注为候选源。
+- Farside BTC/ETH ETF flows：若网页受 Cloudflare 或缺稳定 JSON/CSV，不能作为无人值守硬依赖；找到稳定镜像/API 后再纳入日报主源。
 
 ## 宏观与跨资产
 
