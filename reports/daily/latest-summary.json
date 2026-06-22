@@ -1,14 +1,14 @@
 {
-  "date": "2026-06-21",
-  "generatedAtBjt": "2026-06-21 21:10 北京时间(BJT)",
-  "fileName": "2026-06-21-2110-market-brief.html",
-  "outputPath": "reports/daily/2026-06-21-2110-market-brief.html",
-  "publicUrl": "https://junxinhuang.github.io/fin-market-brief/reports/daily/2026-06-21-2110-market-brief.html",
-  "reportSlot": "evening",
-  "reportLabel": "晚报",
+  "date": "2026-06-22",
+  "generatedAtBjt": "2026-06-22 09:10 北京时间(BJT)",
+  "fileName": "2026-06-22-0910-market-brief.html",
+  "outputPath": "reports/daily/2026-06-22-0910-market-brief.html",
+  "publicUrl": "https://junxinhuang.github.io/fin-market-brief/reports/daily/2026-06-22-0910-market-brief.html",
+  "reportSlot": "morning",
+  "reportLabel": "早报",
   "headline": "PPI(生产者价格指数)偏热削弱降息交易，市场主线变成“科技韧性对抗通胀粘性”。BTC 未有效站稳 4小时 VWAP，反弹仍按弱修复处理；PPI 偏热使中期风险偏好承压。 黄金仍受美元和实际利率压制，PPI 偏热后短线反弹质量偏弱。",
   "turns": [
-    "加密：BTC 64,125，4小时 VWAP 64,569，弱修复 / 未反转。",
+    "加密：BTC 63,855，4小时 VWAP 64,532，弱修复 / 未反转。",
     "宏观：CPI 状态为已发布；CPI 压力仍不低，降息交易难以单靠一次数据完全打开，风险资产反弹需要二次确认。",
     "美股：SPY +0.78%，QQQ +2.51%，SMH +5.76%。科技和半导体仍在带动指数，短线韧性强；但 PPI 偏热会限制估值扩张。",
     "黄金：GLD -0.38%，7个交易日 +0.21%。"
