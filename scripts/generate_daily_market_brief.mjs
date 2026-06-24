@@ -3,6 +3,7 @@
 import { execFile } from "node:child_process";
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { promisify } from "node:util";
+import { formatReportLinks, reportLinks } from "./report_links.mjs";
 
 const execFileAsync = promisify(execFile);
 
@@ -448,6 +449,11 @@ const stablecoinTone =
 
 const previousNote = await previousReportNote(fileName);
 const publicUrl = `${pagesBase}/${outputPath}`;
+const relatedReportRows = formatReportLinks({ marketUrl: publicUrl }).map((line) => {
+  const [name, ...urlParts] = line.split(": ");
+  const url = urlParts.join(": ");
+  return [name, url];
+});
 
 const inflationSignal =
   ppi.status === "released"
@@ -738,6 +744,11 @@ const html = `<!doctype html>
       </section>
 
       <section class="section">
+        <h2>相关报告入口</h2>
+        ${renderTable(["报告", "链接"], relatedReportRows)}
+      </section>
+
+      <section class="section">
         <h2>重点转向提醒</h2>
         <div class="grid-3">
           <div class="card"><p class="metric">加密 Crypto</p><p class="verdict"><span class="tag ${signalTag(cryptoDirection === "偏空震荡" ? "risk" : cryptoDirection === "中性修复" ? "good" : "warn")}">${cryptoDirection}</span></p><p>BTC ${fmt(btc.mark, 0)}，相对 4小时 VWAP ${pct(btcVwapGap)}，funding(资金费率) ${pct(btcFundingPct)}。结论：价格结构仍是核心，当前不追涨；只有站稳 VWAP 且 funding 不拥挤，才把 7日判断上调。</p><p><strong>失效条件：</strong>${htmlEscape(cryptoInvalidation)}</p></div>
@@ -857,6 +868,11 @@ const summary = {
   fileName,
   outputPath,
   publicUrl,
+  relatedReports: {
+    macro: reportLinks.macro.url,
+    crypto: reportLinks.crypto.url,
+    market: publicUrl,
+  },
   reportSlot: context.slot,
   reportLabel: context.label,
   headline: headlineText,

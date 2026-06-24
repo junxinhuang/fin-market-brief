@@ -1,0 +1,27 @@
+name: Weekly Report Links
+
+on:
+  schedule:
+    # Monday 09:15 Beijing time.
+    - cron: "15 1 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  push-links:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Push weekly report links
+        env:
+          FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
+        run: node scripts/push_report_links.mjs --title=每周报告入口

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { readFile } from "node:fs/promises";
+import { formatReportLinks } from "./report_links.mjs";
 
 const webhook = process.env.FEISHU_WEBHOOK;
 
@@ -58,7 +59,7 @@ const message = textBlock([
   "- 美股：宏观数据发布前看预期差，发布后看美元/长债收益率、QQQ/SMH 和信用资产的吸收质量。",
   "- 黄金：每次取最新可得数据，短线看美元和实际利率，中长期支撑仍来自央行购金和地缘风险。",
   "",
-  `完整 HTML 报告：${summary.publicUrl}`,
+  ...formatReportLinks({ marketUrl: summary.publicUrl }),
   `链接状态：${publishCheck.note}`,
 ]);
 
