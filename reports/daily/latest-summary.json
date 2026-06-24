@@ -1,16 +1,16 @@
 {
-  "date": "2026-06-23",
-  "generatedAtBjt": "2026-06-23 21:10 北京时间(BJT)",
-  "fileName": "2026-06-23-2110-market-brief.html",
-  "outputPath": "reports/daily/2026-06-23-2110-market-brief.html",
-  "publicUrl": "https://junxinhuang.github.io/fin-market-brief/reports/daily/2026-06-23-2110-market-brief.html",
-  "reportSlot": "evening",
-  "reportLabel": "晚报",
+  "date": "2026-06-24",
+  "generatedAtBjt": "2026-06-24 09:10 北京时间(BJT)",
+  "fileName": "2026-06-24-0910-market-brief.html",
+  "outputPath": "reports/daily/2026-06-24-0910-market-brief.html",
+  "publicUrl": "https://junxinhuang.github.io/fin-market-brief/reports/daily/2026-06-24-0910-market-brief.html",
+  "reportSlot": "morning",
+  "reportLabel": "早报",
   "headline": "PPI(生产者价格指数)偏热削弱降息交易，市场主线变成“科技韧性对抗通胀粘性”。BTC 未有效站稳 4小时 VWAP，反弹仍按弱修复处理；PPI 偏热使中期风险偏好承压。 黄金仍受美元和实际利率压制，PPI 偏热后短线反弹质量偏弱。",
   "turns": [
-    "加密：BTC 62,056，4小时 VWAP 64,226，弱修复 / 未反转。",
+    "加密：BTC 62,902，4小时 VWAP 63,950，弱修复 / 未反转。",
     "宏观：CPI 状态为已发布；CPI 压力仍不低，降息交易难以单靠一次数据完全打开，风险资产反弹需要二次确认。",
-    "美股：SPY -1.38%，QQQ -3.02%，SMH -6.33%。科技和半导体动能不足，通胀粘性会放大回撤风险。",
-    "黄金：GLD -1.78%，7个交易日 -0.50%。"
+    "美股：SPY -1.45%，QQQ -0.25%，SMH -7.01%。科技和半导体动能不足，通胀粘性会放大回撤风险。",
+    "黄金：GLD -1.89%，7个交易日 -4.85%。"
   ]
 }
