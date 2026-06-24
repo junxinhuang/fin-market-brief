@@ -43,25 +43,9 @@ async function waitForPublishedUrl(url) {
 }
 
 const summary = JSON.parse(await readFile("reports/daily/latest-summary.json", "utf8"));
-const reportLabel = summary.reportLabel || "日报";
-const publishCheck = await waitForPublishedUrl(summary.publicUrl);
+await waitForPublishedUrl(summary.publicUrl);
 
-const message = textBlock([
-  `金融市场跟踪${reportLabel}｜${summary.generatedAtBjt}`,
-  "",
-  `一句话结论：${summary.headline}`,
-  "",
-  "重点转向提醒：",
-  ...(summary.turns || []).map((line) => `- ${line}`),
-  "",
-  "今日核心操作含义：",
-  "- 加密：弱修复不是做多信号，BTC 未重新站稳关键成交量加权均价(VWAP)前不追反弹。",
-  "- 美股：宏观数据发布前看预期差，发布后看美元/长债收益率、QQQ/SMH 和信用资产的吸收质量。",
-  "- 黄金：每次取最新可得数据，短线看美元和实际利率，中长期支撑仍来自央行购金和地缘风险。",
-  "",
-  ...formatReportLinks({ marketUrl: summary.publicUrl }),
-  `链接状态：${publishCheck.note}`,
-]);
+const message = textBlock(formatReportLinks({ marketUrl: summary.publicUrl }));
 
 const res = await fetch(webhook, {
   method: "POST",

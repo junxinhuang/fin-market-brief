@@ -24,9 +24,9 @@ async function latestMarketUrl() {
   }
 }
 
-const title = argValue("title", "报告链接");
+const title = argValue("title", "");
 const marketUrl = argValue("market-url", await latestMarketUrl());
-const message = [title, "", ...formatReportLinks({ marketUrl })].join("\n");
+const message = [title, title ? "" : null, ...formatReportLinks({ marketUrl })].filter(Boolean).join("\n");
 
 const res = await fetch(webhook, {
   method: "POST",

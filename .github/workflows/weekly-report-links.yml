@@ -24,4 +24,4 @@ jobs:
       - name: Push weekly report links
         env:
           FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
-        run: node scripts/push_report_links.mjs --title=每周报告入口
+        run: node scripts/push_report_links.mjs
