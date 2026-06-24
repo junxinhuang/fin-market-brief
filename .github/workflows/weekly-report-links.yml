@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   push-links:
@@ -20,6 +20,34 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install macro dependencies
+        run: python -m pip install --upgrade pyyaml openpyxl
+
+      - name: Refresh linked reports
+        env:
+          COINALYZE_API_KEY: ${{ secrets.COINALYZE_API_KEY }}
+        run: |
+          python scripts/fetch_macro_indicators.py
+          python scripts/generate_macro_dashboard.py
+          node skills/crypto-quant-analysis/scripts/generate_daily_crypto_decision.mjs
+
+      - name: Commit refreshed linked reports
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/macro/latest.json data/macro/latest-summary.csv data/macro/history/*.json data/macro/raw/* reports/macro/dashboard.html reports/crypto/daily/*.html reports/crypto/daily/*.md
+          if git diff --cached --quiet; then
+            echo "No refreshed linked report changes to commit."
+          else
+            git commit -m "Refresh linked reports"
+            git push
+          fi
 
       - name: Push weekly report links
         env:

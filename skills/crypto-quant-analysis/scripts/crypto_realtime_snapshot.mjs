@@ -3,9 +3,31 @@
 const symbol = (process.argv[2] || "ETH").toUpperCase();
 const now = Date.now();
 const { execFileSync } = await import("node:child_process");
+const fs = await import("node:fs");
+const path = await import("node:path");
 const fetchMarketWide = symbol === "BTC";
 
 const HYPERLIQUID_INFO = "https://api.hyperliquid.xyz/info";
+const COINALYZE_BASE = "https://api.coinalyze.net/v1";
+const CACHE_DIR = path.resolve("data/crypto/oi-history");
+
+function loadLocalEnv() {
+  const envFile = path.resolve(".env");
+  if (!fs.existsSync(envFile)) return;
+  const lines = fs.readFileSync(envFile, "utf8").split("\n");
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+    const match = trimmed.match(/^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
+    if (!match) continue;
+    const [, key, rawValue] = match;
+    if (process.env[key]) continue;
+    process.env[key] = rawValue.trim().replace(/^['"]|['"]$/g, "");
+  }
+}
+
+loadLocalEnv();
+const fetchBinanceOptional = process.env.ENABLE_BINANCE_OPTIONAL === "1";
 
 async function postJson(url, body, timeoutMs = 15000) {
   const text = execFileSync(
@@ -27,6 +49,19 @@ async function postJson(url, body, timeoutMs = 15000) {
 
 async function getJson(url, timeoutMs = 15000) {
   const text = execFileSync("curl", ["-sS", "--max-time", String(Math.ceil(timeoutMs / 1000)), url], {
+    encoding: "utf8",
+    maxBuffer: 20 * 1024 * 1024,
+  });
+  return JSON.parse(text);
+}
+
+async function getJsonWithHeaders(url, headers, timeoutMs = 15000) {
+  const args = ["-sS", "--max-time", String(Math.ceil(timeoutMs / 1000))];
+  for (const [key, value] of Object.entries(headers || {})) {
+    args.push("-H", `${key}: ${value}`);
+  }
+  args.push(url);
+  const text = execFileSync("curl", args, {
     encoding: "utf8",
     maxBuffer: 20 * 1024 * 1024,
   });
@@ -112,6 +147,45 @@ async function stablecoinLiquidity() {
     change7dPct: pctChange(current, prevWeek),
     change30dPct: pctChange(current, prevMonth),
     topChains: chains,
+  };
+}
+
+function coinalyzeSymbol() {
+  return `${symbol}USDT_PERP.A`;
+}
+
+async function coinalyzeGet(pathname, params = {}) {
+  const apiKey = process.env.COINALYZE_API_KEY;
+  if (!apiKey) {
+    return {
+      skipped: "COINALYZE_API_KEY is not visible to this process.",
+    };
+  }
+  const url = new URL(`${COINALYZE_BASE}${pathname}`);
+  for (const [key, value] of Object.entries(params)) {
+    if (value != null) url.searchParams.set(key, String(value));
+  }
+  return getJsonWithHeaders(url.toString(), { api_key: apiKey }, 15000);
+}
+
+async function coinalyzeDerivatives() {
+  const to = Math.floor(now / 1000);
+  const from = to - 24 * 60 * 60;
+  const symbols = coinalyzeSymbol();
+  const params = { symbols, interval: "1hour", from, to };
+  const [longShortRatio, liquidationHistory, openInterestHistory] = await Promise.all([
+    settle("coinalyzeLongShortRatio", () => coinalyzeGet("/long-short-ratio-history", params)),
+    settle("coinalyzeLiquidationHistory", () => coinalyzeGet("/liquidation-history", params)),
+    settle("coinalyzeOpenInterestHistory", () => coinalyzeGet("/open-interest-history", params)),
+  ]);
+  return {
+    source: "Coinalyze API",
+    symbol: symbols,
+    note:
+      "Coinalyze liquidation history is realized liquidation flow, not a true forward-looking liquidation heatmap.",
+    longShortRatio: longShortRatio.ok ? longShortRatio.data : { error: longShortRatio.error },
+    liquidationHistory: liquidationHistory.ok ? liquidationHistory.data : { error: liquidationHistory.error },
+    openInterestHistory: openInterestHistory.ok ? openInterestHistory.data : { error: openInterestHistory.error },
   };
 }
 
@@ -211,6 +285,85 @@ function findAsset(metaAndCtxs) {
   return { meta: universe[idx], context: contexts[idx] };
 }
 
+function cacheFile(symbol) {
+  return path.join(CACHE_DIR, `${symbol.toLowerCase()}.jsonl`);
+}
+
+function readOiHistory(symbol) {
+  const file = cacheFile(symbol);
+  if (!fs.existsSync(file)) return [];
+  return fs
+    .readFileSync(file, "utf8")
+    .split("\n")
+    .filter(Boolean)
+    .map((line) => {
+      try {
+        return JSON.parse(line);
+      } catch {
+        return null;
+      }
+    })
+    .filter(Boolean)
+    .sort((a, b) => Number(a.timestamp) - Number(b.timestamp));
+}
+
+function appendOiHistory(symbol, snapshot) {
+  fs.mkdirSync(CACHE_DIR, { recursive: true });
+  fs.appendFileSync(cacheFile(symbol), `${JSON.stringify(snapshot)}\n`);
+}
+
+function closestAtOrBefore(rows, targetTs) {
+  let closest = null;
+  for (const row of rows) {
+    if (Number(row.timestamp) <= targetTs) closest = row;
+    else break;
+  }
+  return closest;
+}
+
+function oiChange(current, previous) {
+  if (!current || !previous) return null;
+  const currentOi = Number(current.openInterestBase);
+  const previousOi = Number(previous.openInterestBase);
+  if (!Number.isFinite(currentOi) || !Number.isFinite(previousOi) || previousOi === 0) return null;
+  return {
+    fromTimestamp: previous.timestamp,
+    toTimestamp: current.timestamp,
+    previousOpenInterestBase: previousOi,
+    currentOpenInterestBase: currentOi,
+    changeBase: currentOi - previousOi,
+    changePct: pctChange(currentOi, previousOi),
+    previousMarkPx: Number(previous.markPx),
+    currentMarkPx: Number(current.markPx),
+    priceChangePct: pctChange(Number(current.markPx), Number(previous.markPx)),
+  };
+}
+
+function buildOiHistorySummary(symbol, currentSnapshot) {
+  if (!currentSnapshot) {
+    return { error: "No current snapshot available; OI history was not updated." };
+  }
+  const rowsBefore = readOiHistory(symbol);
+  appendOiHistory(symbol, currentSnapshot);
+  const rows = [...rowsBefore, currentSnapshot].sort((a, b) => Number(a.timestamp) - Number(b.timestamp));
+  const latest = rows.at(-1);
+  return {
+    source: "Local Hyperliquid snapshot cache",
+    cacheFile: cacheFile(symbol),
+    observations: rows.length,
+    latest,
+    changes: {
+      "1h": oiChange(latest, closestAtOrBefore(rows, now - 60 * 60 * 1000)),
+      "4h": oiChange(latest, closestAtOrBefore(rows, now - 4 * 60 * 60 * 1000)),
+      "24h": oiChange(latest, closestAtOrBefore(rows, now - 24 * 60 * 60 * 1000)),
+    },
+    note:
+      rows.length < 2
+        ? "历史缓存刚开始积累；1h/4h/24h OI 变化暂时缺失/未验证。"
+        : "OI changes are computed from local cached Hyperliquid snapshots; sparse sampling may reduce precision.",
+  };
+}
+
 async function settle(name, fn) {
   try {
     return { ok: true, data: await fn() };
@@ -231,6 +384,7 @@ const [
   stablecoins,
   longShort,
   liquidations,
+  coinalyze,
 ] = await Promise.all([
   settle("metaAndAssetCtxs", () => postJson(HYPERLIQUID_INFO, { type: "metaAndAssetCtxs" })),
   settle("candles1h", () => candles("1h", 36 * 60 * 60 * 1000)),
@@ -248,14 +402,40 @@ const [
   settle("ethereumGas", ethereumGas),
   settle("fearGreed", () => getJson("https://api.alternative.me/fng/?limit=1")),
   settle("stablecoinLiquidity", () => (fetchMarketWide ? stablecoinLiquidity() : { skipped: "market-wide data fetched on BTC only" })),
-  settle("binanceLongShort", () => (fetchMarketWide ? binanceLongShort() : { skipped: "market-wide optional source fetched on BTC only" })),
-  settle("binanceLiquidations", () => (fetchMarketWide ? binanceLiquidations() : { skipped: "market-wide optional source fetched on BTC only" })),
+  settle("binanceLongShort", () =>
+    fetchMarketWide && fetchBinanceOptional
+      ? binanceLongShort()
+      : { skipped: "disabled by default; set ENABLE_BINANCE_OPTIONAL=1 to try Binance public futures proxy" }
+  ),
+  settle("binanceLiquidations", () =>
+    fetchMarketWide && fetchBinanceOptional
+      ? binanceLiquidations()
+      : { skipped: "disabled by default; set ENABLE_BINANCE_OPTIONAL=1 to try Binance public force-order proxy" }
+  ),
+  settle("coinalyzeDerivatives", coinalyzeDerivatives),
 ]);
 
 const asset = metaAndCtxs.ok ? findAsset(metaAndCtxs.data) : null;
 const h1 = candles1h.ok ? candles1h.data : [];
 const h4 = candles4h.ok ? candles4h.data : [];
 const d1 = candles1d.ok ? candles1d.data : [];
+const realtimeSnapshot = asset
+  ? {
+      timestamp: now,
+      isoTime: new Date(now).toISOString(),
+      symbol,
+      source: "Hyperliquid metaAndAssetCtxs",
+      markPx: Number(asset.context.markPx),
+      midPx: asset.context.midPx == null ? null : Number(asset.context.midPx),
+      oraclePx: Number(asset.context.oraclePx),
+      prevDayPx: Number(asset.context.prevDayPx),
+      funding: Number(asset.context.funding),
+      openInterestBase: Number(asset.context.openInterest),
+      dayNtlVlmUsd: Number(asset.context.dayNtlVlm),
+      dayBaseVlm: Number(asset.context.dayBaseVlm),
+    }
+  : null;
+const oiHistory = buildOiHistorySummary(symbol, realtimeSnapshot);
 
 const output = {
   symbol,
@@ -281,6 +461,7 @@ const output = {
     "1d": { ok: candles1d.ok, count: d1.length, vwap: vwapFromCandles(d1), candles: d1.slice(-30) },
   },
   fundingHistory: fundingHistory.ok ? fundingHistory.data.slice(-24) : { error: fundingHistory.error },
+  oiHistory,
   orderBook: book.ok ? summarizeBook(book.data) : { error: book.error },
   ethereumGas: gas.ok ? gas.data : { error: gas.error },
   sentiment: {
@@ -291,6 +472,7 @@ const output = {
     stablecoins: stablecoins.ok ? stablecoins.data : { error: stablecoins.error },
   },
   externalDerivatives: {
+    coinalyze: coinalyze.ok ? coinalyze.data : { error: coinalyze.error },
     longShortRatio: longShort.ok ? longShort.data : { error: longShort.error },
     liquidationOrders: liquidations.ok ? liquidations.data : { error: liquidations.error },
   },
@@ -306,9 +488,28 @@ const output = {
     liquidationHeatmap:
       "缺失/未验证：Hyperliquid public API 不提供跨市场 liquidation heatmap；Binance 强平流只能作为近期强平订单代理，不能替代热力图。",
     longShortRatio:
-      "Hyperliquid public API 当前快照不提供账户多空比；已尝试 Binance public long/short ratio，可用时展示，不可用时标记。",
+      "Hyperliquid public API 当前快照不提供账户多空比；优先尝试 Coinalyze，可用时展示；Binance public long/short ratio 只作为备源。",
     exchangeFlowsWalletSocial:
       "缺失/未验证：需要专门链上/社交数据源，例如 Alva、Santiment、LunarCrush、Nansen、Arkham 或自建索引。",
+  },
+  sourceStatus: {
+    hyperliquid: metaAndCtxs.ok ? "ok" : `error: ${metaAndCtxs.error}`,
+    coinalyze: coinalyze.ok ? "ok_or_structured_skip" : `error: ${coinalyze.error}`,
+    localOiCache: oiHistory.error ? `error: ${oiHistory.error}` : "ok",
+    binanceOptional: fetchMarketWide
+      ? {
+          longShort: longShort.ok
+            ? longShort.data?.skipped
+              ? `skipped: ${longShort.data.skipped}`
+              : "ok"
+            : `error: ${longShort.error}`,
+          liquidations: liquidations.ok
+            ? liquidations.data?.skipped
+              ? `skipped: ${liquidations.data.skipped}`
+              : "ok"
+            : `error: ${liquidations.error}`,
+        }
+      : "skipped; Coinalyze is primary derivatives supplement",
   },
 };
 

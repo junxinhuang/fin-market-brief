@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { readFile } from "node:fs/promises";
-import { formatReportLinks } from "./report_links.mjs";
+import { formatReportLinks, reportLinks } from "./report_links.mjs";
 
 const webhook = process.env.FEISHU_WEBHOOK;
 
@@ -44,6 +44,8 @@ async function waitForPublishedUrl(url) {
 
 const summary = JSON.parse(await readFile("reports/daily/latest-summary.json", "utf8"));
 await waitForPublishedUrl(summary.publicUrl);
+await waitForPublishedUrl(reportLinks.macro.url);
+await waitForPublishedUrl(reportLinks.crypto.url);
 
 const message = textBlock(formatReportLinks({ marketUrl: summary.publicUrl }));
 

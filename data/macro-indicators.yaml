@@ -1,0 +1,1146 @@
+version: 1
+name: macro_asset_opportunity_radar
+description: >
+  Core macro and cross-asset indicators for long-horizon learning and opportunity
+  discovery across USD, China, global risk assets, gold, real estate, and crypto.
+  This file is a data dictionary, not a trading signal model.
+timezone: Asia/Shanghai
+freshness_target: T-1 or latest released observation
+display_defaults:
+  day: daily or latest close
+  week: weekly close or weekly average
+  month: monthly observation, YoY when meaningful
+  quarter: quarterly observation, annualized or YoY when meaningful
+availability_legend:
+  stable: Public history is expected to be reliable enough for v1.
+  proxy: Use a public proxy or fallback because direct official/free history is limited.
+  defer: Keep in the framework, but do not block v1 on this field.
+common_transforms:
+  yoy: Year-over-year percentage change.
+  mom: Month-over-month percentage change.
+  qoq_annualized: Quarter-over-quarter annualized rate.
+  level: Raw reported level.
+  spread: Difference between two rates.
+  trend_3m: Latest value versus 3-month moving average or 3-month change.
+  percentile_12m: Latest value percentile over trailing 12 months.
+
+indicators:
+  - id: us_fed_funds_rate
+    priority: 1
+    region: US
+    theme: rates
+    label: Fed Funds Rate
+    source: FRED
+    source_url: https://fred.stlouisfed.org/series/FEDFUNDS
+    series_id: FEDFUNDS
+    earliest_expected: "1954"
+    source_frequency: month
+    display_frequency: month
+    transform: level
+    availability: stable
+    fallback: Federal Reserve H.15
+    note: USD policy-rate anchor.
+
+  - id: us_policy_rate_expectations
+    priority: 2
+    region: US
+    theme: rates
+    label: "Policy Expectations Proxy: 2Y-Fed Funds Spread"
+    source: US Treasury / FRED derived proxy
+    source_url: https://home.treasury.gov/resource-center/data-chart-center/interest-rates
+    series_id: null
+    earliest_expected: "2016 from local Treasury curve cache"
+    source_frequency: day
+    display_frequency: week
+    transform: level
+    availability: proxy
+    fallback: Fed Funds or SOFR futures implied path if a stable history source is added.
+    note: Proxy only; 2Y Treasury yield minus Fed Funds rate reflects policy-cycle expectations, not CME FedWatch meeting probabilities.
+
+  - id: us_10y_treasury_yield
+    priority: 3
+    region: US
+    theme: rates
+    label: 10Y Treasury Yield
+    source: Treasury yield curve CSV / FRED fallback
+    source_url: https://home.treasury.gov/resource-center/data-chart-center/interest-rates
+    series_id: DGS10
+    earliest_expected: "2016+ in v1 Treasury cache; FRED fallback can extend to 1962"
+    source_frequency: day
+    display_frequency: week
+    transform: level
+    availability: stable
+    fallback: FRED DGS10 or Treasury H.15
+    note: Global discount-rate anchor.
+
+  - id: us_10y_real_yield
+    priority: 4
+    region: US
+    theme: rates
+    label: 10Y Real Yield
+    source: Treasury real yield curve CSV / FRED fallback
+    source_url: https://home.treasury.gov/resource-center/data-chart-center/interest-rates
+    series_id: DFII10
+    earliest_expected: "2016+ in v1 Treasury cache; FRED fallback can extend to 2003"
+    source_frequency: day
+    display_frequency: week
+    transform: level
+    availability: stable
+    fallback: FRED DFII10 or Treasury TIPS yield
+    note: Key macro pressure variable for gold, BTC, growth equities, and real estate.
+
+  - id: us_2y10y_spread
+    priority: 5
+    region: US
+    theme: rates
+    label: 10Y-2Y Treasury Spread
+    source: Treasury yield curve CSV / FRED fallback
+    source_url: https://home.treasury.gov/resource-center/data-chart-center/interest-rates
+    series_id: T10Y2Y
+    earliest_expected: "2016+ in v1 Treasury cache; FRED fallback can extend to 1976"
+    source_frequency: day
+    display_frequency: week
+    transform: spread
+    availability: stable
+    fallback: FRED T10Y2Y or DGS10 minus DGS2
+    note: Recession and policy-cycle slope indicator.
+
+  - id: us_dxy
+    priority: 6
+    region: US
+    theme: fx
+    label: US Dollar Index Proxy
+    source: FRED broad dollar index proxy
+    source_url: https://fred.stlouisfed.org/series/DTWEXBGS
+    series_id: DTWEXBGS
+    earliest_expected: "2006+ for FRED broad dollar index proxy"
+    source_frequency: day
+    display_frequency: week
+    transform: level
+    availability: proxy
+    fallback: Stooq/Yahoo DXY if available.
+    note: Uses FRED nominal broad dollar index as the v1 proxy; ICE DXY official history may be restricted.
+
+  - id: us_real_gdp_growth
+    priority: 7
+    region: US
+    theme: growth
+    label: Real GDP Growth
+    source: BEA / FRED
+    source_url: https://fred.stlouisfed.org/series/GDPC1
+    series_id: GDPC1
+    earliest_expected: "1947"
+    source_frequency: quarter
+    display_frequency: quarter
+    transform: qoq_annualized
+    availability: stable
+    fallback: BEA NIPA API
+    note: Main US growth-cycle indicator.
+
+  - id: us_ism_manufacturing_pmi
+    priority: 8
+    region: US
+    theme: growth
+    label: ISM Manufacturing PMI
+    source: ISM / Jin10 public calendar mirror
+    source_url: https://datacenter.jin10.com/reportType/dc_usa_ism_pmi
+    series_id: null
+    earliest_expected: "1970"
+    source_frequency: month
+    display_frequency: month
+    transform: level
+    availability: stable
+    fallback: ISM report or FRED NAPM if accessible.
+    note: Manufacturing cycle; 50 separates expansion and contraction. Jin10 all.js cache currently seeds history and latest API can refresh when reachable.
+
+  - id: us_ism_services_pmi
+    priority: 9
+    region: US
+    theme: growth
+    label: ISM Services PMI
+    source: ISM / Jin10 public calendar mirror
+    source_url: https://datacenter.jin10.com/reportType/dc_usa_ism_non_pmi
+    series_id: null
+    earliest_expected: "1997"
+    source_frequency: month
+    display_frequency: month
+    transform: level
+    availability: stable
+    fallback: ISM services report.
+    note: Services-cycle read for the dominant part of US activity. Jin10 all.js cache currently seeds history and latest API can refresh when reachable.
+
+  - id: us_retail_sales
+    priority: 10
+    region: US
+    theme: consumption
+    label: Retail Sales
+    source: Census / FRED
+    source_url: https://fred.stlouisfed.org/series/RSAFS
+    series_id: RSAFS
+    earliest_expected: "1992"
+    source_frequency: month
+    display_frequency: month
+    transform: yoy
+    availability: stable
+    fallback: Census retail trade release
+    note: Consumer demand trend.
+
+  - id: us_cpi
+    priority: 11
+    region: US
+    theme: inflation
+    label: CPI
+    source: BLS / FRED
+    source_url: https://fred.stlouisfed.org/series/CPIAUCSL
+    series_id: CPIAUCSL
+    earliest_expected: "1947"
+    source_frequency: month
+    display_frequency: month
+    transform: yoy
+    availability: stable
+    fallback: BLS API
+    note: Headline consumer inflation.
+
+  - id: us_core_cpi
+    priority: 12
+    region: US
+    theme: inflation
+    label: Core CPI
+    source: BLS / FRED
+    source_url: https://fred.stlouisfed.org/series/CPILFESL
+    series_id: CPILFESL
+    earliest_expected: "1957"
+    source_frequency: month
+    display_frequency: month
+    transform: yoy
+    availability: stable
+    fallback: BLS API
+    note: Sticky inflation read excluding food and energy.
+
+  - id: us_core_pce
+    priority: 13
+    region: US
+    theme: inflation
+    label: Core PCE
+    source: BEA / FRED
+    source_url: https://fred.stlouisfed.org/series/PCEPILFE
+    series_id: PCEPILFE
+    earliest_expected: "1959"
+    source_frequency: month
+    display_frequency: month
+    transform: yoy
+    availability: stable
+    fallback: BEA API
+    note: Fed-preferred inflation trend.
+
+  - id: us_oil_price
+    priority: 14
+    region: US
+    theme: commodities
+    label: WTI Oil Price
+    source: FRED / EIA
+    source_url: https://fred.stlouisfed.org/series/DCOILWTICO
+    series_id: DCOILWTICO
+    earliest_expected: "1986"
+    source_frequency: day
+    display_frequency: week
+    transform: level
+    availability: stable
+    fallback: Yahoo Finance futures proxy
+    note: Energy inflation and cycle input.
+
+  - id: us_unemployment_rate
+    priority: 15
+    region: US
+    theme: labor
+    label: Unemployment Rate
+    source: BLS / FRED
+    source_url: https://fred.stlouisfed.org/series/UNRATE
+    series_id: UNRATE
+    earliest_expected: "1948"
+    source_frequency: month
+    display_frequency: month
+    transform: level
+    availability: stable
+    fallback: BLS API
+    note: Labor-market stress indicator.
+
+  - id: us_nonfarm_payrolls
+    priority: 16
+    region: US
+    theme: labor
+    label: Nonfarm Payrolls
+    source: BLS / FRED
+    source_url: https://fred.stlouisfed.org/series/PAYEMS
+    series_id: PAYEMS
+    earliest_expected: "1939"
+    source_frequency: month
+    display_frequency: month
+    transform: mom
+    availability: stable
+    fallback: BLS API
+    note: Employment growth trend.
+
+  - id: us_initial_jobless_claims
+    priority: 17
+    region: US
+    theme: labor
+    label: Initial Jobless Claims
+    source: DOL / FRED
+    source_url: https://fred.stlouisfed.org/series/ICSA
+    series_id: ICSA
+    earliest_expected: "1967"
+    source_frequency: week
+    display_frequency: week
+    transform: level
+    availability: stable
+    fallback: Department of Labor ETA
+    note: High-frequency labor stress.
+
+  - id: us_m2_yoy
+    priority: 18
+    region: US
+    theme: liquidity
+    label: M2 YoY
+    source: FRED
+    source_url: https://fred.stlouisfed.org/series/M2SL
+    series_id: M2SL
+    earliest_expected: "1959"
+    source_frequency: month
+    display_frequency: month
+    transform: yoy
+    availability: stable
+    fallback: Federal Reserve H.6
+    note: Broad money liquidity.
+
+  - id: us_fed_balance_sheet
+    priority: 19
+    region: US
+    theme: liquidity
+    label: Fed Balance Sheet
+    source: Fed H.4.1 / FRED
+    source_url: https://fred.stlouisfed.org/series/WALCL
+    series_id: WALCL
+    earliest_expected: "2002"
+    source_frequency: week
+    display_frequency: week
+    transform: level
+    availability: stable
+    fallback: Federal Reserve H.4.1
+    note: QE/QT balance-sheet impulse.
+
+  - id: us_bank_reserves
+    priority: 20
+    region: US
+    theme: liquidity
+    label: Bank Reserves
+    source: Fed / FRED
+    source_url: https://fred.stlouisfed.org/series/WRESBAL
+    series_id: WRESBAL
+    earliest_expected: "1984+"
+    source_frequency: week
+    display_frequency: week
+    transform: level
+    availability: stable
+    fallback: Federal Reserve data
+    note: Banking-system liquidity.
+
+  - id: us_high_yield_spread
+    priority: 21
+    region: US
+    theme: credit
+    label: High Yield Spread
+    source: ICE BofA / FRED
+    source_url: https://fred.stlouisfed.org/series/BAMLH0A0HYM2
+    series_id: BAMLH0A0HYM2
+    earliest_expected: "1996"
+    source_frequency: day
+    display_frequency: week
+    transform: level
+    availability: stable
+    fallback: HYG spread proxy
+    note: Credit-risk temperature.
+
+  - id: us_sp500_forward_pe
+    priority: 22
+    region: US
+    theme: equity_valuation
+    label: S&P 500 Valuation Proxy
+    source: FRED / BEA NIPA corporate profits derived proxy
+    source_url: https://fred.stlouisfed.org/series/CPATAX
+    series_id: null
+    earliest_expected: "2016 from local S&P 500 cache"
+    source_frequency: quarter
+    display_frequency: month
+    transform: level
+    availability: proxy
+    fallback: Shiller CAPE, trailing P/E, or licensed forward P/E if available.
+    note: Proxy only; S&P 500 index divided by NIPA after-tax corporate profits, not analyst-consensus forward P/E.
+
+  - id: us_sp500_eps_growth
+    priority: 23
+    region: US
+    theme: equity_earnings
+    label: "Earnings Cycle Proxy: Corporate Profits YoY"
+    source: FRED / BEA NIPA corporate profits after tax
+    source_url: https://fred.stlouisfed.org/series/CPATAX
+    series_id: CPATAX
+    earliest_expected: "1947"
+    source_frequency: quarter
+    display_frequency: quarter
+    transform: yoy
+    availability: proxy
+    fallback: trailing S&P 500 EPS YoY or licensed consensus EPS growth if available.
+    note: Proxy only; NIPA after-tax corporate profits YoY, not S&P 500 analyst EPS growth.
+
+  - id: us_30y_mortgage_rate
+    priority: 24
+    region: US
+    theme: real_estate
+    label: 30Y Mortgage Rate
+    source: Freddie Mac / FRED
+    source_url: https://fred.stlouisfed.org/series/MORTGAGE30US
+    series_id: MORTGAGE30US
+    earliest_expected: "1971"
+    source_frequency: week
+    display_frequency: week
+    transform: level
+    availability: stable
+    fallback: Freddie Mac PMMS
+    note: Mortgage affordability pressure.
+
+  - id: us_case_shiller_hpi
+    priority: 25
+    region: US
+    theme: real_estate
+    label: Case-Shiller Home Price Index
+    source: S&P / FRED
+    source_url: https://fred.stlouisfed.org/series/CSUSHPINSA
+    series_id: CSUSHPINSA
+    earliest_expected: "1987"
+    source_frequency: month
+    display_frequency: month
+    transform: yoy
+    availability: stable
+    fallback: FHFA HPI
+    note: US home-price trend.
+
+  - id: cn_tsf_stock_yoy
+    priority: 26
+    region: China
+    theme: credit
+    label: Aggregate Financing to Real Economy Stock YoY
+    source: PBOC
+    source_url: http://www.pbc.gov.cn/diaochatongjisi/116219/116319/index.html
+    series_id: null
+    earliest_expected: "2002+"
+    source_frequency: month
+    display_frequency: month
+    transform: yoy
+    availability: stable
+    fallback: NBS/macropage-style curated CSV
+    note: Core China credit-cycle indicator.
+
+  - id: cn_tsf_flow
+    priority: 27
+    region: China
+    theme: credit
+    label: Aggregate Financing Flow
+    source: PBOC
+    source_url: http://www.pbc.gov.cn/diaochatongjisi/116219/116319/index.html
+    series_id: null
+    earliest_expected: "2002+"
+    source_frequency: month
+    display_frequency: month
+    transform: level
+    availability: stable
+    fallback: curated PBOC table extract
+    note: Monthly broad-credit impulse.
+
+  - id: cn_m1_yoy
+    priority: 28
+    region: China
+    theme: liquidity
+    label: M1 YoY
+    source: PBOC
+    source_url: http://www.pbc.gov.cn/diaochatongjisi/116219/116319/index.html
+    series_id: null
+    earliest_expected: "1990s+"
+    source_frequency: month
+    display_frequency: month
+    transform: yoy
+    availability: stable
+    fallback: CEIC-style mirror if licensed; curated CSV otherwise
+    note: Active money and transaction-intensity proxy.
+
+  - id: cn_m2_yoy
+    priority: 29
+    region: China
+    theme: liquidity
+    label: M2 YoY
+    source: PBOC
+    source_url: http://www.pbc.gov.cn/diaochatongjisi/116219/116319/index.html
+    series_id: null
+    earliest_expected: "1990s+"
+    source_frequency: month
+    display_frequency: month
+    transform: yoy
+    availability: stable
+    fallback: curated PBOC table extract
+    note: Broad China liquidity.
+
+  - id: cn_new_rmb_loans
+    priority: 30
+    region: China
+    theme: credit
+    label: New RMB Loans
+    source: PBOC
+    source_url: http://www.pbc.gov.cn/diaochatongjisi/116219/116319/index.html
+    series_id: null
+    earliest_expected: "1990s+"
+    source_frequency: month
+    display_frequency: month
+    transform: level
+    availability: stable
+    fallback: curated PBOC table extract
+    note: Bank-credit extension.
+
+  - id: cn_corporate_medium_long_loans
+    priority: 31
+    region: China
+    theme: credit
+    label: Corporate Medium and Long-Term Loans
+    source: PBOC
+    source_url: http://www.pbc.gov.cn/diaochatongjisi/116219/116319/index.html
+    series_id: null
+    earliest_expected: "2000s+"
+    source_frequency: month
+    display_frequency: month
+    transform: level
+    availability: stable
+    fallback: curated PBOC table extract
+    note: Corporate expansion willingness; requires careful table parsing.
+
+  - id: cn_household_medium_long_loans
+    priority: 32
+    region: China
+    theme: credit
+    label: Household Medium and Long-Term Loans
+    source: PBOC
+    source_url: http://www.pbc.gov.cn/diaochatongjisi/116219/116319/index.html
+    series_id: null
+    earliest_expected: "2000s+"
+    source_frequency: month
+    display_frequency: month
+    transform: level
+    availability: stable
+    fallback: curated PBOC table extract
+    note: Household leverage and mortgage-demand proxy.
+
+  - id: cn_official_manufacturing_pmi
+    priority: 33
+    region: China
+    theme: growth
+    label: Official Manufacturing PMI
+    source: NBS / CFLP
+    source_url: https://www.stats.gov.cn/
+    series_id: null
+    earliest_expected: "2005"
+    source_frequency: month
+    display_frequency: month
+    transform: level
+    availability: stable
+    fallback: Investing or FRED mirror if available
+    note: Official China manufacturing cycle.
+
+  - id: cn_caixin_manufacturing_pmi
+    priority: 34
+    region: China
+    theme: growth
+    label: Caixin Manufacturing PMI
+    source: Caixin / S&P Global / Jin10 public calendar mirror
+    source_url: https://datacenter.jin10.com/reportType/dc_chinese_caixin_manufacturing_pmi
+    series_id: null
+    earliest_expected: "2004+"
+    source_frequency: month
+    display_frequency: month
+    transform: level
+    availability: proxy
+    fallback: Use official PMI if free Caixin history is unavailable.
+    note: More private/export-chain tilted. Jin10 all.js cache seeds history; source licensing still needs care for redistribution.
+
+  - id: cn_industrial_production_yoy
+    priority: 35
+    region: China
+    theme: growth
+    label: Industrial Value Added YoY
+    source: NBS / Jin10 public calendar mirror
+    source_url: https://datacenter.jin10.com/reportType/dc_chinese_industrial_production_yoy
+    series_id: null
+    earliest_expected: "1990"
+    source_frequency: month
+    display_frequency: month
+    transform: yoy
+    availability: stable
+    fallback: NBS data table extract; AKShare macro_china_industrial_production_yoy wrapper.
+    note: Hard production activity; v1 uses Jin10 public economic-calendar mirror, replace with official NBS adapter later.
+
+  - id: cn_fixed_asset_investment_yoy
+    priority: 36
+    region: China
+    theme: investment
+    label: Fixed Asset Investment YoY
+    source: NBS
+    source_url: https://www.stats.gov.cn/
+    series_id: null
+    earliest_expected: "1990s+"
+    source_frequency: month
+    display_frequency: month
+    transform: yoy
+    availability: stable
+    fallback: NBS data table extract
+    note: Total investment trend; split into manufacturing, infrastructure, and real estate later.
+
+  - id: cn_real_estate_development_investment_yoy
+    priority: 37
+    region: China
+    theme: real_estate
+    label: Real Estate Development Investment YoY
+    source: NBS
+    source_url: https://www.stats.gov.cn/
+    series_id: null
+    earliest_expected: "1990s+"
+    source_frequency: month
+    display_frequency: month
+    transform: yoy
+    availability: stable
+    fallback: NBS data table extract
+    note: China property-cycle drag or recovery.
+
+  - id: cn_commercial_housing_sales_area_yoy
+    priority: 38
+    region: China
+    theme: real_estate
+    label: Commercial Housing Sales Area YoY
+    source: NBS
+    source_url: https://www.stats.gov.cn/
+    series_id: null
+    earliest_expected: "1990s+"
+    source_frequency: month
+    display_frequency: month
+    transform: yoy
+    availability: stable
+    fallback: NBS data table extract
+    note: Property demand trend.
+
+  - id: cn_70_city_home_price
+    priority: 39
+    region: China
+    theme: real_estate
+    label: 70-City Home Price Index
+    source: NBS
+    source_url: https://www.stats.gov.cn/
+    series_id: null
+    earliest_expected: "2005; current detailed methodology roughly 2011+"
+    source_frequency: month
+    display_frequency: month
+    transform: yoy
+    availability: stable
+    fallback: aggregate new/secondhand city price table
+    note: Home-price trend; methodology changes should be documented.
+
+  - id: cn_cpi_yoy
+    priority: 40
+    region: China
+    theme: inflation
+    label: CPI YoY
+    source: FRED / OECD / NBS mirror
+    source_url: https://fred.stlouisfed.org/series/CPALTT01CNM659N
+    series_id: CPALTT01CNM659N
+    earliest_expected: "1987"
+    source_frequency: month
+    display_frequency: month
+    transform: yoy
+    availability: stable
+    fallback: NBS data table extract; macropage CPI MoM chain if YoY unavailable.
+    note: Household inflation and demand pressure; FRED/OECD mirror used for v1.
+
+  - id: cn_ppi_yoy
+    priority: 41
+    region: China
+    theme: inflation
+    label: PPI YoY
+    source: NBS / macropage cache
+    source_url: https://github.com/AFAN-LIFE/macropage
+    series_id: null
+    earliest_expected: "1996+ depending on MoM availability"
+    source_frequency: month
+    display_frequency: month
+    transform: yoy
+    availability: stable
+    fallback: NBS data table extract
+    note: Industrial price cycle and profit pressure; v1 derives YoY from PPI MoM chain and must be labeled as derived.
+
+  - id: cn_retail_sales_yoy
+    priority: 42
+    region: China
+    theme: consumption
+    label: Retail Sales YoY
+    source: NBS
+    source_url: https://www.stats.gov.cn/
+    series_id: null
+    earliest_expected: "1990s+"
+    source_frequency: month
+    display_frequency: month
+    transform: yoy
+    availability: stable
+    fallback: NBS data table extract
+    note: Consumption trend.
+
+  - id: cn_exports_yoy
+    priority: 43
+    region: China
+    theme: trade
+    label: Exports YoY
+    source: China Customs / FRED mirror
+    source_url: http://www.customs.gov.cn/
+    series_id: null
+    earliest_expected: "1990s+"
+    source_frequency: month
+    display_frequency: month
+    transform: yoy
+    availability: stable
+    fallback: FRED or World Bank trade data
+    note: External demand trend.
+
+  - id: cn_usdcny
+    priority: 44
+    region: China
+    theme: fx
+    label: USD/CNY
+    source: FRED / PBOC / Yahoo Finance
+    source_url: https://fred.stlouisfed.org/series/DEXCHUS
+    series_id: DEXCHUS
+    earliest_expected: "1981/1994+ depending on exchange-rate regime and provider"
+    source_frequency: day
+    display_frequency: week
+    transform: level
+    availability: stable
+    fallback: PBOC fixing or Yahoo CNY=X
+    note: RMB pressure and USD liquidity transmission.
+
+  - id: cn_10y_gov_bond_yield
+    priority: 45
+    region: China
+    theme: rates
+    label: China 10Y Government Bond Yield
+    source: ChinaBond / macropage cache
+    source_url: https://github.com/AFAN-LIFE/macropage
+    series_id: null
+    earliest_expected: "2006"
+    source_frequency: day
+    display_frequency: week
+    transform: level
+    availability: proxy
+    fallback: ChinaBond official curve or AKShare refresh adapter.
+    note: China discount-rate and growth-expectation anchor; v1 reads macropage yield.csv tenYear cache.
+
+  - id: eu_ecb_policy_rate
+    priority: 46
+    region: Europe
+    theme: rates
+    label: ECB Deposit Facility Rate
+    source: FRED / ECB Data Portal
+    source_url: https://fred.stlouisfed.org/series/ECBDFR
+    series_id: ECBDFR
+    earliest_expected: "1999"
+    source_frequency: day
+    display_frequency: month
+    transform: level
+    availability: stable
+    fallback: ECB Data Portal policy-rate series.
+    note: Uses ECB deposit facility rate as the v1 policy-rate proxy.
+
+  - id: eu_core_hicp
+    priority: 47
+    region: Europe
+    theme: inflation
+    label: Eurozone Core HICP
+    source: Eurostat
+    source_url: https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_hicp_manr?lang=en&freq=M&unit=RCH_A&coicop=TOT_X_NRG_FOOD&geo=EA20
+    series_id: null
+    earliest_expected: "1997"
+    source_frequency: month
+    display_frequency: month
+    transform: yoy
+    availability: stable
+    fallback: ECB Data Portal
+    note: Eurostat HICP annual rate of change, overall index excluding energy, food, alcohol and tobacco, euro area 20.
+
+  - id: eu_eurusd
+    priority: 48
+    region: Europe
+    theme: fx
+    label: EUR/USD
+    source: ECB / FRED / Yahoo Finance
+    source_url: https://fred.stlouisfed.org/series/DEXUSEU
+    series_id: DEXUSEU
+    earliest_expected: "1999; synthetic pre-euro series can go earlier"
+    source_frequency: day
+    display_frequency: week
+    transform: level
+    availability: stable
+    fallback: ECB reference rates
+    note: Major DXY component and global USD condition input.
+
+  - id: eu_composite_pmi
+    priority: 49
+    region: Europe
+    theme: growth
+    label: Eurozone Growth Sentiment Proxy
+    source: FRED/OECD Business Confidence Indicator
+    source_url: https://fred.stlouisfed.org/series/BSCICP03EZM665S
+    series_id: BSCICP03EZM665S
+    earliest_expected: "1985"
+    source_frequency: month
+    display_frequency: month
+    transform: level
+    availability: proxy
+    fallback: Licensed S&P Global Eurozone Composite PMI if available.
+    note: Proxy only; OECD business confidence indicator, not S&P Global Eurozone Composite PMI.
+
+  - id: de_manufacturing_pmi
+    priority: 50
+    region: Europe
+    theme: growth
+    label: Germany Industrial Cycle Proxy
+    source: FRED/OECD Germany industrial production
+    source_url: https://fred.stlouisfed.org/series/DEUPROINDMISMEI
+    series_id: DEUPROINDMISMEI
+    earliest_expected: "1958"
+    source_frequency: month
+    display_frequency: month
+    transform: yoy
+    availability: proxy
+    fallback: Licensed S&P Global Germany Manufacturing PMI or Ifo business climate if available.
+    note: Proxy only; Germany industrial production YoY, not S&P Global Germany Manufacturing PMI.
+
+  - id: jp_10y_jgb_yield
+    priority: 51
+    region: Japan
+    theme: rates
+    label: Japan 10Y JGB Yield
+    source: FRED / OECD
+    source_url: https://fred.stlouisfed.org/series/IRLTLT01JPM156N
+    series_id: IRLTLT01JPM156N
+    earliest_expected: "1980s+"
+    source_frequency: day
+    display_frequency: week
+    transform: level
+    availability: stable
+    fallback: OECD long-term interest rates
+    note: Japan normalization and global carry-trade risk.
+
+  - id: jp_usdjpy
+    priority: 52
+    region: Japan
+    theme: fx
+    label: USD/JPY
+    source: FRED / Yahoo Finance
+    source_url: https://fred.stlouisfed.org/series/DEXJPUS
+    series_id: DEXJPUS
+    earliest_expected: "1971+"
+    source_frequency: day
+    display_frequency: week
+    transform: level
+    availability: stable
+    fallback: BOJ or Yahoo JPY=X
+    note: Carry-trade and risk-appetite proxy.
+
+  - id: global_manufacturing_pmi
+    priority: 53
+    region: Global
+    theme: growth
+    label: Global Manufacturing PMI
+    source: Derived proxy from US ISM and China PMIs
+    source_url: null
+    series_id: null
+    earliest_expected: "1998+"
+    source_frequency: month
+    display_frequency: month
+    transform: level
+    availability: proxy
+    fallback: Official J.P. Morgan/S&P Global PMI if licensed/free history becomes available.
+    note: Proxy only; v1 uses available US ISM, China official PMI, and China Caixin PMI with normalized weights.
+
+  - id: global_brent_oil
+    priority: 54
+    region: Global
+    theme: commodities
+    label: Brent Oil
+    source: FRED / EIA
+    source_url: https://fred.stlouisfed.org/series/DCOILBRENTEU
+    series_id: DCOILBRENTEU
+    earliest_expected: "1987"
+    source_frequency: day
+    display_frequency: week
+    transform: level
+    availability: stable
+    fallback: Yahoo Finance futures proxy
+    note: Global energy inflation input.
+
+  - id: global_copper_price
+    priority: 55
+    region: Global
+    theme: commodities
+    label: Copper Price
+    source: FRED / World Bank / Yahoo Finance
+    source_url: https://fred.stlouisfed.org/series/PCOPPUSDM
+    series_id: PCOPPUSDM
+    earliest_expected: "1992"
+    source_frequency: month
+    display_frequency: month
+    transform: level
+    availability: stable
+    fallback: World Bank Pink Sheet monthly copper price
+    note: Global growth and China-demand proxy; monthly World Bank/FRED copper price.
+
+  - id: xasset_gold_price
+    priority: 56
+    region: CrossAsset
+    theme: precious_metals
+    label: Gold Price
+    source: Stooq gold futures proxy / LBMA fallback
+    source_url: https://stooq.com/
+    series_id: GC.F
+    earliest_expected: "1970s+ depending on futures/proxy provider"
+    source_frequency: day
+    display_frequency: week
+    transform: level
+    availability: stable
+    fallback: LBMA or Yahoo Finance gold futures proxy.
+    note: Uses gold futures proxy in v1; real-rate, dollar, and safe-haven asset.
+
+  - id: xasset_vix
+    priority: 57
+    region: CrossAsset
+    theme: risk
+    label: VIX
+    source: CBOE / FRED / Yahoo Finance
+    source_url: https://fred.stlouisfed.org/series/VIXCLS
+    series_id: VIXCLS
+    earliest_expected: "1990"
+    source_frequency: day
+    display_frequency: week
+    transform: level
+    availability: stable
+    fallback: CBOE historical data
+    note: Equity volatility and risk-aversion indicator.
+
+  - id: xasset_move_index
+    priority: 58
+    region: CrossAsset
+    theme: risk
+    label: Treasury Rate Volatility Proxy
+    source: US Treasury derived proxy
+    source_url: https://home.treasury.gov/resource-center/data-chart-center/interest-rates
+    series_id: null
+    earliest_expected: "2016 from local Treasury curve cache"
+    source_frequency: day
+    display_frequency: week
+    transform: level
+    availability: proxy
+    fallback: ICE/BofA MOVE if a stable licensed/free history source is available.
+    note: Proxy only; annualized 60-trading-day realized volatility of 10Y Treasury yield changes, not ICE/BofA MOVE.
+
+  - id: xasset_sp500
+    priority: 59
+    region: CrossAsset
+    theme: equity_index
+    label: S&P 500
+    source: FRED / Yahoo Finance / Stooq
+    source_url: https://fred.stlouisfed.org/series/SP500
+    series_id: SP500
+    earliest_expected: "1927/1957 depending on index construction"
+    source_frequency: day
+    display_frequency: week
+    transform: level
+    availability: stable
+    fallback: SPY ETF from Yahoo/Stooq
+    note: Global risk-asset anchor.
+
+  - id: xasset_nasdaq100
+    priority: 60
+    region: CrossAsset
+    theme: equity_index
+    label: Nasdaq 100
+    source: Yahoo Finance / Stooq
+    source_url: https://stooq.com/
+    series_id: NDX
+    earliest_expected: "1985"
+    source_frequency: day
+    display_frequency: week
+    transform: level
+    availability: stable
+    fallback: QQQ ETF from 1999
+    note: Growth and technology risk appetite.
+
+  - id: xasset_msci_acwi
+    priority: 61
+    region: CrossAsset
+    theme: equity_index
+    label: MSCI ACWI
+    source: Yahoo Finance ETF proxy
+    source_url: https://finance.yahoo.com/quote/ACWI/
+    series_id: ACWI
+    earliest_expected: "2008 for ETF; 1987+ for paid index history"
+    source_frequency: day
+    display_frequency: week
+    transform: level
+    availability: stable
+    fallback: ACWI ETF adjusted close
+    note: Use ETF proxy for free v1.
+
+  - id: xasset_btc_price_trend
+    priority: 62
+    region: CrossAsset
+    theme: crypto
+    label: BTC Price Trend
+    source: CoinGecko / Binance / Hyperliquid
+    source_url: https://www.coingecko.com/en/coins/bitcoin
+    series_id: bitcoin
+    earliest_expected: "2010/2013 depending on provider"
+    source_frequency: day
+    display_frequency: week
+    transform: level
+    availability: stable
+    fallback: Binance BTCUSDT daily candles
+    note: Use weekly trend and moving averages for long-horizon context.
+
+  - id: xasset_btc_dominance
+    priority: 63
+    region: CrossAsset
+    theme: crypto
+    label: BTC Dominance
+    source: CoinGecko / CoinMarketCap
+    source_url: https://www.coingecko.com/
+    series_id: null
+    earliest_expected: "2013/2014+"
+    source_frequency: day
+    display_frequency: week
+    transform: level
+    availability: proxy
+    fallback: Coinlore latest-only global endpoint; derive history from BTC market cap divided by total crypto market cap only if both are sourced consistently.
+    note: Crypto internal risk-appetite indicator; free fallback may be latest-only.
+
+  - id: xasset_eth_btc
+    priority: 64
+    region: CrossAsset
+    theme: crypto
+    label: ETH/BTC
+    source: CoinGecko / Binance
+    source_url: https://www.coingecko.com/en/coins/ethereum
+    series_id: ethereum_bitcoin_ratio
+    earliest_expected: "2015"
+    source_frequency: day
+    display_frequency: week
+    transform: level
+    availability: stable
+    fallback: Binance ETHBTC candles
+    note: Crypto risk-spread indicator.
+
+  - id: xasset_stablecoin_supply
+    priority: 65
+    region: CrossAsset
+    theme: crypto_liquidity
+    label: Stablecoin Supply
+    source: DeFiLlama Stablecoins API
+    source_url: https://stablecoins.llama.fi/
+    series_id: stablecoins_total
+    earliest_expected: "2017+"
+    source_frequency: day
+    display_frequency: week
+    transform: level
+    availability: stable
+    fallback: major stablecoin market caps from CoinGecko
+    note: Crypto-native liquidity.
+
+  - id: xasset_crypto_funding_rate
+    priority: 66
+    region: CrossAsset
+    theme: crypto_derivatives
+    label: Crypto Funding Rate
+    source: Hyperliquid / Binance Futures
+    source_url: https://hyperliquid.gitbook.io/hyperliquid-docs/for-developers/api
+    series_id: BTC_ETH_SOL_funding
+    earliest_expected: "Binance 2019+; Hyperliquid newer"
+    source_frequency: day
+    display_frequency: week
+    transform: level
+    availability: stable
+    fallback: Use BTC, ETH, SOL venue-level funding and label as non-aggregate.
+    note: Long-horizon crowding, not a standalone trading signal.
+
+  - id: xasset_crypto_open_interest
+    priority: 67
+    region: CrossAsset
+    theme: crypto_derivatives
+    label: Crypto Open Interest
+    source: Hyperliquid / Binance / Coinglass
+    source_url: https://hyperliquid.gitbook.io/hyperliquid-docs/for-developers/api
+    series_id: BTC_ETH_SOL_oi
+    earliest_expected: "2019/2020+ depending on venue"
+    source_frequency: day
+    display_frequency: week
+    transform: level
+    availability: proxy
+    fallback: Use single-venue OI; label whole-market aggregate as missing if unavailable.
+    note: Do not replace with unrelated leverage proxies.
+
+  - id: xasset_defi_tvl
+    priority: 68
+    region: CrossAsset
+    theme: crypto_liquidity
+    label: DeFi TVL
+    source: DeFiLlama API
+    source_url: https://defillama.com/
+    series_id: total_tvl
+    earliest_expected: "2018+"
+    source_frequency: day
+    display_frequency: week
+    transform: level
+    availability: stable
+    fallback: chain-level TVL from DeFiLlama
+    note: Chain activity and risk-capital proxy; always show TVL methodology caveat.
+
+  - id: xasset_hyg
+    priority: 69
+    region: CrossAsset
+    theme: credit
+    label: HYG High Yield ETF
+    source: Yahoo Finance / Stooq
+    source_url: https://finance.yahoo.com/quote/HYG/
+    series_id: HYG
+    earliest_expected: "2007"
+    source_frequency: day
+    display_frequency: week
+    transform: level
+    availability: stable
+    fallback: JNK ETF
+    note: Tradable credit-risk appetite proxy.
+
+  - id: xasset_reit_index
+    priority: 70
+    region: CrossAsset
+    theme: real_estate
+    label: REIT Index
+    source: Yahoo Finance ETF proxy
+    source_url: https://finance.yahoo.com/quote/VNQ/
+    series_id: VNQ
+    earliest_expected: "VNQ 2004; IYR 2000"
+    source_frequency: day
+    display_frequency: week
+    transform: level
+    availability: stable
+    fallback: IYR ETF
+    note: Public-market real estate proxy.
