@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-06-25T13:13:24.303216+00:00",
+  "generated_at": "2026-06-25T16:29:41.732259+00:00",
   "config": "data/macro-indicators.yaml",
   "count": 70,
   "status_counts": {
-    "ok": 46,
-    "error": 24
+    "ok": 57,
+    "error": 13
   },
   "indicators": [
     {
@@ -18,7 +18,7 @@
       "display_frequency": "month",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:10:34.464578+00:00",
+      "generated_at": "2026-06-25T16:24:39.626614+00:00",
       "status": "ok",
       "points": 863,
       "first_date": "1954-07-01",
@@ -27,7 +27,9 @@
       "history_path": "data/macro/history/us_fed_funds_rate.json",
       "adapter_meta": {
         "adapter": "fred_csv",
-        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=FEDFUNDS"
+        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=FEDFUNDS",
+        "cache_path": "data/macro/raw/FEDFUNDS.csv",
+        "refreshed": true
       },
       "fallback": "Federal Reserve H.15",
       "note": "USD policy-rate anchor."
@@ -43,7 +45,7 @@
       "display_frequency": "week",
       "transform": "level",
       "availability": "proxy",
-      "generated_at": "2026-06-25T13:10:34.712431+00:00",
+      "generated_at": "2026-06-25T16:24:39.812439+00:00",
       "status": "error",
       "points": 0,
       "first_date": null,
@@ -65,7 +67,7 @@
       "display_frequency": "week",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:10:34.816667+00:00",
+      "generated_at": "2026-06-25T16:24:39.935421+00:00",
       "status": "error",
       "points": 0,
       "first_date": null,
@@ -87,7 +89,7 @@
       "display_frequency": "week",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:10:34.936384+00:00",
+      "generated_at": "2026-06-25T16:24:40.118775+00:00",
       "status": "error",
       "points": 0,
       "first_date": null,
@@ -109,7 +111,7 @@
       "display_frequency": "week",
       "transform": "spread",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:10:35.046070+00:00",
+      "generated_at": "2026-06-25T16:24:40.197381+00:00",
       "status": "error",
       "points": 0,
       "first_date": null,
@@ -131,7 +133,7 @@
       "display_frequency": "week",
       "transform": "level",
       "availability": "proxy",
-      "generated_at": "2026-06-25T13:10:35.167084+00:00",
+      "generated_at": "2026-06-25T16:24:40.278365+00:00",
       "status": "ok",
       "points": 2500,
       "first_date": "2016-06-13",
@@ -140,7 +142,9 @@
       "history_path": "data/macro/history/us_dxy.json",
       "adapter_meta": {
         "adapter": "fred_csv",
-        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTWEXBGS"
+        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTWEXBGS",
+        "cache_path": "data/macro/raw/DTWEXBGS.csv",
+        "refreshed": true
       },
       "fallback": "Stooq/Yahoo DXY if available.",
       "note": "Uses FRED nominal broad dollar index as the v1 proxy; ICE DXY official history may be restricted."
@@ -156,7 +160,7 @@
       "display_frequency": "quarter",
       "transform": "qoq_annualized",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:10:35.334735+00:00",
+      "generated_at": "2026-06-25T16:24:40.364857+00:00",
       "status": "ok",
       "points": 317,
       "first_date": "1947-01-01",
@@ -165,7 +169,9 @@
       "history_path": "data/macro/history/us_real_gdp_growth.json",
       "adapter_meta": {
         "adapter": "fred_csv",
-        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=GDPC1"
+        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=GDPC1",
+        "cache_path": "data/macro/raw/GDPC1.csv",
+        "refreshed": true
       },
       "fallback": "BEA NIPA API",
       "note": "Main US growth-cycle indicator."
@@ -181,7 +187,7 @@
       "display_frequency": "month",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:10:35.689687+00:00",
+      "generated_at": "2026-06-25T16:24:40.429904+00:00",
       "status": "ok",
       "points": 669,
       "first_date": "1970-01-01",
@@ -209,7 +215,7 @@
       "display_frequency": "month",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:10:58.198882+00:00",
+      "generated_at": "2026-06-25T16:25:07.634444+00:00",
       "status": "ok",
       "points": 338,
       "first_date": "1997-08-01",
@@ -237,7 +243,7 @@
       "display_frequency": "month",
       "transform": "yoy",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:11:09.836596+00:00",
+      "generated_at": "2026-06-25T16:25:21.594609+00:00",
       "status": "ok",
       "points": 413,
       "first_date": "1992-01-01",
@@ -246,7 +252,9 @@
       "history_path": "data/macro/history/us_retail_sales.json",
       "adapter_meta": {
         "adapter": "fred_csv",
-        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=RSAFS"
+        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=RSAFS",
+        "cache_path": "data/macro/raw/RSAFS.csv",
+        "refreshed": true
       },
       "fallback": "Census retail trade release",
       "note": "Consumer demand trend."
@@ -262,7 +270,7 @@
       "display_frequency": "month",
       "transform": "yoy",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:11:10.508378+00:00",
+      "generated_at": "2026-06-25T16:25:21.658121+00:00",
       "status": "ok",
       "points": 952,
       "first_date": "1947-01-01",
@@ -271,7 +279,9 @@
       "history_path": "data/macro/history/us_cpi.json",
       "adapter_meta": {
         "adapter": "fred_csv",
-        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPIAUCSL"
+        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPIAUCSL",
+        "cache_path": "data/macro/raw/CPIAUCSL.csv",
+        "refreshed": true
       },
       "fallback": "BLS API",
       "note": "Headline consumer inflation."
@@ -287,7 +297,7 @@
       "display_frequency": "month",
       "transform": "yoy",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:11:10.587948+00:00",
+      "generated_at": "2026-06-25T16:25:21.725551+00:00",
       "status": "ok",
       "points": 832,
       "first_date": "1957-01-01",
@@ -296,7 +306,9 @@
       "history_path": "data/macro/history/us_core_cpi.json",
       "adapter_meta": {
         "adapter": "fred_csv",
-        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPILFESL"
+        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPILFESL",
+        "cache_path": "data/macro/raw/CPILFESL.csv",
+        "refreshed": true
       },
       "fallback": "BLS API",
       "note": "Sticky inflation read excluding food and energy."
@@ -312,7 +324,7 @@
       "display_frequency": "month",
       "transform": "yoy",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:11:11.033726+00:00",
+      "generated_at": "2026-06-25T16:25:21.853260+00:00",
       "status": "ok",
       "points": 809,
       "first_date": "1959-01-01",
@@ -321,7 +333,9 @@
       "history_path": "data/macro/history/us_core_pce.json",
       "adapter_meta": {
         "adapter": "fred_csv",
-        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=PCEPILFE"
+        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=PCEPILFE",
+        "cache_path": "data/macro/raw/PCEPILFE.csv",
+        "refreshed": true
       },
       "fallback": "BEA API",
       "note": "Fed-preferred inflation trend."
@@ -337,7 +351,7 @@
       "display_frequency": "week",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:11:11.660272+00:00",
+      "generated_at": "2026-06-25T16:25:21.925973+00:00",
       "status": "ok",
       "points": 2500,
       "first_date": "2016-06-22",
@@ -346,7 +360,9 @@
       "history_path": "data/macro/history/us_oil_price.json",
       "adapter_meta": {
         "adapter": "fred_csv",
-        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILWTICO"
+        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILWTICO",
+        "cache_path": "data/macro/raw/DCOILWTICO.csv",
+        "refreshed": true
       },
       "fallback": "Yahoo Finance futures proxy",
       "note": "Energy inflation and cycle input."
@@ -362,7 +378,7 @@
       "display_frequency": "month",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:11:11.795760+00:00",
+      "generated_at": "2026-06-25T16:25:22.073481+00:00",
       "status": "ok",
       "points": 940,
       "first_date": "1948-01-01",
@@ -371,7 +387,9 @@
       "history_path": "data/macro/history/us_unemployment_rate.json",
       "adapter_meta": {
         "adapter": "fred_csv",
-        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=UNRATE"
+        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=UNRATE",
+        "cache_path": "data/macro/raw/UNRATE.csv",
+        "refreshed": true
       },
       "fallback": "BLS API",
       "note": "Labor-market stress indicator."
@@ -387,7 +405,7 @@
       "display_frequency": "month",
       "transform": "mom",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:11:11.885383+00:00",
+      "generated_at": "2026-06-25T16:25:22.303649+00:00",
       "status": "ok",
       "points": 1049,
       "first_date": "1939-01-01",
@@ -396,7 +414,9 @@
       "history_path": "data/macro/history/us_nonfarm_payrolls.json",
       "adapter_meta": {
         "adapter": "fred_csv",
-        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=PAYEMS"
+        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=PAYEMS",
+        "cache_path": "data/macro/raw/PAYEMS.csv",
+        "refreshed": true
       },
       "fallback": "BLS API",
       "note": "Employment growth trend."
@@ -412,7 +432,7 @@
       "display_frequency": "week",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:11:11.958739+00:00",
+      "generated_at": "2026-06-25T16:25:22.380693+00:00",
       "status": "ok",
       "points": 2500,
       "first_date": "1978-07-29",
@@ -421,7 +441,9 @@
       "history_path": "data/macro/history/us_initial_jobless_claims.json",
       "adapter_meta": {
         "adapter": "fred_csv",
-        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=ICSA"
+        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=ICSA",
+        "cache_path": "data/macro/raw/ICSA.csv",
+        "refreshed": true
       },
       "fallback": "Department of Labor ETA",
       "note": "High-frequency labor stress."
@@ -437,7 +459,7 @@
       "display_frequency": "month",
       "transform": "yoy",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:11:12.850121+00:00",
+      "generated_at": "2026-06-25T16:25:22.499752+00:00",
       "status": "ok",
       "points": 809,
       "first_date": "1959-01-01",
@@ -446,7 +468,9 @@
       "history_path": "data/macro/history/us_m2_yoy.json",
       "adapter_meta": {
         "adapter": "fred_csv",
-        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=M2SL"
+        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=M2SL",
+        "cache_path": "data/macro/raw/M2SL.csv",
+        "refreshed": true
       },
       "fallback": "Federal Reserve H.6",
       "note": "Broad money liquidity."
@@ -462,7 +486,7 @@
       "display_frequency": "week",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:11:12.916470+00:00",
+      "generated_at": "2026-06-25T16:25:22.580836+00:00",
       "status": "ok",
       "points": 1227,
       "first_date": "2002-12-18",
@@ -471,7 +495,9 @@
       "history_path": "data/macro/history/us_fed_balance_sheet.json",
       "adapter_meta": {
         "adapter": "fred_csv",
-        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=WALCL"
+        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=WALCL",
+        "cache_path": "data/macro/raw/WALCL.csv",
+        "refreshed": true
       },
       "fallback": "Federal Reserve H.4.1",
       "note": "QE/QT balance-sheet impulse."
@@ -487,7 +513,7 @@
       "display_frequency": "week",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:11:12.992605+00:00",
+      "generated_at": "2026-06-25T16:25:22.677697+00:00",
       "status": "ok",
       "points": 1227,
       "first_date": "2002-12-18",
@@ -496,7 +522,9 @@
       "history_path": "data/macro/history/us_bank_reserves.json",
       "adapter_meta": {
         "adapter": "fred_csv",
-        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=WRESBAL"
+        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=WRESBAL",
+        "cache_path": "data/macro/raw/WRESBAL.csv",
+        "refreshed": true
       },
       "fallback": "Federal Reserve data",
       "note": "Banking-system liquidity."
@@ -512,7 +540,7 @@
       "display_frequency": "week",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:11:13.142827+00:00",
+      "generated_at": "2026-06-25T16:25:22.934558+00:00",
       "status": "ok",
       "points": 786,
       "first_date": "2023-06-26",
@@ -521,7 +549,9 @@
       "history_path": "data/macro/history/us_high_yield_spread.json",
       "adapter_meta": {
         "adapter": "fred_csv",
-        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAMLH0A0HYM2"
+        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAMLH0A0HYM2",
+        "cache_path": "data/macro/raw/BAMLH0A0HYM2.csv",
+        "refreshed": true
       },
       "fallback": "HYG spread proxy",
       "note": "Credit-risk temperature."
@@ -537,7 +567,7 @@
       "display_frequency": "month",
       "transform": "level",
       "availability": "proxy",
-      "generated_at": "2026-06-25T13:11:13.281969+00:00",
+      "generated_at": "2026-06-25T16:25:23.045392+00:00",
       "status": "ok",
       "points": 39,
       "first_date": "2016-07-01",
@@ -549,11 +579,15 @@
         "components": {
           "S&P 500": {
             "adapter": "fred_csv",
-            "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=SP500"
+            "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=SP500",
+            "cache_path": "data/macro/raw/SP500.csv",
+            "refreshed": true
           },
           "NIPA after-tax corporate profits": {
             "adapter": "fred_csv",
-            "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPATAX"
+            "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPATAX",
+            "cache_path": "data/macro/raw/CPATAX.csv",
+            "refreshed": true
           }
         },
         "gap": "Proxy only. Uses S&P 500 index divided by NIPA after-tax corporate profits; not analyst-consensus forward P/E."
@@ -572,7 +606,7 @@
       "display_frequency": "quarter",
       "transform": "yoy",
       "availability": "proxy",
-      "generated_at": "2026-06-25T13:11:13.755400+00:00",
+      "generated_at": "2026-06-25T16:25:23.374494+00:00",
       "status": "ok",
       "points": 313,
       "first_date": "1948-01-01",
@@ -582,6 +616,8 @@
       "adapter_meta": {
         "adapter": "fred_csv_yoy",
         "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPATAX",
+        "cache_path": "data/macro/raw/CPATAX.csv",
+        "refreshed": true,
         "source_name": "FRED / BEA NIPA corporate profits after tax",
         "operation": "yoy",
         "gap": "Proxy only. Uses NIPA after-tax corporate profits YoY; not analyst-consensus S&P 500 EPS growth."
@@ -600,16 +636,18 @@
       "display_frequency": "week",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:11:13.804629+00:00",
+      "generated_at": "2026-06-25T16:25:23.429007+00:00",
       "status": "ok",
       "points": 2500,
-      "first_date": "1978-07-28",
-      "latest_date": "2026-06-18",
-      "latest_value": 6.47,
+      "first_date": "1978-08-04",
+      "latest_date": "2026-06-25",
+      "latest_value": 6.49,
       "history_path": "data/macro/history/us_30y_mortgage_rate.json",
       "adapter_meta": {
         "adapter": "fred_csv",
-        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=MORTGAGE30US"
+        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=MORTGAGE30US",
+        "cache_path": "data/macro/raw/MORTGAGE30US.csv",
+        "refreshed": true
       },
       "fallback": "Freddie Mac PMMS",
       "note": "Mortgage affordability pressure."
@@ -625,7 +663,7 @@
       "display_frequency": "month",
       "transform": "yoy",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:11:13.868652+00:00",
+      "generated_at": "2026-06-25T16:25:23.545999+00:00",
       "status": "ok",
       "points": 471,
       "first_date": "1987-01-01",
@@ -634,7 +672,9 @@
       "history_path": "data/macro/history/us_case_shiller_hpi.json",
       "adapter_meta": {
         "adapter": "fred_csv",
-        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CSUSHPINSA"
+        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CSUSHPINSA",
+        "cache_path": "data/macro/raw/CSUSHPINSA.csv",
+        "refreshed": true
       },
       "fallback": "FHFA HPI",
       "note": "US home-price trend."
@@ -650,7 +690,7 @@
       "display_frequency": "month",
       "transform": "yoy",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:11:14.399935+00:00",
+      "generated_at": "2026-06-25T16:25:24.105830+00:00",
       "status": "error",
       "points": 0,
       "first_date": null,
@@ -672,14 +712,21 @@
       "display_frequency": "month",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:11:14.556120+00:00",
-      "status": "error",
-      "points": 0,
-      "first_date": null,
-      "latest_date": null,
-      "latest_value": null,
+      "generated_at": "2026-06-25T16:25:24.211911+00:00",
+      "status": "ok",
+      "points": 136,
+      "first_date": "2015-01-01",
+      "latest_date": "2026-04-01",
+      "latest_value": 6245.0,
       "history_path": "data/macro/history/cn_tsf_flow.json",
-      "error": "[Errno 2] No such file or directory: '/home/runner/work/fin-market-brief/fin-market-brief/data/macro/raw/mofcom_shrzgm.json'",
+      "adapter_meta": {
+        "adapter": "mofcom_social_financing_flow_api",
+        "url": "https://data.mofcom.gov.cn/datamofcom/front/gnmy/shrzgmQuery",
+        "cache_path": "data/macro/raw/mofcom_shrzgm.json",
+        "source_name": "MOFCOM data mirror / PBOC aggregate financing flow",
+        "value_field": "tiosfs",
+        "gap": "MOFCOM domestic-trade data mirror of social financing flow; latest may lag PBOC by one release month."
+      },
       "fallback": "curated PBOC table extract",
       "note": "Monthly broad-credit impulse."
     },
@@ -694,14 +741,23 @@
       "display_frequency": "month",
       "transform": "yoy",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:11:16.646936+00:00",
-      "status": "error",
-      "points": 0,
-      "first_date": null,
-      "latest_date": null,
-      "latest_value": null,
+      "generated_at": "2026-06-25T16:25:27.294000+00:00",
+      "status": "ok",
+      "points": 221,
+      "first_date": "2008-01-01",
+      "latest_date": "2026-05-01",
+      "latest_value": 5.5,
       "history_path": "data/macro/history/cn_m1_yoy.json",
-      "error": "[Errno 2] No such file or directory: '/home/runner/work/fin-market-brief/fin-market-brief/data/macro/raw/eastmoney_RPT_ECONOMY_CURRENCY_SUPPLY.json'",
+      "adapter_meta": {
+        "adapter": "eastmoney_public_api",
+        "report_name": "RPT_ECONOMY_CURRENCY_SUPPLY",
+        "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_ECONOMY_CURRENCY_SUPPLY&columns=ALL&pageNumber=1&pageSize=5000&sortColumns=REPORT_DATE&sortTypes=-1&source=WEB&client=WEB",
+        "cache_path": "data/macro/raw/eastmoney_RPT_ECONOMY_CURRENCY_SUPPLY.json",
+        "pages": 1,
+        "source_name": "Eastmoney Datacenter / PBOC money supply",
+        "value_field": "CURRENCY_SAME",
+        "gap": "Public Eastmoney mirror of PBOC money supply; uses M1 YoY field."
+      },
       "fallback": "CEIC-style mirror if licensed; curated CSV otherwise",
       "note": "Active money and transaction-intensity proxy."
     },
@@ -716,14 +772,23 @@
       "display_frequency": "month",
       "transform": "yoy",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:11:18.030155+00:00",
-      "status": "error",
-      "points": 0,
-      "first_date": null,
-      "latest_date": null,
-      "latest_value": null,
+      "generated_at": "2026-06-25T16:25:28.780066+00:00",
+      "status": "ok",
+      "points": 221,
+      "first_date": "2008-01-01",
+      "latest_date": "2026-05-01",
+      "latest_value": 8.6,
       "history_path": "data/macro/history/cn_m2_yoy.json",
-      "error": "[Errno 2] No such file or directory: '/home/runner/work/fin-market-brief/fin-market-brief/data/macro/raw/eastmoney_RPT_ECONOMY_CURRENCY_SUPPLY.json'",
+      "adapter_meta": {
+        "adapter": "eastmoney_public_api",
+        "report_name": "RPT_ECONOMY_CURRENCY_SUPPLY",
+        "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_ECONOMY_CURRENCY_SUPPLY&columns=ALL&pageNumber=1&pageSize=5000&sortColumns=REPORT_DATE&sortTypes=-1&source=WEB&client=WEB",
+        "cache_path": "data/macro/raw/eastmoney_RPT_ECONOMY_CURRENCY_SUPPLY.json",
+        "pages": 1,
+        "source_name": "Eastmoney Datacenter / PBOC money supply",
+        "value_field": "BASIC_CURRENCY_SAME",
+        "gap": "Public Eastmoney mirror of PBOC money supply; uses M2 YoY field."
+      },
       "fallback": "curated PBOC table extract",
       "note": "Broad China liquidity."
     },
@@ -738,14 +803,23 @@
       "display_frequency": "month",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:11:19.681075+00:00",
-      "status": "error",
-      "points": 0,
-      "first_date": null,
-      "latest_date": null,
-      "latest_value": null,
+      "generated_at": "2026-06-25T16:25:30.584955+00:00",
+      "status": "ok",
+      "points": 221,
+      "first_date": "2008-01-01",
+      "latest_date": "2026-05-01",
+      "latest_value": 4965.0,
       "history_path": "data/macro/history/cn_new_rmb_loans.json",
-      "error": "[Errno 2] No such file or directory: '/home/runner/work/fin-market-brief/fin-market-brief/data/macro/raw/eastmoney_RPT_ECONOMY_RMB_LOAN.json'",
+      "adapter_meta": {
+        "adapter": "eastmoney_public_api",
+        "report_name": "RPT_ECONOMY_RMB_LOAN",
+        "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_ECONOMY_RMB_LOAN&columns=ALL&pageNumber=1&pageSize=5000&sortColumns=REPORT_DATE&sortTypes=-1&source=WEB&client=WEB",
+        "cache_path": "data/macro/raw/eastmoney_RPT_ECONOMY_RMB_LOAN.json",
+        "pages": 1,
+        "source_name": "Eastmoney Datacenter / PBOC new RMB loans",
+        "value_field": "RMB_LOAN",
+        "gap": "Public Eastmoney mirror of monthly new RMB loans."
+      },
       "fallback": "curated PBOC table extract",
       "note": "Bank-credit extension."
     },
@@ -760,7 +834,7 @@
       "display_frequency": "month",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:11:20.809064+00:00",
+      "generated_at": "2026-06-25T16:25:31.671720+00:00",
       "status": "error",
       "points": 0,
       "first_date": null,
@@ -782,7 +856,7 @@
       "display_frequency": "month",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:11:20.809420+00:00",
+      "generated_at": "2026-06-25T16:25:31.672247+00:00",
       "status": "error",
       "points": 0,
       "first_date": null,
@@ -804,14 +878,46 @@
       "display_frequency": "month",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:11:20.809746+00:00",
-      "status": "error",
-      "points": 0,
-      "first_date": null,
-      "latest_date": null,
-      "latest_value": null,
+      "generated_at": "2026-06-25T16:25:31.672688+00:00",
+      "status": "ok",
+      "points": 221,
+      "first_date": "2008-01-01",
+      "latest_date": "2026-05-01",
+      "latest_value": 50.0,
       "history_path": "data/macro/history/cn_official_manufacturing_pmi.json",
-      "error": "[Errno 2] No such file or directory: '/home/runner/work/fin-market-brief/fin-market-brief/data/macro/raw/eastmoney_RPT_ECONOMY_PMI.json'",
+      "adapter_meta": {
+        "adapter": "nbs_official_release_plus_history_seed",
+        "source_name": "NBS official data release / China manufacturing PMI",
+        "release_title": "2026年5月中国采购经理指数运行情况",
+        "release_url": "https://www.stats.gov.cn/sj/zxfb/202605/t20260531_1963824.html",
+        "release_date": "2026-05-01",
+        "latest_value_source": "official_nbs_release",
+        "components": {
+          "history_seed": {
+            "adapter": "eastmoney_public_api",
+            "report_name": "RPT_ECONOMY_PMI",
+            "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_ECONOMY_PMI&columns=ALL&pageNumber=1&pageSize=5000&sortColumns=REPORT_DATE&sortTypes=-1&source=WEB&client=WEB",
+            "cache_path": "data/macro/raw/eastmoney_RPT_ECONOMY_PMI.json",
+            "pages": 1,
+            "source_name": "Eastmoney Datacenter / NBS-CFLP PMI",
+            "value_field": "MAKE_INDEX",
+            "gap": "Public Eastmoney mirror of official manufacturing PMI."
+          },
+          "release_index": {
+            "adapter": "nbs_release_index",
+            "url": "https://www.stats.gov.cn/sj/zxfb/",
+            "cache_path": "data/macro/raw/nbs_stats_zxfb.html"
+          },
+          "release_page": {
+            "adapter": "nbs_release_page",
+            "url": "https://www.stats.gov.cn/sj/zxfb/202605/t20260531_1963824.html",
+            "cache_path": "data/macro/raw/nbs_cn_official_manufacturing_pmi_202605.html"
+          },
+          "attachment": null
+        },
+        "parse_mode": "pmi_text",
+        "gap": "Official NBS manufacturing PMI parsed from release text; old .xls attachment is not parsed without xlrd."
+      },
       "fallback": "Investing or FRED mirror if available",
       "note": "Official China manufacturing cycle."
     },
@@ -826,7 +932,7 @@
       "display_frequency": "month",
       "transform": "level",
       "availability": "proxy",
-      "generated_at": "2026-06-25T13:11:21.644300+00:00",
+      "generated_at": "2026-06-25T16:25:46.900655+00:00",
       "status": "ok",
       "points": 206,
       "first_date": "2012-01-20",
@@ -854,14 +960,50 @@
       "display_frequency": "month",
       "transform": "yoy",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:11:28.683320+00:00",
-      "status": "error",
-      "points": 0,
-      "first_date": null,
-      "latest_date": null,
-      "latest_value": null,
+      "generated_at": "2026-06-25T16:25:55.761062+00:00",
+      "status": "ok",
+      "points": 190,
+      "first_date": "2008-02-01",
+      "latest_date": "2026-05-01",
+      "latest_value": 4.5,
       "history_path": "data/macro/history/cn_industrial_production_yoy.json",
-      "error": "[Errno 2] No such file or directory: '/home/runner/work/fin-market-brief/fin-market-brief/data/macro/raw/eastmoney_RPT_ECONOMY_INDUS_GROW.json'",
+      "adapter_meta": {
+        "adapter": "nbs_official_release_plus_history_seed",
+        "source_name": "NBS official data release / Industrial value-added output",
+        "release_title": "2026年5月份规模以上工业增加值增长4.5%",
+        "release_url": "https://www.stats.gov.cn/sj/zxfb/202606/t20260616_1963953.html",
+        "release_date": "2026-05-01",
+        "latest_value_source": "official_nbs_release",
+        "components": {
+          "history_seed": {
+            "adapter": "eastmoney_public_api",
+            "report_name": "RPT_ECONOMY_INDUS_GROW",
+            "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_ECONOMY_INDUS_GROW&columns=ALL&pageNumber=1&pageSize=5000&sortColumns=REPORT_DATE&sortTypes=-1&source=WEB&client=WEB",
+            "cache_path": "data/macro/raw/eastmoney_RPT_ECONOMY_INDUS_GROW.json",
+            "pages": 1,
+            "source_name": "Eastmoney Datacenter / NBS industrial production",
+            "value_field": "BASE_SAME",
+            "gap": "Public Eastmoney mirror of NBS value-added industrial output YoY."
+          },
+          "release_index": {
+            "adapter": "nbs_release_index",
+            "url": "https://www.stats.gov.cn/sj/zxfb/",
+            "cache_path": "data/macro/raw/nbs_stats_zxfb.html"
+          },
+          "release_page": {
+            "adapter": "nbs_release_page",
+            "url": "https://www.stats.gov.cn/sj/zxfb/202606/t20260616_1963953.html",
+            "cache_path": "data/macro/raw/nbs_cn_industrial_production_yoy_202605.html"
+          },
+          "attachment": {
+            "adapter": "nbs_release_xlsx",
+            "url": "https://www.stats.gov.cn/sj/zxfb/202606/P020260616326571885705.xlsx",
+            "cache_path": "data/macro/raw/nbs_cn_industrial_production_yoy_202605.xlsx"
+          }
+        },
+        "parse_mode": "xlsx_row",
+        "gap": "Official NBS latest release patched onto Eastmoney long-history mirror; NBS structured easyquery endpoint is WAF-blocked in this environment."
+      },
       "fallback": "NBS data table extract; AKShare macro_china_industrial_production_yoy wrapper.",
       "note": "Hard production activity; v1 uses Jin10 public economic-calendar mirror, replace with official NBS adapter later."
     },
@@ -876,14 +1018,50 @@
       "display_frequency": "month",
       "transform": "yoy",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:11:29.216957+00:00",
-      "status": "error",
-      "points": 0,
-      "first_date": null,
-      "latest_date": null,
-      "latest_value": null,
+      "generated_at": "2026-06-25T16:26:10.089849+00:00",
+      "status": "ok",
+      "points": 183,
+      "first_date": "2008-03-01",
+      "latest_date": "2026-05-01",
+      "latest_value": -4.1,
       "history_path": "data/macro/history/cn_fixed_asset_investment_yoy.json",
-      "error": "[Errno 2] No such file or directory: '/home/runner/work/fin-market-brief/fin-market-brief/data/macro/raw/eastmoney_RPT_ECONOMY_ASSET_INVEST.json'",
+      "adapter_meta": {
+        "adapter": "nbs_official_release_plus_history_seed",
+        "source_name": "NBS official data release / Fixed asset investment",
+        "release_title": "2026年1—5月份全国固定资产投资基本情况",
+        "release_url": "https://www.stats.gov.cn/sj/zxfb/202606/t20260616_1963951.html",
+        "release_date": "2026-05-01",
+        "latest_value_source": "official_nbs_release",
+        "components": {
+          "history_seed": {
+            "adapter": "eastmoney_public_api",
+            "report_name": "RPT_ECONOMY_ASSET_INVEST",
+            "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_ECONOMY_ASSET_INVEST&columns=ALL&pageNumber=1&pageSize=5000&sortColumns=REPORT_DATE&sortTypes=-1&source=WEB&client=WEB",
+            "cache_path": "data/macro/raw/eastmoney_RPT_ECONOMY_ASSET_INVEST.json",
+            "pages": 1,
+            "source_name": "Eastmoney Datacenter / NBS fixed asset investment",
+            "value_field": "BASE_SAME",
+            "gap": "Public Eastmoney mirror of fixed-asset investment YoY; field is monthly YoY, not cumulative YoY."
+          },
+          "release_index": {
+            "adapter": "nbs_release_index",
+            "url": "https://www.stats.gov.cn/sj/zxfb/",
+            "cache_path": "data/macro/raw/nbs_stats_zxfb.html"
+          },
+          "release_page": {
+            "adapter": "nbs_release_page",
+            "url": "https://www.stats.gov.cn/sj/zxfb/202606/t20260616_1963951.html",
+            "cache_path": "data/macro/raw/nbs_cn_fixed_asset_investment_yoy_202605.html"
+          },
+          "attachment": {
+            "adapter": "nbs_release_xlsx",
+            "url": "https://www.stats.gov.cn/sj/zxfb/202606/P020260616324404884719.xlsx",
+            "cache_path": "data/macro/raw/nbs_cn_fixed_asset_investment_yoy_202605.xlsx"
+          }
+        },
+        "parse_mode": "xlsx_row",
+        "gap": "Official NBS release uses cumulative YoY. Historical seed may contain mirror/vendor revisions."
+      },
       "fallback": "NBS data table extract",
       "note": "Total investment trend; split into manufacturing, infrastructure, and real estate later."
     },
@@ -898,7 +1076,7 @@
       "display_frequency": "month",
       "transform": "yoy",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:11:30.276236+00:00",
+      "generated_at": "2026-06-25T16:26:23.608614+00:00",
       "status": "error",
       "points": 0,
       "first_date": null,
@@ -920,7 +1098,7 @@
       "display_frequency": "month",
       "transform": "yoy",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:11:30.276633+00:00",
+      "generated_at": "2026-06-25T16:26:23.609261+00:00",
       "status": "error",
       "points": 0,
       "first_date": null,
@@ -942,14 +1120,14 @@
       "display_frequency": "month",
       "transform": "yoy",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:11:30.277052+00:00",
+      "generated_at": "2026-06-25T16:26:23.609824+00:00",
       "status": "error",
       "points": 0,
       "first_date": null,
       "latest_date": null,
       "latest_value": null,
       "history_path": "data/macro/history/cn_70_city_home_price.json",
-      "error": "[Errno 2] No such file or directory: '/home/runner/work/fin-market-brief/fin-market-brief/data/macro/raw/eastmoney_RPT_ECONOMY_HOUSE_PRICE.json'",
+      "error": "lxml is required for NBS home-price HTML table parsing",
       "fallback": "aggregate new/secondhand city price table",
       "note": "Home-price trend; methodology changes should be documented."
     },
@@ -964,14 +1142,50 @@
       "display_frequency": "month",
       "transform": "yoy",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:12:16.624425+00:00",
-      "status": "error",
-      "points": 0,
-      "first_date": null,
-      "latest_date": null,
-      "latest_value": null,
+      "generated_at": "2026-06-25T16:27:40.916295+00:00",
+      "status": "ok",
+      "points": 221,
+      "first_date": "2008-01-01",
+      "latest_date": "2026-05-01",
+      "latest_value": 1.2,
       "history_path": "data/macro/history/cn_cpi_yoy.json",
-      "error": "[Errno 2] No such file or directory: '/home/runner/work/fin-market-brief/fin-market-brief/data/macro/raw/eastmoney_RPT_ECONOMY_CPI.json'",
+      "adapter_meta": {
+        "adapter": "nbs_official_release_plus_history_seed",
+        "source_name": "NBS official data release / CPI",
+        "release_title": "2026年5月份居民消费价格同比上涨1.2%",
+        "release_url": "https://www.stats.gov.cn/sj/zxfb/202606/t20260610_1963923.html",
+        "release_date": "2026-05-01",
+        "latest_value_source": "official_nbs_release",
+        "components": {
+          "history_seed": {
+            "adapter": "eastmoney_public_api",
+            "report_name": "RPT_ECONOMY_CPI",
+            "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_ECONOMY_CPI&columns=ALL&pageNumber=1&pageSize=5000&sortColumns=REPORT_DATE&sortTypes=-1&source=WEB&client=WEB",
+            "cache_path": "data/macro/raw/eastmoney_RPT_ECONOMY_CPI.json",
+            "pages": 1,
+            "source_name": "Eastmoney Datacenter / NBS CPI",
+            "value_field": "NATIONAL_SAME",
+            "gap": "Public Eastmoney mirror of NBS CPI YoY."
+          },
+          "release_index": {
+            "adapter": "nbs_release_index",
+            "url": "https://www.stats.gov.cn/sj/zxfb/",
+            "cache_path": "data/macro/raw/nbs_stats_zxfb.html"
+          },
+          "release_page": {
+            "adapter": "nbs_release_page",
+            "url": "https://www.stats.gov.cn/sj/zxfb/202606/t20260610_1963923.html",
+            "cache_path": "data/macro/raw/nbs_cn_cpi_yoy_202605.html"
+          },
+          "attachment": {
+            "adapter": "nbs_release_xlsx",
+            "url": "https://www.stats.gov.cn/sj/zxfb/202606/P020260610308114804225.xlsx",
+            "cache_path": "data/macro/raw/nbs_cn_cpi_yoy_202605.xlsx"
+          }
+        },
+        "parse_mode": "xlsx_row",
+        "gap": "Official NBS latest release patched onto Eastmoney long-history mirror."
+      },
       "fallback": "NBS data table extract; macropage CPI MoM chain if YoY unavailable.",
       "note": "Household inflation and demand pressure; FRED/OECD mirror used for v1."
     },
@@ -986,14 +1200,50 @@
       "display_frequency": "month",
       "transform": "yoy",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:12:17.397028+00:00",
-      "status": "error",
-      "points": 0,
-      "first_date": null,
-      "latest_date": null,
-      "latest_value": null,
+      "generated_at": "2026-06-25T16:27:59.039558+00:00",
+      "status": "ok",
+      "points": 245,
+      "first_date": "2006-01-01",
+      "latest_date": "2026-05-01",
+      "latest_value": 3.9,
       "history_path": "data/macro/history/cn_ppi_yoy.json",
-      "error": "[Errno 2] No such file or directory: '/home/runner/work/fin-market-brief/fin-market-brief/data/macro/raw/eastmoney_RPT_ECONOMY_PPI.json'",
+      "adapter_meta": {
+        "adapter": "nbs_official_release_plus_history_seed",
+        "source_name": "NBS official data release / PPI",
+        "release_title": "2026年5月份工业生产者出厂价格同比上涨3.9% 环比上涨0.5%",
+        "release_url": "https://www.stats.gov.cn/sj/zxfb/202606/t20260610_1963922.html",
+        "release_date": "2026-05-01",
+        "latest_value_source": "official_nbs_release",
+        "components": {
+          "history_seed": {
+            "adapter": "eastmoney_public_api",
+            "report_name": "RPT_ECONOMY_PPI",
+            "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_ECONOMY_PPI&columns=ALL&pageNumber=1&pageSize=5000&sortColumns=REPORT_DATE&sortTypes=-1&source=WEB&client=WEB",
+            "cache_path": "data/macro/raw/eastmoney_RPT_ECONOMY_PPI.json",
+            "pages": 1,
+            "source_name": "Eastmoney Datacenter / NBS PPI",
+            "value_field": "BASE_SAME",
+            "gap": "Public Eastmoney mirror of NBS PPI YoY; replaces previous derived chain YoY proxy."
+          },
+          "release_index": {
+            "adapter": "nbs_release_index",
+            "url": "https://www.stats.gov.cn/sj/zxfb/",
+            "cache_path": "data/macro/raw/nbs_stats_zxfb.html"
+          },
+          "release_page": {
+            "adapter": "nbs_release_page",
+            "url": "https://www.stats.gov.cn/sj/zxfb/202606/t20260610_1963922.html",
+            "cache_path": "data/macro/raw/nbs_cn_ppi_yoy_202605.html"
+          },
+          "attachment": {
+            "adapter": "nbs_release_xlsx",
+            "url": "https://www.stats.gov.cn/sj/zxfb/202606/P020260610307161385880.xlsx",
+            "cache_path": "data/macro/raw/nbs_cn_ppi_yoy_202605.xlsx"
+          }
+        },
+        "parse_mode": "xlsx_row",
+        "gap": "Official NBS latest release patched onto Eastmoney long-history mirror."
+      },
       "fallback": "NBS data table extract",
       "note": "Industrial price cycle and profit pressure; v1 derives YoY from PPI MoM chain and must be labeled as derived."
     },
@@ -1008,14 +1258,46 @@
       "display_frequency": "month",
       "transform": "yoy",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:12:17.986988+00:00",
-      "status": "error",
-      "points": 0,
-      "first_date": null,
-      "latest_date": null,
-      "latest_value": null,
+      "generated_at": "2026-06-25T16:28:11.823483+00:00",
+      "status": "ok",
+      "points": 191,
+      "first_date": "2008-01-01",
+      "latest_date": "2026-05-01",
+      "latest_value": -0.6,
       "history_path": "data/macro/history/cn_retail_sales_yoy.json",
-      "error": "[Errno 2] No such file or directory: '/home/runner/work/fin-market-brief/fin-market-brief/data/macro/raw/eastmoney_RPT_ECONOMY_TOTAL_RETAIL.json'",
+      "adapter_meta": {
+        "adapter": "nbs_official_release_plus_history_seed",
+        "source_name": "NBS official data release / Total retail sales of consumer goods",
+        "release_title": "2026年1—5月份社会消费品零售总额增长1.4%",
+        "release_url": "https://www.stats.gov.cn/sj/zxfb/202606/t20260616_1963949.html",
+        "release_date": "2026-05-01",
+        "latest_value_source": "official_nbs_release",
+        "components": {
+          "history_seed": {
+            "adapter": "eastmoney_public_api",
+            "report_name": "RPT_ECONOMY_TOTAL_RETAIL",
+            "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_ECONOMY_TOTAL_RETAIL&columns=ALL&pageNumber=1&pageSize=5000&sortColumns=REPORT_DATE&sortTypes=-1&source=WEB&client=WEB",
+            "cache_path": "data/macro/raw/eastmoney_RPT_ECONOMY_TOTAL_RETAIL.json",
+            "pages": 1,
+            "source_name": "Eastmoney Datacenter / NBS total retail sales",
+            "value_field": "RETAIL_TOTAL_SAME",
+            "gap": "Public Eastmoney mirror of NBS monthly total retail sales YoY."
+          },
+          "release_index": {
+            "adapter": "nbs_release_index",
+            "url": "https://www.stats.gov.cn/sj/zxfb/",
+            "cache_path": "data/macro/raw/nbs_stats_zxfb.html"
+          },
+          "release_page": {
+            "adapter": "nbs_release_page",
+            "url": "https://www.stats.gov.cn/sj/zxfb/202606/t20260616_1963949.html",
+            "cache_path": "data/macro/raw/nbs_cn_retail_sales_yoy_202605.html"
+          },
+          "attachment": null
+        },
+        "parse_mode": "retail_text",
+        "gap": "Official NBS monthly YoY parsed from release text; old .xls attachment is not parsed without xlrd."
+      },
       "fallback": "NBS data table extract",
       "note": "Consumption trend."
     },
@@ -1030,14 +1312,23 @@
       "display_frequency": "month",
       "transform": "yoy",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:12:18.882818+00:00",
-      "status": "error",
-      "points": 0,
-      "first_date": null,
-      "latest_date": null,
-      "latest_value": null,
+      "generated_at": "2026-06-25T16:28:22.950151+00:00",
+      "status": "ok",
+      "points": 221,
+      "first_date": "2008-01-01",
+      "latest_date": "2026-05-01",
+      "latest_value": 19.4,
       "history_path": "data/macro/history/cn_exports_yoy.json",
-      "error": "[Errno 2] No such file or directory: '/home/runner/work/fin-market-brief/fin-market-brief/data/macro/raw/eastmoney_RPT_ECONOMY_CUSTOMS.json'",
+      "adapter_meta": {
+        "adapter": "eastmoney_public_api",
+        "report_name": "RPT_ECONOMY_CUSTOMS",
+        "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_ECONOMY_CUSTOMS&columns=ALL&pageNumber=1&pageSize=5000&sortColumns=REPORT_DATE&sortTypes=-1&source=WEB&client=WEB",
+        "cache_path": "data/macro/raw/eastmoney_RPT_ECONOMY_CUSTOMS.json",
+        "pages": 1,
+        "source_name": "Eastmoney Datacenter / China Customs",
+        "value_field": "EXIT_BASE_SAME",
+        "gap": "Public Eastmoney mirror of China Customs export YoY."
+      },
       "fallback": "FRED or World Bank trade data",
       "note": "External demand trend."
     },
@@ -1052,7 +1343,7 @@
       "display_frequency": "week",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:12:19.822571+00:00",
+      "generated_at": "2026-06-25T16:28:24.501920+00:00",
       "status": "ok",
       "points": 2500,
       "first_date": "2016-06-15",
@@ -1061,7 +1352,9 @@
       "history_path": "data/macro/history/cn_usdcny.json",
       "adapter_meta": {
         "adapter": "fred_csv",
-        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXCHUS"
+        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXCHUS",
+        "cache_path": "data/macro/raw/DEXCHUS.csv",
+        "refreshed": true
       },
       "fallback": "PBOC fixing or Yahoo CNY=X",
       "note": "RMB pressure and USD liquidity transmission."
@@ -1077,7 +1370,7 @@
       "display_frequency": "week",
       "transform": "level",
       "availability": "proxy",
-      "generated_at": "2026-06-25T13:12:20.122933+00:00",
+      "generated_at": "2026-06-25T16:28:27.243198+00:00",
       "status": "error",
       "points": 0,
       "first_date": null,
@@ -1099,7 +1392,7 @@
       "display_frequency": "month",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:12:20.123312+00:00",
+      "generated_at": "2026-06-25T16:28:27.243772+00:00",
       "status": "ok",
       "points": 2500,
       "first_date": "2019-08-22",
@@ -1108,7 +1401,9 @@
       "history_path": "data/macro/history/eu_ecb_policy_rate.json",
       "adapter_meta": {
         "adapter": "fred_csv",
-        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=ECBDFR"
+        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=ECBDFR",
+        "cache_path": "data/macro/raw/ECBDFR.csv",
+        "refreshed": true
       },
       "fallback": "ECB Data Portal policy-rate series.",
       "note": "Uses ECB deposit facility rate as the v1 policy-rate proxy."
@@ -1124,7 +1419,7 @@
       "display_frequency": "month",
       "transform": "yoy",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:12:22.183066+00:00",
+      "generated_at": "2026-06-25T16:28:29.560357+00:00",
       "status": "ok",
       "points": 289,
       "first_date": "2001-12-01",
@@ -1134,6 +1429,8 @@
       "adapter_meta": {
         "adapter": "eurostat_jsonstat",
         "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_hicp_manr?lang=en&freq=M&unit=RCH_A&coicop=TOT_X_NRG_FOOD&geo=EA20",
+        "cache_path": "data/macro/raw/eurostat_prc_hicp_manr_EA20_TOT_X_NRG_FOOD.json",
+        "refreshed": true,
         "source_name": "Eurostat prc_hicp_manr / HICP annual rate of change",
         "dataset": "prc_hicp_manr",
         "params": {
@@ -1161,7 +1458,7 @@
       "display_frequency": "week",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:12:22.939025+00:00",
+      "generated_at": "2026-06-25T16:28:29.983319+00:00",
       "status": "ok",
       "points": 2500,
       "first_date": "2016-06-15",
@@ -1170,7 +1467,9 @@
       "history_path": "data/macro/history/eu_eurusd.json",
       "adapter_meta": {
         "adapter": "fred_csv",
-        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXUSEU"
+        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXUSEU",
+        "cache_path": "data/macro/raw/DEXUSEU.csv",
+        "refreshed": true
       },
       "fallback": "ECB reference rates",
       "note": "Major DXY component and global USD condition input."
@@ -1186,7 +1485,7 @@
       "display_frequency": "month",
       "transform": "level",
       "availability": "proxy",
-      "generated_at": "2026-06-25T13:12:23.067265+00:00",
+      "generated_at": "2026-06-25T16:28:31.683682+00:00",
       "status": "ok",
       "points": 469,
       "first_date": "1985-01-01",
@@ -1195,7 +1494,9 @@
       "history_path": "data/macro/history/eu_composite_pmi.json",
       "adapter_meta": {
         "adapter": "fred_csv",
-        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=BSCICP03EZM665S"
+        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=BSCICP03EZM665S",
+        "cache_path": "data/macro/raw/BSCICP03EZM665S.csv",
+        "refreshed": true
       },
       "fallback": "Licensed S&P Global Eurozone Composite PMI if available.",
       "note": "Proxy only; OECD business confidence indicator, not S&P Global Eurozone Composite PMI."
@@ -1211,7 +1512,7 @@
       "display_frequency": "month",
       "transform": "yoy",
       "availability": "proxy",
-      "generated_at": "2026-06-25T13:12:23.478472+00:00",
+      "generated_at": "2026-06-25T16:28:32.172720+00:00",
       "status": "ok",
       "points": 783,
       "first_date": "1959-01-01",
@@ -1221,6 +1522,8 @@
       "adapter_meta": {
         "adapter": "fred_csv_yoy",
         "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEUPROINDMISMEI",
+        "cache_path": "data/macro/raw/DEUPROINDMISMEI.csv",
+        "refreshed": true,
         "source_name": "FRED/OECD Germany production of total industry",
         "operation": "yoy",
         "gap": "Proxy only. Uses Germany industrial production YoY; not S&P Global Germany Manufacturing PMI."
@@ -1239,7 +1542,7 @@
       "display_frequency": "week",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:12:23.928186+00:00",
+      "generated_at": "2026-06-25T16:28:32.666093+00:00",
       "status": "ok",
       "points": 449,
       "first_date": "1989-01-01",
@@ -1248,7 +1551,9 @@
       "history_path": "data/macro/history/jp_10y_jgb_yield.json",
       "adapter_meta": {
         "adapter": "fred_csv",
-        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IRLTLT01JPM156N"
+        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IRLTLT01JPM156N",
+        "cache_path": "data/macro/raw/IRLTLT01JPM156N.csv",
+        "refreshed": true
       },
       "fallback": "OECD long-term interest rates",
       "note": "Japan normalization and global carry-trade risk."
@@ -1264,7 +1569,7 @@
       "display_frequency": "week",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:12:24.013090+00:00",
+      "generated_at": "2026-06-25T16:28:33.187209+00:00",
       "status": "ok",
       "points": 2500,
       "first_date": "2016-06-15",
@@ -1273,7 +1578,9 @@
       "history_path": "data/macro/history/jp_usdjpy.json",
       "adapter_meta": {
         "adapter": "fred_csv",
-        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXJPUS"
+        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXJPUS",
+        "cache_path": "data/macro/raw/DEXJPUS.csv",
+        "refreshed": true
       },
       "fallback": "BOJ or Yahoo JPY=X",
       "note": "Carry-trade and risk-appetite proxy."
@@ -1289,7 +1596,7 @@
       "display_frequency": "month",
       "transform": "level",
       "availability": "proxy",
-      "generated_at": "2026-06-25T13:12:24.132177+00:00",
+      "generated_at": "2026-06-25T16:28:36.064636+00:00",
       "status": "error",
       "points": 0,
       "first_date": null,
@@ -1311,7 +1618,7 @@
       "display_frequency": "week",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:12:46.042375+00:00",
+      "generated_at": "2026-06-25T16:29:03.073831+00:00",
       "status": "ok",
       "points": 2500,
       "first_date": "2016-08-12",
@@ -1320,7 +1627,9 @@
       "history_path": "data/macro/history/global_brent_oil.json",
       "adapter_meta": {
         "adapter": "fred_csv",
-        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBRENTEU"
+        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBRENTEU",
+        "cache_path": "data/macro/raw/DCOILBRENTEU.csv",
+        "refreshed": true
       },
       "fallback": "Yahoo Finance futures proxy",
       "note": "Global energy inflation input."
@@ -1336,7 +1645,7 @@
       "display_frequency": "month",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:12:48.319706+00:00",
+      "generated_at": "2026-06-25T16:29:03.300063+00:00",
       "status": "ok",
       "points": 413,
       "first_date": "1992-01-01",
@@ -1345,7 +1654,9 @@
       "history_path": "data/macro/history/global_copper_price.json",
       "adapter_meta": {
         "adapter": "fred_csv",
-        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=PCOPPUSDM"
+        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=PCOPPUSDM",
+        "cache_path": "data/macro/raw/PCOPPUSDM.csv",
+        "refreshed": true
       },
       "fallback": "World Bank Pink Sheet monthly copper price",
       "note": "Global growth and China-demand proxy; monthly World Bank/FRED copper price."
@@ -1361,7 +1672,7 @@
       "display_frequency": "week",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:12:48.689299+00:00",
+      "generated_at": "2026-06-25T16:29:03.712357+00:00",
       "status": "ok",
       "points": 2500,
       "first_date": "2016-07-14",
@@ -1370,8 +1681,10 @@
       "history_path": "data/macro/history/xasset_gold_price.json",
       "adapter_meta": {
         "adapter": "nasdaq_history",
+        "symbol": "GLD",
         "url": "https://api.nasdaq.com/api/quote/GLD/historical?assetclass=etf&fromdate=1900-01-01&todate=2026-06-25&limit=9999",
-        "symbol": "GLD"
+        "cache_path": "data/macro/raw/nasdaq_GLD.json",
+        "refreshed": true
       },
       "fallback": "LBMA or Yahoo Finance gold futures proxy.",
       "note": "Uses gold futures proxy in v1; real-rate, dollar, and safe-haven asset."
@@ -1387,16 +1700,18 @@
       "display_frequency": "week",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:12:52.277921+00:00",
+      "generated_at": "2026-06-25T16:29:05.122109+00:00",
       "status": "ok",
       "points": 2500,
-      "first_date": "2016-08-25",
-      "latest_date": "2026-06-23",
-      "latest_value": 19.49,
+      "first_date": "2016-08-26",
+      "latest_date": "2026-06-24",
+      "latest_value": 18.63,
       "history_path": "data/macro/history/xasset_vix.json",
       "adapter_meta": {
         "adapter": "fred_csv",
-        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=VIXCLS"
+        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=VIXCLS",
+        "cache_path": "data/macro/raw/VIXCLS.csv",
+        "refreshed": true
       },
       "fallback": "CBOE historical data",
       "note": "Equity volatility and risk-aversion indicator."
@@ -1412,7 +1727,7 @@
       "display_frequency": "week",
       "transform": "level",
       "availability": "proxy",
-      "generated_at": "2026-06-25T13:12:52.372407+00:00",
+      "generated_at": "2026-06-25T16:29:05.211405+00:00",
       "status": "error",
       "points": 0,
       "first_date": null,
@@ -1434,7 +1749,7 @@
       "display_frequency": "week",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:12:52.372657+00:00",
+      "generated_at": "2026-06-25T16:29:05.211967+00:00",
       "status": "ok",
       "points": 2500,
       "first_date": "2016-07-13",
@@ -1443,7 +1758,9 @@
       "history_path": "data/macro/history/xasset_sp500.json",
       "adapter_meta": {
         "adapter": "fred_csv",
-        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=SP500"
+        "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=SP500",
+        "cache_path": "data/macro/raw/SP500.csv",
+        "refreshed": true
       },
       "fallback": "SPY ETF from Yahoo/Stooq",
       "note": "Global risk-asset anchor."
@@ -1459,7 +1776,7 @@
       "display_frequency": "week",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:12:52.436562+00:00",
+      "generated_at": "2026-06-25T16:29:05.276941+00:00",
       "status": "ok",
       "points": 2500,
       "first_date": "2016-07-14",
@@ -1468,8 +1785,10 @@
       "history_path": "data/macro/history/xasset_nasdaq100.json",
       "adapter_meta": {
         "adapter": "nasdaq_history",
+        "symbol": "QQQ",
         "url": "https://api.nasdaq.com/api/quote/QQQ/historical?assetclass=etf&fromdate=1900-01-01&todate=2026-06-25&limit=9999",
-        "symbol": "QQQ"
+        "cache_path": "data/macro/raw/nasdaq_QQQ.json",
+        "refreshed": true
       },
       "fallback": "QQQ ETF from 1999",
       "note": "Growth and technology risk appetite."
@@ -1485,7 +1804,7 @@
       "display_frequency": "week",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:12:54.844581+00:00",
+      "generated_at": "2026-06-25T16:29:06.631830+00:00",
       "status": "ok",
       "points": 2500,
       "first_date": "2016-07-14",
@@ -1494,8 +1813,10 @@
       "history_path": "data/macro/history/xasset_msci_acwi.json",
       "adapter_meta": {
         "adapter": "nasdaq_history",
+        "symbol": "ACWI",
         "url": "https://api.nasdaq.com/api/quote/ACWI/historical?assetclass=etf&fromdate=1900-01-01&todate=2026-06-25&limit=9999",
-        "symbol": "ACWI"
+        "cache_path": "data/macro/raw/nasdaq_ACWI.json",
+        "refreshed": true
       },
       "fallback": "ACWI ETF adjusted close",
       "note": "Use ETF proxy for free v1."
@@ -1511,15 +1832,17 @@
       "display_frequency": "week",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:12:58.241600+00:00",
+      "generated_at": "2026-06-25T16:29:09.031979+00:00",
       "status": "ok",
       "points": 2137,
       "first_date": "2020-08-19",
       "latest_date": "2026-06-25",
-      "latest_value": 61290.0,
+      "latest_value": 59715.0,
       "history_path": "data/macro/history/xasset_btc_price_trend.json",
       "adapter_meta": {
         "adapter": "hyperliquid_candle_snapshot",
+        "cache_path": "data/macro/raw/hyperliquid_btc_1d_candles.json",
+        "refreshed": true,
         "coin": "BTC",
         "gap": "Hyperliquid perpetual daily close; venue-level perp price, not a consolidated spot index."
       },
@@ -1537,16 +1860,18 @@
       "display_frequency": "week",
       "transform": "level",
       "availability": "proxy",
-      "generated_at": "2026-06-25T13:12:58.929131+00:00",
+      "generated_at": "2026-06-25T16:29:09.873635+00:00",
       "status": "ok",
       "points": 1,
       "first_date": "2026-06-25",
       "latest_date": "2026-06-25",
-      "latest_value": 56.015379784891415,
+      "latest_value": 55.814119928790696,
       "history_path": "data/macro/history/xasset_btc_dominance.json",
       "adapter_meta": {
         "adapter": "coingecko_global_latest_only",
         "url": "https://api.coingecko.com/api/v3/global",
+        "cache_path": "data/macro/raw/coingecko_global.json",
+        "refreshed": true,
         "gap": "Free endpoint provides latest dominance only; historical dominance needs derived market-cap history."
       },
       "fallback": "Coinlore latest-only global endpoint; derive history from BTC market cap divided by total crypto market cap only if both are sourced consistently.",
@@ -1563,23 +1888,27 @@
       "display_frequency": "week",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:12:59.082334+00:00",
+      "generated_at": "2026-06-25T16:29:09.976362+00:00",
       "status": "ok",
       "points": 2137,
       "first_date": "2020-08-19",
       "latest_date": "2026-06-25",
-      "latest_value": 0.026718877467776146,
+      "latest_value": 0.026380306455664405,
       "history_path": "data/macro/history/xasset_eth_btc.json",
       "adapter_meta": {
         "adapter": "hyperliquid_candle_snapshot_cache_derived",
         "legs": {
           "ETH": {
             "adapter": "hyperliquid_candle_snapshot",
+            "cache_path": "data/macro/raw/hyperliquid_eth_1d_candles.json",
+            "refreshed": true,
             "coin": "ETH",
             "gap": "Hyperliquid perpetual daily close; venue-level perp price, not a consolidated spot index."
           },
           "BTC": {
             "adapter": "hyperliquid_candle_snapshot",
+            "cache_path": "data/macro/raw/hyperliquid_btc_1d_candles.json",
+            "refreshed": true,
             "coin": "BTC",
             "gap": "Hyperliquid perpetual daily close; venue-level perp price, not a consolidated spot index."
           }
@@ -1600,16 +1929,18 @@
       "display_frequency": "week",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:13:00.359042+00:00",
+      "generated_at": "2026-06-25T16:29:11.608414+00:00",
       "status": "ok",
       "points": 2500,
       "first_date": "2019-08-22",
       "latest_date": "2026-06-25",
-      "latest_value": 312432745206.86,
+      "latest_value": 312592753106.51,
       "history_path": "data/macro/history/xasset_stablecoin_supply.json",
       "adapter_meta": {
         "adapter": "defillama_stablecoincharts_all",
         "url": "https://stablecoins.llama.fi/stablecoincharts/all",
+        "cache_path": "data/macro/raw/defillama_stablecoincharts_all.json",
+        "refreshed": true,
         "gap": "DeFiLlama all-stablecoin circulating USD-pegged supply history; methodology may revise historical chain/asset classification."
       },
       "fallback": "major stablecoin market caps from CoinGecko",
@@ -1626,12 +1957,12 @@
       "display_frequency": "week",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:13:00.533709+00:00",
+      "generated_at": "2026-06-25T16:29:11.755181+00:00",
       "status": "ok",
       "points": 366,
       "first_date": "2025-06-25",
       "latest_date": "2026-06-25",
-      "latest_value": -6.390642857142857e-06,
+      "latest_value": -8.15145294117647e-06,
       "history_path": "data/macro/history/xasset_crypto_funding_rate.json",
       "adapter_meta": {
         "adapter": "hyperliquid_funding_history",
@@ -1657,12 +1988,12 @@
       "display_frequency": "week",
       "transform": "level",
       "availability": "proxy",
-      "generated_at": "2026-06-25T13:13:20.819968+00:00",
+      "generated_at": "2026-06-25T16:29:34.726789+00:00",
       "status": "ok",
       "points": 1,
       "first_date": "2026-06-25",
       "latest_date": "2026-06-25",
-      "latest_value": 3476685724.7319994,
+      "latest_value": 3340975127.0765805,
       "history_path": "data/macro/history/xasset_crypto_open_interest.json",
       "adapter_meta": {
         "adapter": "hyperliquid_meta_and_asset_contexts",
@@ -1687,16 +2018,18 @@
       "display_frequency": "week",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:13:21.256092+00:00",
+      "generated_at": "2026-06-25T16:29:35.000371+00:00",
       "status": "ok",
       "points": 2500,
       "first_date": "2019-08-22",
       "latest_date": "2026-06-25",
-      "latest_value": 71043003453.0,
+      "latest_value": 69452741858.0,
       "history_path": "data/macro/history/xasset_defi_tvl.json",
       "adapter_meta": {
         "adapter": "defillama_historical_chain_tvl",
-        "url": "https://api.llama.fi/v2/historicalChainTvl"
+        "url": "https://api.llama.fi/v2/historicalChainTvl",
+        "cache_path": "data/macro/raw/defillama_tvl.json",
+        "refreshed": true
       },
       "fallback": "chain-level TVL from DeFiLlama",
       "note": "Chain activity and risk-capital proxy; always show TVL methodology caveat."
@@ -1712,7 +2045,7 @@
       "display_frequency": "week",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:13:21.401037+00:00",
+      "generated_at": "2026-06-25T16:29:35.183003+00:00",
       "status": "ok",
       "points": 2500,
       "first_date": "2016-07-14",
@@ -1721,8 +2054,10 @@
       "history_path": "data/macro/history/xasset_hyg.json",
       "adapter_meta": {
         "adapter": "nasdaq_history",
+        "symbol": "HYG",
         "url": "https://api.nasdaq.com/api/quote/HYG/historical?assetclass=etf&fromdate=1900-01-01&todate=2026-06-25&limit=9999",
-        "symbol": "HYG"
+        "cache_path": "data/macro/raw/nasdaq_HYG.json",
+        "refreshed": true
       },
       "fallback": "JNK ETF",
       "note": "Tradable credit-risk appetite proxy."
@@ -1738,7 +2073,7 @@
       "display_frequency": "week",
       "transform": "level",
       "availability": "stable",
-      "generated_at": "2026-06-25T13:13:22.916009+00:00",
+      "generated_at": "2026-06-25T16:29:37.816395+00:00",
       "status": "ok",
       "points": 2500,
       "first_date": "2016-07-14",
@@ -1747,8 +2082,10 @@
       "history_path": "data/macro/history/xasset_reit_index.json",
       "adapter_meta": {
         "adapter": "nasdaq_history",
+        "symbol": "VNQ",
         "url": "https://api.nasdaq.com/api/quote/VNQ/historical?assetclass=etf&fromdate=1900-01-01&todate=2026-06-25&limit=9999",
-        "symbol": "VNQ"
+        "cache_path": "data/macro/raw/nasdaq_VNQ.json",
+        "refreshed": true
       },
       "fallback": "IYR ETF",
       "note": "Public-market real estate proxy."
