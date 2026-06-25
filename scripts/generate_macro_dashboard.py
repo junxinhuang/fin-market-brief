@@ -421,9 +421,35 @@ def load_rows(indicator_id: str, limit: int = 20000) -> list[dict[str, object]]:
     return rows[-limit:]
 
 
+def _finite_float(value: object) -> float | None:
+    try:
+        number = float(value)  # type: ignore[arg-type]
+    except (TypeError, ValueError):
+        return None
+    if number != number or number in (float("inf"), float("-inf")):
+        return None
+    return number
+
+
+def _latest_from_history(history: list[dict[str, object]]) -> tuple[str | None, float | None]:
+    for row in reversed(history):
+        value = _finite_float(row.get("value"))
+        date = str(row.get("date") or "")
+        if value is not None and date:
+            return date, value
+    return None, None
+
+
 def compact_indicator(item: dict[str, object]) -> dict[str, object]:
     meta = item.get("adapter_meta") or {}
     indicator_id = str(item["id"])
+    history = load_rows(indicator_id)
+    history_latest_date, history_latest_value = _latest_from_history(history)
+    latest_value = _finite_float(item.get("latest_value"))
+    latest_date = str(item.get("latest_date") or "")
+    if latest_value is None and history_latest_value is not None:
+        latest_value = history_latest_value
+        latest_date = history_latest_date or latest_date
     return {
         "id": indicator_id,
         "priority": item["priority"],
@@ -440,8 +466,8 @@ def compact_indicator(item: dict[str, object]) -> dict[str, object]:
         "status": item.get("status"),
         "points": item.get("points"),
         "firstDate": item.get("first_date"),
-        "latestDate": item.get("latest_date"),
-        "latestValue": item.get("latest_value"),
+        "latestDate": latest_date or None,
+        "latestValue": latest_value,
         "unit": UNIT_BY_ID.get(indicator_id, "数值"),
         "description": SIMPLE_EXPLANATION_BY_ID.get(indicator_id)
         or DESCRIPTION_BY_ID.get(indicator_id)
@@ -453,7 +479,7 @@ def compact_indicator(item: dict[str, object]) -> dict[str, object]:
         "note": item.get("note"),
         "adapter": meta.get("adapter"),
         "caveat": item.get("gap") or meta.get("gap") or item.get("note"),
-        "history": load_rows(str(item["id"])),
+        "history": history,
     }
 
 
@@ -562,6 +588,12 @@ def _fmt_metric(indicators: dict[str, dict[str, object]], indicator_id: str) -> 
     if value is None:
         return "—"
     unit = str(item.get("unit") or "")
+    return _fmt_number(value, unit)
+
+
+def _fmt_optional(value: float | None, unit: str = "") -> str:
+    if value is None:
+        return "—"
     return _fmt_number(value, unit)
 
 
@@ -710,10 +742,17 @@ def build_us_rate_diagnosis(indicators: dict[str, dict[str, object]]) -> dict[st
         turning_points.append(f"10年期近几年高点在 {ten_peak['date']}，约 {ten_peak['value']:.2f}%。")
 
     market_state = (
-        f"当前10年期约{_fmt_number(ten_latest or 0, '%')}、2年期约{_fmt_number(two_latest or 0, '%')}、"
-        f"10Y-2Y约{_fmt_number(spread_latest or 0, '百分点')}、实际利率约{_fmt_number(real_latest or 0, '%')}。"
+        f"当前10年期约{_fmt_optional(ten_latest, '%')}、2年期约{_fmt_optional(two_latest, '%')}、"
+        f"10Y-2Y约{_fmt_optional(spread_latest, '百分点')}、实际利率约{_fmt_optional(real_latest, '%')}。"
     )
-    if spread_latest is not None and spread_latest > 0 and (real_latest or 0) > 1.8 and (policy_gap_latest or 0) > 0:
+    if (
+        spread_latest is not None
+        and spread_latest > 0
+        and real_latest is not None
+        and real_latest > 1.8
+        and policy_gap_latest is not None
+        and policy_gap_latest > 0
+    ):
         market_state += " 这更像“软着陆/高利率更久”市场：风险资产可以涨，但估值受真实利率压制，黄金和BTC需要美元或实际利率下行来获得更顺的宏观风。"
     elif spread_latest is not None and spread_latest < 0:
         market_state += " 这仍是倒挂阶段：短端政策压力压过长端增长预期，衰退和未来降息预期较重。"
@@ -789,8 +828,8 @@ def build_china_credit_diagnosis(indicators: dict[str, dict[str, object]]) -> di
             turning_points.append(f"{label}近年低点在 {extreme['date']}，约 {_fmt_number(extreme['value'], unit)}。")
 
     market_state = (
-        f"当前社融{_fmt_number(tsf or 0, '%')}、M1{_fmt_number(m1 or 0, '%')}、PMI{_fmt_number(pmi or 0, '指数点')}、"
-        f"地产投资{_fmt_number(property_inv or 0, '%')}、商品房销售{_fmt_number(sales or 0, '%')}。"
+        f"当前社融{_fmt_optional(tsf, '%')}、M1{_fmt_optional(m1, '%')}、PMI{_fmt_optional(pmi, '指数点')}、"
+        f"地产投资{_fmt_optional(property_inv, '%')}、商品房销售{_fmt_optional(sales, '%')}。"
     )
     if pmi is not None and pmi >= 50 and property_inv is not None and property_inv < 0:
         market_state += " 这更像政策托底后的结构性修复，而不是地产带动的强复苏；对商品和港股/中概更有利的条件是信用和地产销售同步改善。"
@@ -861,8 +900,8 @@ def build_inflation_commodities_diagnosis(indicators: dict[str, dict[str, object
             turning_points.append(f"{label}近年{'高点' if kind == 'max' else '低点'}在 {extreme['date']}，约 {_fmt_number(extreme['value'], UNIT_BY_ID.get(indicator_id, ''))}。")
 
     market_state = (
-        f"当前核心PCE{_fmt_number(core_pce or 0, '指数点')}、欧元区核心HICP{_fmt_number(eu_core or 0, '%')}、"
-        f"布油{_fmt_number(oil or 0, '美元/桶')}、铜{_fmt_number(copper or 0, '美元/吨')}、中国PPI{_fmt_number(ppi or 0, '%')}。"
+        f"当前核心PCE{_fmt_optional(core_pce, '指数点')}、欧元区核心HICP{_fmt_optional(eu_core, '%')}、"
+        f"布油{_fmt_optional(oil, '美元/桶')}、铜{_fmt_optional(copper, '美元/吨')}、中国PPI{_fmt_optional(ppi, '%')}。"
     )
     market_state += " 若商品继续强而核心通胀不降，债券和成长估值会承压；若商品回落且核心通胀松动，黄金、BTC和成长股的宏观风会更顺。"
 
@@ -921,8 +960,8 @@ def build_risk_credit_diagnosis(indicators: dict[str, dict[str, object]]) -> dic
             turning_points.append(f"{label}近年高点在 {extreme['date']}，约 {_fmt_number(extreme['value'], UNIT_BY_ID.get(indicator_id, ''))}。")
 
     market_state = (
-        f"当前标普500{_fmt_number(spx or 0, '指数点')}、VIX{_fmt_number(vix or 0, '指数点')}、"
-        f"高收益债利差{_fmt_number(hy or 0, '百分点')}、美债波动代理{_fmt_number(move or 0, '年化百分点')}。"
+        f"当前标普500{_fmt_optional(spx, '指数点')}、VIX{_fmt_optional(vix, '指数点')}、"
+        f"高收益债利差{_fmt_optional(hy, '百分点')}、美债波动代理{_fmt_optional(move, '年化百分点')}。"
         " 这组用于判断上涨是否有信用和波动配合，而不是只看指数新高。"
     )
     return {
@@ -982,8 +1021,8 @@ def build_crypto_liquidity_diagnosis(indicators: dict[str, dict[str, object]]) -
         turning_points.append("稳定币/OI/资金费率部分序列历史不足，暂不把单点读数当成趋势拐点。")
 
     market_state = (
-        f"当前BTC{_fmt_number(btc or 0, '美元')}、稳定币供应{_fmt_number(stable or 0, '美元')}、"
-        f"资金费率{_fmt_number(funding or 0, '费率')}、OI代理{_fmt_number(oi or 0, '美元')}、ETH/BTC{_fmt_number(ethbtc or 0, 'ETH/BTC')}。"
+        f"当前BTC{_fmt_optional(btc, '美元')}、稳定币供应{_fmt_optional(stable, '美元')}、"
+        f"资金费率{_fmt_optional(funding, '费率')}、OI代理{_fmt_optional(oi, '美元')}、ETH/BTC{_fmt_optional(ethbtc, 'ETH/BTC')}。"
         " 这组只判断长期背景和拥挤度，不输出具体交易标的。"
     )
     return {
@@ -1041,8 +1080,8 @@ def build_usd_pressure_diagnosis(indicators: dict[str, dict[str, object]]) -> di
             turning_points.append(f"{label}近年高点在 {extreme['date']}，约 {_fmt_number(extreme['value'], UNIT_BY_ID.get(indicator_id, ''))}。")
 
     market_state = (
-        f"当前美元指数代理{_fmt_number(dxy or 0, '指数点')}、美元兑人民币{_fmt_number(cny or 0, '人民币/美元')}、"
-        f"欧元兑美元{_fmt_number(eur or 0, '美元/欧元')}、美元兑日元{_fmt_number(jpy or 0, '日元/美元')}。"
+        f"当前美元指数代理{_fmt_optional(dxy, '指数点')}、美元兑人民币{_fmt_optional(cny, '人民币/美元')}、"
+        f"欧元兑美元{_fmt_optional(eur, '美元/欧元')}、美元兑日元{_fmt_optional(jpy, '日元/美元')}。"
         " 强美元会抬高全球融资压力，通常压制黄金、新兴市场和加密的估值弹性。"
     )
     return {
@@ -2424,7 +2463,7 @@ def build_html(payload: dict[str, object]) -> str:
             </div>
             <span class="tag ${{item.availability === 'proxy' ? 'proxy' : ''}}">${{item.availability}}</span>
           </div>
-          <div><span class="value">${{fmtWithUnit(item.latestValue, item.unit)}}</span> <span class="card-meta">${{item.latestDate}}</span></div>
+          <div><span class="value">${{fmtWithUnit(item.latestValue, item.unit)}}</span> <span class="card-meta">${{item.latestDate || '—'}}</span></div>
           ${{sparkline(history, 360, 78, item.availability === 'proxy' ? '#a86913' : '#3265a8', true).replace('class="spark"', 'class="big-chart"')}}
           <div class="card-meta">单位 ${{item.unit}} · 近 4 期 <span class="change ${{changeClass(chg)}}">${{chg === null ? '—' : (chg > 0 ? '+' : '') + fmtWithUnit(chg, item.unit)}}</span> · 分位 ${{pct === null ? '—' : pct.toFixed(0) + '%'}}</div>
           ${{comboChips(item)}}

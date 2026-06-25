@@ -518,6 +518,54 @@ def run_curl_bytes(url: str, *, timeout: int = 30) -> bytes:
     return completed.stdout
 
 
+def fetch_text_live_first(
+    url: str,
+    cache_path: Path,
+    *,
+    timeout: int = 45,
+    curl_args: list[str] | None = None,
+    binary: bool = False,
+    reject_html: bool = False,
+) -> tuple[str | bytes, dict[str, Any]]:
+    try:
+        if curl_args is None:
+            content = run_curl_bytes(url, timeout=timeout) if binary else run_curl(url, timeout=timeout)
+        else:
+            completed = subprocess.run(
+                curl_args,
+                cwd=ROOT,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=not binary,
+                check=False,
+            )
+            if completed.returncode != 0:
+                stderr = completed.stderr if isinstance(completed.stderr, str) else completed.stderr.decode(errors="ignore")
+                raise RuntimeError(stderr.strip() or f"curl exited {completed.returncode}")
+            content = completed.stdout
+        if reject_html and not binary:
+            text = content if isinstance(content, str) else content.decode(errors="ignore")
+            if text.lstrip().startswith("<"):
+                raise RuntimeError("live response looked like HTML/error page")
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
+        if binary:
+            cache_path.write_bytes(content if isinstance(content, bytes) else content.encode())
+        else:
+            cache_path.write_text(content if isinstance(content, str) else content.decode(errors="ignore"))
+        return content, {"url": url, "cache_path": str(cache_path.relative_to(ROOT)), "refreshed": True}
+    except Exception as exc:  # noqa: BLE001
+        if not cache_path.exists():
+            raise
+        cached = cache_path.read_bytes() if binary else cache_path.read_text(errors="ignore")
+        return cached, {
+            "url": url,
+            "cache_path": str(cache_path.relative_to(ROOT)),
+            "refreshed": False,
+            "cache_fallback": True,
+            "live_error": str(exc),
+        }
+
+
 def parse_float(value: str | None) -> float | None:
     if value is None:
         return None
@@ -566,21 +614,9 @@ def summarize_history(rows: list[dict[str, Any]]) -> dict[str, Any]:
 def fetch_fred(series_id: str, *, max_points: int | None) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?{urlencode({'id': series_id})}"
     cache_path = RAW_DIR / f"{series_id}.csv"
-    if cache_path.exists():
-        text = cache_path.read_text()
-        if text.lstrip().startswith("<"):
-            text = run_curl(url, timeout=45)
-            source_meta = {
-                "adapter": "fred_csv",
-                "url": url,
-                "ignored_cache_path": str(cache_path.relative_to(ROOT)),
-                "ignored_cache_reason": "HTML/error page",
-            }
-        else:
-            source_meta = {"adapter": "fred_csv_cache", "url": url, "cache_path": str(cache_path.relative_to(ROOT))}
-    else:
-        text = run_curl(url, timeout=45)
-        source_meta = {"adapter": "fred_csv", "url": url}
+    text, meta = fetch_text_live_first(url, cache_path, timeout=45, reject_html=True)
+    assert isinstance(text, str)
+    source_meta = {"adapter": "fred_csv" if meta.get("refreshed") else "fred_csv_cache_fallback", **meta}
     if text.lstrip().startswith("<"):
         raise RuntimeError("FRED returned HTML instead of CSV")
     reader = csv.DictReader(io.StringIO(text))
@@ -600,22 +636,9 @@ def fetch_fred(series_id: str, *, max_points: int | None) -> tuple[list[dict[str
 def fetch_stooq(symbol: str, *, max_points: int | None) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     url = f"https://stooq.com/q/d/l/?{urlencode({'s': symbol, 'i': 'd'})}"
     cache_path = RAW_DIR / f"{symbol}.csv"
-    if cache_path.exists():
-        text = cache_path.read_text()
-        if text.lstrip().startswith("<"):
-            text = run_curl(url, timeout=45)
-            source_meta = {
-                "adapter": "stooq_csv",
-                "url": url,
-                "ignored_cache_path": str(cache_path.relative_to(ROOT)),
-                "ignored_cache_reason": "HTML/error page",
-                "symbol": symbol,
-            }
-        else:
-            source_meta = {"adapter": "stooq_csv_cache", "url": url, "cache_path": str(cache_path.relative_to(ROOT)), "symbol": symbol}
-    else:
-        text = run_curl(url, timeout=45)
-        source_meta = {"adapter": "stooq_csv", "url": url, "symbol": symbol}
+    text, meta = fetch_text_live_first(url, cache_path, timeout=45, reject_html=True)
+    assert isinstance(text, str)
+    source_meta = {"adapter": "stooq_csv" if meta.get("refreshed") else "stooq_csv_cache_fallback", "symbol": symbol, **meta}
     if not text.strip() or "No data" in text:
         raise RuntimeError("Stooq returned no data")
     reader = csv.DictReader(io.StringIO(text))
@@ -632,16 +655,10 @@ def fetch_eurostat_jsonstat(spec: dict[str, Any], *, max_points: int | None) -> 
     query = urlencode(spec["params"])
     url = f"https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/{spec['dataset']}?{query}"
     cache_path = RAW_DIR / f"eurostat_{spec['dataset']}_{spec['params']['geo']}_{spec['params']['coicop']}.json"
-    if cache_path.exists():
-        payload = json.loads(cache_path.read_text())
-        source_meta = {
-            "adapter": "eurostat_jsonstat_cache",
-            "url": url,
-            "cache_path": str(cache_path.relative_to(ROOT)),
-        }
-    else:
-        payload = json.loads(run_curl(url, timeout=60))
-        source_meta = {"adapter": "eurostat_jsonstat", "url": url}
+    text, meta = fetch_text_live_first(url, cache_path, timeout=60, reject_html=True)
+    assert isinstance(text, str)
+    payload = json.loads(text)
+    source_meta = {"adapter": "eurostat_jsonstat" if meta.get("refreshed") else "eurostat_jsonstat_cache_fallback", **meta}
 
     if "error" in payload:
         raise RuntimeError(f"Eurostat returned error: {payload['error']}")
@@ -1215,38 +1232,25 @@ def fetch_nasdaq_history(symbol: str, assetclass: str, *, max_points: int | None
         f"{urlencode({'assetclass': assetclass, 'fromdate': '1900-01-01', 'todate': datetime.now(timezone.utc).date().isoformat(), 'limit': '9999'})}"
     )
     cache_path = RAW_DIR / f"nasdaq_{symbol}.json"
-    if cache_path.exists():
-        text = cache_path.read_text()
-        source_meta = {"adapter": "nasdaq_history_cache", "url": url, "cache_path": str(cache_path.relative_to(ROOT)), "symbol": symbol}
-    else:
-        args = [
-            "curl",
-            "-sS",
-            "-L",
-            "--max-time",
-            "45",
-            "-H",
-            "user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/125 Safari/537.36",
-            "-H",
-            "accept: application/json,text/plain,*/*",
-            "-H",
-            "origin: https://www.nasdaq.com",
-            "-H",
-            "referer: https://www.nasdaq.com/",
-            url,
-        ]
-        completed = subprocess.run(
-            args,
-            cwd=ROOT,
-            text=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            check=False,
-        )
-        if completed.returncode != 0:
-            raise RuntimeError(completed.stderr.strip() or f"curl exited {completed.returncode}")
-        text = completed.stdout
-        source_meta = {"adapter": "nasdaq_history", "url": url, "symbol": symbol}
+    args = [
+        "curl",
+        "-sS",
+        "-L",
+        "--max-time",
+        "45",
+        "-H",
+        "user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/125 Safari/537.36",
+        "-H",
+        "accept: application/json,text/plain,*/*",
+        "-H",
+        "origin: https://www.nasdaq.com",
+        "-H",
+        "referer: https://www.nasdaq.com/",
+        url,
+    ]
+    text, meta = fetch_text_live_first(url, cache_path, timeout=45, curl_args=args, reject_html=True)
+    assert isinstance(text, str)
+    source_meta = {"adapter": "nasdaq_history" if meta.get("refreshed") else "nasdaq_history_cache_fallback", "symbol": symbol, **meta}
     payload = json.loads(text)
     raw_rows = (((payload.get("data") or {}).get("tradesTable") or {}).get("rows") or [])
     rows = []
@@ -1444,17 +1448,20 @@ def fetch_btc_dominance(*, max_points: int | None) -> tuple[list[dict[str, Any]]
     source_meta: dict[str, Any]
     try:
         cache_path = RAW_DIR / "coingecko_global.json"
-        payload = json.loads(cache_path.read_text()) if cache_path.exists() else json.loads(run_curl(coingecko_url, timeout=30))
+        text, meta = fetch_text_live_first(coingecko_url, cache_path, timeout=30, reject_html=True)
+        assert isinstance(text, str)
+        payload = json.loads(text)
         value = payload.get("data", {}).get("market_cap_percentage", {}).get("btc")
-        source_meta = {"adapter": "coingecko_global_latest_only", "url": coingecko_url}
+        source_meta = {"adapter": "coingecko_global_latest_only" if meta.get("refreshed") else "coingecko_global_latest_only_cache_fallback", **meta}
     except Exception as exc:  # noqa: BLE001
         cache_path = RAW_DIR / "coinlore_global.json"
-        payload = json.loads(cache_path.read_text()) if cache_path.exists() else json.loads(run_curl(coinlore_url, timeout=30))
+        text, meta = fetch_text_live_first(coinlore_url, cache_path, timeout=30, reject_html=True)
+        assert isinstance(text, str)
+        payload = json.loads(text)
         value = (payload[0] if payload else {}).get("btc_d")
         source_meta = {
-            "adapter": "coinlore_global_latest_only_cache" if cache_path.exists() else "coinlore_global_latest_only",
-            "url": coinlore_url,
-            "cache_path": str(cache_path.relative_to(ROOT)) if cache_path.exists() else None,
+            "adapter": "coinlore_global_latest_only" if meta.get("refreshed") else "coinlore_global_latest_only_cache_fallback",
+            **meta,
             "fallback_from": coingecko_url,
             "fallback_error": str(exc),
         }
@@ -1471,16 +1478,10 @@ def fetch_btc_dominance(*, max_points: int | None) -> tuple[list[dict[str, Any]]
 def fetch_stablecoin_supply(*, max_points: int | None) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     url = "https://stablecoins.llama.fi/stablecoincharts/all"
     cache_path = RAW_DIR / "defillama_stablecoincharts_all.json"
-    if cache_path.exists():
-        payload = json.loads(cache_path.read_text())
-        source_meta = {
-            "adapter": "defillama_stablecoincharts_all_cache",
-            "url": url,
-            "cache_path": str(cache_path.relative_to(ROOT)),
-        }
-    else:
-        payload = json.loads(run_curl(url, timeout=45))
-        source_meta = {"adapter": "defillama_stablecoincharts_all", "url": url}
+    text, meta = fetch_text_live_first(url, cache_path, timeout=45, reject_html=True)
+    assert isinstance(text, str)
+    payload = json.loads(text)
+    source_meta = {"adapter": "defillama_stablecoincharts_all" if meta.get("refreshed") else "defillama_stablecoincharts_all_cache_fallback", **meta}
     rows = []
     for item in payload or []:
         ts = item.get("date")
@@ -1498,16 +1499,10 @@ def fetch_stablecoin_supply(*, max_points: int | None) -> tuple[list[dict[str, A
 def fetch_defi_tvl(*, max_points: int | None) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     url = "https://api.llama.fi/v2/historicalChainTvl"
     cache_path = RAW_DIR / "defillama_tvl.json"
-    if cache_path.exists():
-        payload = json.loads(cache_path.read_text())
-        source_meta = {
-            "adapter": "defillama_historical_chain_tvl_cache",
-            "url": url,
-            "cache_path": str(cache_path.relative_to(ROOT)),
-        }
-    else:
-        payload = json.loads(run_curl(url, timeout=60))
-        source_meta = {"adapter": "defillama_historical_chain_tvl", "url": url}
+    text, meta = fetch_text_live_first(url, cache_path, timeout=60, reject_html=True)
+    assert isinstance(text, str)
+    payload = json.loads(text)
+    source_meta = {"adapter": "defillama_historical_chain_tvl" if meta.get("refreshed") else "defillama_historical_chain_tvl_cache_fallback", **meta}
     rows = []
     for item in payload:
         ts = item.get("date")
@@ -1732,21 +1727,14 @@ def fetch_ism_official_recent(spec: dict[str, Any], *, max_points: int | None) -
     if not cache_file or not url:
         return [], {}
     cache_path = RAW_DIR / cache_file
-    if cache_path.exists():
-        text = cache_path.read_text(errors="ignore")
-        source_meta = {
-            "adapter": "ism_official_recent_cache",
-            "source_name": spec.get("official_recent_source"),
-            "source_url": url,
-            "cache_path": str(cache_path.relative_to(ROOT)),
-        }
-    else:
-        text = run_curl(url, timeout=45)
-        source_meta = {
-            "adapter": "ism_official_recent",
-            "source_name": spec.get("official_recent_source"),
-            "source_url": url,
-        }
+    text, meta = fetch_text_live_first(url, cache_path, timeout=45)
+    assert isinstance(text, str)
+    source_meta = {
+        "adapter": "ism_official_recent" if meta.get("refreshed") else "ism_official_recent_cache_fallback",
+        "source_name": spec.get("official_recent_source"),
+        "source_url": url,
+        **meta,
+    }
 
     start_marker = spec.get("official_recent_start")
     end_marker = spec.get("official_recent_end")
@@ -1832,16 +1820,27 @@ def fetch_hyperliquid_candles(coin: str, *, max_points: int | None) -> tuple[lis
             "endTime": end_ms,
         },
     }
-    if cache_path.exists():
-        payload = json.loads(cache_path.read_text())
+    try:
+        payload = hyperliquid_post(body)
+        cache_path.write_text(json.dumps(payload, ensure_ascii=False) + "\n")
         source_meta = {
-            "adapter": "hyperliquid_candle_snapshot_cache",
+            "adapter": "hyperliquid_candle_snapshot",
             "cache_path": str(cache_path.relative_to(ROOT)),
+            "refreshed": True,
             "coin": coin,
         }
-    else:
-        payload = hyperliquid_post(body)
-        source_meta = {"adapter": "hyperliquid_candle_snapshot", "coin": coin}
+    except Exception as exc:  # noqa: BLE001
+        if not cache_path.exists():
+            raise
+        payload = json.loads(cache_path.read_text())
+        source_meta = {
+            "adapter": "hyperliquid_candle_snapshot_cache_fallback",
+            "cache_path": str(cache_path.relative_to(ROOT)),
+            "refreshed": False,
+            "cache_fallback": True,
+            "live_error": str(exc),
+            "coin": coin,
+        }
     rows = []
     for item in payload or []:
         ts = item.get("t") or item.get("T")
@@ -2046,6 +2045,7 @@ def fetch_global_manufacturing_pmi_proxy(*, max_points: int | None) -> tuple[lis
 
 def fetch_indicator(indicator: dict[str, Any], *, max_points: int | None) -> dict[str, Any]:
     indicator_id = indicator["id"]
+    history_path = HISTORY_DIR / f"{indicator_id}.json"
     result = {
         "id": indicator_id,
         "priority": indicator["priority"],
@@ -2144,8 +2144,31 @@ def fetch_indicator(indicator: dict[str, Any], *, max_points: int | None) -> dic
                 "gap": "No adapter implemented yet for this source/indicator.",
                 "fallback": indicator.get("fallback"),
             }
-        summary = summarize_history(rows)
         history_path = HISTORY_DIR / f"{indicator_id}.json"
+        summary = summarize_history(rows)
+        if summary.get("status") == "missing" and history_path.exists():
+            try:
+                cached_rows = json.loads(history_path.read_text())
+            except json.JSONDecodeError:
+                cached_rows = []
+            if cached_rows:
+                cached_summary = summarize_history(cached_rows)
+                return {
+                    **result,
+                    **cached_summary,
+                    "status": "stale_cache",
+                    "history_path": str(history_path.relative_to(ROOT)),
+                    "adapter_meta": {
+                        "adapter": "existing_history_cache_fallback",
+                        "cache_path": str(history_path.relative_to(ROOT)),
+                        "refreshed": False,
+                        "cache_fallback": True,
+                        "live_error": "Latest fetch parsed no valid rows; preserved previous history.",
+                        "attempted_adapter_meta": meta,
+                    },
+                    "fallback": indicator.get("fallback"),
+                    "note": indicator.get("note"),
+                }
         history_path.write_text(json.dumps(rows, ensure_ascii=False, indent=2) + "\n")
         return {
             **result,
@@ -2156,7 +2179,30 @@ def fetch_indicator(indicator: dict[str, Any], *, max_points: int | None) -> dic
             "note": indicator.get("note"),
         }
     except Exception as exc:  # noqa: BLE001
-        history_path = HISTORY_DIR / f"{indicator_id}.json"
+        cached_rows: list[dict[str, Any]] = []
+        if history_path.exists():
+            try:
+                cached_rows = json.loads(history_path.read_text())
+            except json.JSONDecodeError:
+                cached_rows = []
+        if cached_rows:
+            summary = summarize_history(cached_rows)
+            return {
+                **result,
+                **summary,
+                "status": "stale_cache",
+                "history_path": str(history_path.relative_to(ROOT)),
+                "adapter_meta": {
+                    "adapter": "existing_history_cache_fallback",
+                    "cache_path": str(history_path.relative_to(ROOT)),
+                    "refreshed": False,
+                    "cache_fallback": True,
+                    "live_error": str(exc),
+                },
+                "error": str(exc),
+                "fallback": indicator.get("fallback"),
+                "note": indicator.get("note"),
+            }
         history_path.write_text("[]\n")
         return {
             **result,
