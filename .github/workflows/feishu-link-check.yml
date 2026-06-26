@@ -1,0 +1,24 @@
+name: Feishu Link Check
+
+on:
+  push:
+    paths:
+      - ".github/feishu-link-check-now.txt"
+  workflow_dispatch:
+
+jobs:
+  push-links:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Push Feishu report links
+        env:
+          FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
+        run: node scripts/push_report_links.mjs --title="临时检查：宏观/加密/早晚报链接"
