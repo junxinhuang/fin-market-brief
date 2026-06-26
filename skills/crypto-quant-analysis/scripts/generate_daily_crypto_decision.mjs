@@ -279,8 +279,14 @@ function positionPressure(snapshot, price, longShort, liq) {
   const oiNotionalUsd = Number.isFinite(oiBase) && Number.isFinite(price) ? oiBase * price : null;
   const longPct = Number(longShort?.l);
   const shortPct = Number(longShort?.s);
-  const longNotionalUsd = Number.isFinite(oiNotionalUsd) && Number.isFinite(longPct) ? oiNotionalUsd * (longPct / 100) : null;
-  const shortNotionalUsd = Number.isFinite(oiNotionalUsd) && Number.isFinite(shortPct) ? oiNotionalUsd * (shortPct / 100) : null;
+  const hasLongShort =
+    Number.isFinite(longPct) &&
+    Number.isFinite(shortPct) &&
+    longPct > 0 &&
+    shortPct > 0 &&
+    Math.abs(longPct + shortPct - 100) <= 2;
+  const longNotionalUsd = Number.isFinite(oiNotionalUsd) && hasLongShort ? oiNotionalUsd * (longPct / 100) : null;
+  const shortNotionalUsd = Number.isFinite(oiNotionalUsd) && hasLongShort ? oiNotionalUsd * (shortPct / 100) : null;
   const longLiqUsd = Number.isFinite(Number(liq?.longs)) && Number.isFinite(price) ? Number(liq.longs) * price : null;
   const shortLiqUsd = Number.isFinite(Number(liq?.shorts)) && Number.isFinite(price) ? Number(liq.shorts) * price : null;
   const longLiqPctOfSide = Number.isFinite(longLiqUsd) && Number.isFinite(longNotionalUsd) && longNotionalUsd > 0 ? (longLiqUsd / longNotionalUsd) * 100 : null;
@@ -319,8 +325,9 @@ function positionPressure(snapshot, price, longShort, liq) {
     shortLiqUsd,
     longLiqPctOfSide,
     shortLiqPctOfSide,
-    longPct,
-    shortPct,
+    longPct: hasLongShort ? longPct : null,
+    shortPct: hasLongShort ? shortPct : null,
+    hasLongShort,
     bands,
     read,
   };
@@ -749,10 +756,10 @@ function renderHtmlReport(context) {
     return [
       `<strong>${esc(asset.symbol)}</strong>`,
       esc(compactUsd(asset.pressure?.oiNotionalUsd)),
-      esc(`${compactUsd(asset.pressure?.longNotionalUsd)} (${compactPct(asset.pressure?.longPct, false)})`),
-      esc(`${compactUsd(asset.pressure?.shortNotionalUsd)} (${compactPct(asset.pressure?.shortPct, false)})`),
-      esc(`${compactUsd(asset.pressure?.longLiqUsd)} (${compactPct(asset.pressure?.longLiqPctOfSide, false)})`),
-      esc(`${compactUsd(asset.pressure?.shortLiqUsd)} (${compactPct(asset.pressure?.shortLiqPctOfSide, false)})`),
+      esc(asset.pressure?.hasLongShort ? `${compactUsd(asset.pressure?.longNotionalUsd)} (${compactPct(asset.pressure?.longPct, false)})` : "缺失/未验证"),
+      esc(asset.pressure?.hasLongShort ? `${compactUsd(asset.pressure?.shortNotionalUsd)} (${compactPct(asset.pressure?.shortPct, false)})` : "缺失/未验证"),
+      esc(asset.pressure?.hasLongShort ? `${compactUsd(asset.pressure?.longLiqUsd)} (${compactPct(asset.pressure?.longLiqPctOfSide, false)})` : "缺失/未验证"),
+      esc(asset.pressure?.hasLongShort ? `${compactUsd(asset.pressure?.shortLiqUsd)} (${compactPct(asset.pressure?.shortLiqPctOfSide, false)})` : "缺失/未验证"),
       esc(`${whole(band(10).longLiqPx)} / ${whole(band(10).shortLiqPx)}`),
       esc(`${whole(band(25).longLiqPx)} / ${whole(band(25).shortLiqPx)}`),
       esc(`${whole(band(50).longLiqPx)} / ${whole(band(50).shortLiqPx)}`),
@@ -775,8 +782,22 @@ function renderHtmlReport(context) {
         ["1d K线", esc(asset.d1.text)],
         ["funding / premium", esc(`funding ${rate(asset.funding)}；premium ${rate(asset.premium)}`)],
         ["Coinalyze long/short", esc(asset.longShort ? `ratio ${n(asset.longShort.r, 4)}；long ${n(asset.longShort.l)}%；short ${n(asset.longShort.s)}%` : "缺失/未验证")],
-        ["估算多/空持仓", esc(`总 OI ${compactUsd(asset.pressure?.oiNotionalUsd)}；估多仓 ${compactUsd(asset.pressure?.longNotionalUsd)}；估空仓 ${compactUsd(asset.pressure?.shortNotionalUsd)}。${asset.pressure?.source}`)],
-        ["已强平/存量", esc(`多平 ${compactUsd(asset.pressure?.longLiqUsd)}，占估多仓 ${compactPct(asset.pressure?.longLiqPctOfSide, false)}；空平 ${compactUsd(asset.pressure?.shortLiqUsd)}，占估空仓 ${compactPct(asset.pressure?.shortLiqPctOfSide, false)}。`)],
+        [
+          "估算多/空持仓",
+          esc(
+            asset.pressure?.hasLongShort
+              ? `总 OI ${compactUsd(asset.pressure?.oiNotionalUsd)}；估多仓 ${compactUsd(asset.pressure?.longNotionalUsd)}；估空仓 ${compactUsd(asset.pressure?.shortNotionalUsd)}。${asset.pressure?.source}`
+              : `总 OI ${compactUsd(asset.pressure?.oiNotionalUsd)}；多空拆分缺失/未验证。缺少有效 long/short ratio 时不能把多仓或空仓写成 0。`
+          ),
+        ],
+        [
+          "已强平/存量",
+          esc(
+            asset.pressure?.hasLongShort
+              ? `多平 ${compactUsd(asset.pressure?.longLiqUsd)}，占估多仓 ${compactPct(asset.pressure?.longLiqPctOfSide, false)}；空平 ${compactUsd(asset.pressure?.shortLiqUsd)}，占估空仓 ${compactPct(asset.pressure?.shortLiqPctOfSide, false)}。`
+              : `近6小时已发生强平流可看方向，但因多空存量缺失，不能计算“占估多仓/空仓”的比例。`
+          ),
+        ],
         ["估算强平价带", esc(`10x 多/空 ${whole(asset.pressure?.bands?.[0]?.longLiqPx)} / ${whole(asset.pressure?.bands?.[0]?.shortLiqPx)}；25x 多/空 ${whole(asset.pressure?.bands?.[1]?.longLiqPx)} / ${whole(asset.pressure?.bands?.[1]?.shortLiqPx)}；50x 多/空 ${whole(asset.pressure?.bands?.[2]?.longLiqPx)} / ${whole(asset.pressure?.bands?.[2]?.shortLiqPx)}。未计维护保证金、真实入场分布和逐仓/全仓差异。`)],
         ["近6小时强平流", esc(`long liq ${compactBase(asset.liq.longs)}；short liq ${compactBase(asset.liq.shorts)}。这是已发生强平流，不是热力图。`)],
         ["盘口深度/spread", esc(asset.orderBook.text)],

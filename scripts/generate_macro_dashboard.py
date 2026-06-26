@@ -1365,6 +1365,20 @@ def build_combo_insights(indicators: list[dict[str, object]]) -> list[dict[str, 
     ]
 
 
+def validate_core_indicators(indicators: list[dict[str, object]]) -> None:
+    by_id = _indicator_map(indicators)
+    missing = []
+    for indicator_id in CORE_IDS:
+        item = by_id.get(indicator_id)
+        history = item.get("history") if item else []
+        if not item or _latest(by_id, indicator_id) is None or not isinstance(history, list) or not history:
+            missing.append(indicator_id)
+    if missing:
+        raise RuntimeError(
+            "Refuse to generate macro dashboard with empty core indicators: " + ", ".join(missing)
+        )
+
+
 def build_html(payload: dict[str, object]) -> str:
     payload_json = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
     return f"""<!doctype html>
@@ -2582,6 +2596,7 @@ def build_html(payload: dict[str, object]) -> str:
 def main() -> int:
     latest = json.loads(LATEST_PATH.read_text())
     indicators = [compact_indicator(item) for item in latest["indicators"]]
+    validate_core_indicators(indicators)
     combos = build_combo_insights(indicators)
     payload = {
         "generatedAt": datetime.now(timezone.utc).isoformat(),

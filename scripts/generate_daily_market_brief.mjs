@@ -495,6 +495,12 @@ const cryptoInvalidation =
   cryptoDirection === "偏空震荡"
     ? `BTC 重新站上 4小时 VWAP ${fmt(btc.h4Vwap, 0)} 且资金费率保持不过热，偏空判断失效。`
     : `BTC 跌回 4小时 VWAP 下方 1% 以上，修复判断失效。`;
+const cryptoActionRead =
+  cryptoDirection === "偏空震荡"
+    ? "价格仍在4小时VWAP下方，重点是不要接下跌中的弱反弹；反弹到VWAP附近失败时，才按偏空结构继续观察。"
+    : cryptoDirection === "中性修复"
+      ? "价格重新靠近/站上4小时VWAP，短线卖压减轻；但只有VWAP站稳且funding不拥挤，才把7日判断上调。"
+      : "价格结构还没有给出明确方向，等待4小时VWAP和资金费率共同确认。";
 const equityDirection =
   isNum(qqqSmhLeadership) && qqqSmhLeadership > 1 && ratesDollarPressure < 0.8
     ? "科技带动修复"
@@ -751,7 +757,7 @@ const html = `<!doctype html>
       <section class="section">
         <h2>重点转向提醒</h2>
         <div class="grid-3">
-          <div class="card"><p class="metric">加密 Crypto</p><p class="verdict"><span class="tag ${signalTag(cryptoDirection === "偏空震荡" ? "risk" : cryptoDirection === "中性修复" ? "good" : "warn")}">${cryptoDirection}</span></p><p>BTC ${fmt(btc.mark, 0)}，相对 4小时 VWAP ${pct(btcVwapGap)}，funding(资金费率) ${pct(btcFundingPct)}。结论：价格结构仍是核心，当前不追涨；只有站稳 VWAP 且 funding 不拥挤，才把 7日判断上调。</p><p><strong>失效条件：</strong>${htmlEscape(cryptoInvalidation)}</p></div>
+          <div class="card"><p class="metric">加密 Crypto</p><p class="verdict"><span class="tag ${signalTag(cryptoDirection === "偏空震荡" ? "risk" : cryptoDirection === "中性修复" ? "good" : "warn")}">${cryptoDirection}</span></p><p>BTC ${fmt(btc.mark, 0)}，相对 4小时 VWAP ${pct(btcVwapGap)}，funding(资金费率) ${pct(btcFundingPct)}。结论：${htmlEscape(cryptoActionRead)}</p><p><strong>失效条件：</strong>${htmlEscape(cryptoInvalidation)}</p></div>
           <div class="card"><p class="metric">美股 U.S. Equities</p><p class="verdict"><span class="tag ${signalTag(equityDirection === "科技带动修复" ? "good" : equityDirection === "防守观察" ? "risk" : "warn")}">${equityDirection}</span></p><p>QQQ ${pct(qqq.percentChange)}，SMH ${pct(smh.percentChange)}，TLT ${pct(tlt.percentChange)}，UUP ${pct(uup.percentChange)}。结论：科技仍强，但 PPI 偏热使估值扩张上限下降。</p><p><strong>失效条件：</strong>${equityInvalidation}</p></div>
           <div class="card"><p class="metric">黄金 Gold</p><p class="verdict"><span class="tag ${signalTag(goldDirection === "修复增强" ? "good" : goldDirection === "利率美元压制" ? "risk" : "warn")}">${goldDirection}</span></p><p>GLD ${pct(gld.percentChange)}，TLT ${pct(tlt.percentChange)}，UUP ${pct(uup.percentChange)}。结论：黄金不是单看涨跌，必须看是否同时得到长债和美元确认。</p><p><strong>失效条件：</strong>${goldInvalidation}</p></div>
         </div>

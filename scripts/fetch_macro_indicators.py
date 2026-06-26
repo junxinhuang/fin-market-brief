@@ -1295,14 +1295,23 @@ def fetch_treasury_yield_curve(field: str, *, max_points: int | None) -> tuple[l
 
 def fetch_treasury_yield_curve_long(field: str, fred_series_id: str, *, max_points: int | None) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     fred_rows, fred_meta = fetch_fred(fred_series_id, max_points=None)
-    treasury_rows, treasury_meta = fetch_treasury_yield_curve(field, max_points=None)
+    try:
+        treasury_rows, treasury_meta = fetch_treasury_yield_curve(field, max_points=None)
+    except Exception as exc:  # noqa: BLE001
+        treasury_rows = []
+        treasury_meta = {
+            "adapter": "treasury_yield_curve_cache_unavailable",
+            "cache_glob": "data/macro/raw/treasury_yield_*.csv",
+            "field": field,
+            "error": str(exc),
+        }
     rows_by_date = {row["date"]: row["value"] for row in fred_rows}
     rows_by_date.update({row["date"]: row["value"] for row in treasury_rows})
     rows = [{"date": date, "value": value} for date, value in sorted(rows_by_date.items())]
     return compact_history(rows, max_points), {
-        "adapter": "fred_long_history_plus_treasury_curve_cache",
+        "adapter": "fred_long_history_plus_optional_treasury_curve_cache",
         "components": {"fred": fred_meta, "treasury": treasury_meta},
-        "gap": "Long history comes from FRED; overlapping 2016+ values are patched with local U.S. Treasury curve cache when available.",
+        "gap": "Long history comes from FRED; overlapping values are patched with local U.S. Treasury curve cache when available.",
     }
 
 
@@ -1331,12 +1340,21 @@ def fetch_treasury_real_yield_curve(field: str, *, max_points: int | None) -> tu
 
 def fetch_treasury_real_yield_curve_long(field: str, fred_series_id: str, *, max_points: int | None) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     fred_rows, fred_meta = fetch_fred(fred_series_id, max_points=None)
-    treasury_rows, treasury_meta = fetch_treasury_real_yield_curve(field, max_points=None)
+    try:
+        treasury_rows, treasury_meta = fetch_treasury_real_yield_curve(field, max_points=None)
+    except Exception as exc:  # noqa: BLE001
+        treasury_rows = []
+        treasury_meta = {
+            "adapter": "treasury_real_yield_curve_cache_unavailable",
+            "cache_glob": "data/macro/raw/treasury_real_yield_*.csv",
+            "field": field,
+            "error": str(exc),
+        }
     rows_by_date = {row["date"]: row["value"] for row in fred_rows}
     rows_by_date.update({row["date"]: row["value"] for row in treasury_rows})
     rows = [{"date": date, "value": value} for date, value in sorted(rows_by_date.items())]
     return compact_history(rows, max_points), {
-        "adapter": "fred_long_history_plus_treasury_real_yield_cache",
+        "adapter": "fred_long_history_plus_optional_treasury_real_yield_cache",
         "components": {"fred": fred_meta, "treasury": treasury_meta},
         "gap": "Long real-yield history comes from FRED DFII10; overlapping 2016+ values are patched with local U.S. Treasury TIPS curve cache when available.",
     }
@@ -1398,7 +1416,10 @@ def fetch_fred_yoy(series_id: str, *, source_name: str, gap: str, max_points: in
 
 
 def fetch_treasury_rate_volatility_proxy(*, max_points: int | None, window: int = 60) -> tuple[list[dict[str, Any]], dict[str, Any]]:
-    rows, meta = fetch_treasury_yield_curve("10 Yr", max_points=None)
+    try:
+        rows, meta = fetch_treasury_yield_curve("10 Yr", max_points=None)
+    except Exception:
+        rows, meta = fetch_fred("DGS10", max_points=None)
     vol_rows = []
     changes = []
     previous = None
