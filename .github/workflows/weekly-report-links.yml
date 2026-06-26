@@ -4,6 +4,9 @@ on:
   schedule:
     # Monday 09:15 Beijing time.
     - cron: "15 1 * * 1"
+  push:
+    paths:
+      - ".github/feishu-link-check-trigger.txt"
   workflow_dispatch:
 
 permissions:
