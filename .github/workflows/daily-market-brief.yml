@@ -8,6 +8,7 @@ on:
     - cron: "0,10,20,30 2 * * *"
     - cron: "*/10 13 * * *"
     - cron: "0,10,20,30 14 * * *"
+    - cron: "0 15 * * *"
   workflow_dispatch:
     inputs:
       force:
@@ -66,10 +67,10 @@ jobs:
                 export SLOT_START_HM="900"
                 export SLOT_END_HM="1030"
                 ;;
-              "*/10 13 * * *"|"0,10,20,30 14 * * *")
+              "*/10 13 * * *"|"0,10,20,30 14 * * *"|"0 15 * * *")
                 export SLOT_NAME="evening"
                 export SLOT_START_HM="2100"
-                export SLOT_END_HM="2230"
+                export SLOT_END_HM="2359"
                 ;;
               *)
                 echo "Unknown schedule '$EVENT_SCHEDULE'; skip."
@@ -79,10 +80,10 @@ jobs:
             esac
             echo "Scheduled $SLOT_NAME report for $TODAY_BJT; actual Beijing time is $NOW_HM."
           else
-            if [ "$NOW_HM" -ge 2100 ] && [ "$NOW_HM" -le 2230 ]; then
+            if [ "$NOW_HM" -ge 2100 ] && [ "$NOW_HM" -le 2359 ]; then
               export SLOT_NAME="evening"
               export SLOT_START_HM="2100"
-              export SLOT_END_HM="2230"
+              export SLOT_END_HM="2359"
             elif [ "$NOW_HM" -ge 900 ] && [ "$NOW_HM" -le 1030 ]; then
               export SLOT_NAME="morning"
               export SLOT_START_HM="900"
