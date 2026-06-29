@@ -2,13 +2,9 @@ name: Daily Market Brief
 
 on:
   schedule:
-    # Try every 10 minutes during the morning/evening Beijing-time windows.
-    # Guard logic below allows only one morning and one evening report per day.
-    - cron: "*/10 1 * * *"
-    - cron: "0,10,20,30 2 * * *"
-    - cron: "*/10 13 * * *"
-    - cron: "0,10,20,30 14 * * *"
-    - cron: "0 15 * * *"
+    # Beijing time 09:10 and 21:10. Guard windows absorb GitHub schedule delays.
+    - cron: "10 1 * * *"
+    - cron: "10 13 * * *"
   workflow_dispatch:
     inputs:
       force:
@@ -62,15 +58,15 @@ jobs:
           export NOW_HM="$(TZ=Asia/Shanghai date +%H%M)"
           if [ "$EVENT_NAME" = "schedule" ]; then
             case "$EVENT_SCHEDULE" in
-              "*/10 1 * * *"|"0,10,20,30 2 * * *")
+              "10 1 * * *")
                 export SLOT_NAME="morning"
                 export SLOT_START_HM="900"
                 export SLOT_END_HM="1030"
                 ;;
-              "*/10 13 * * *"|"0,10,20,30 14 * * *"|"0 15 * * *")
+              "10 13 * * *")
                 export SLOT_NAME="evening"
                 export SLOT_START_HM="2100"
-                export SLOT_END_HM="2359"
+                export SLOT_END_HM="2230"
                 ;;
               *)
                 echo "Unknown schedule '$EVENT_SCHEDULE'; skip."
@@ -80,10 +76,10 @@ jobs:
             esac
             echo "Scheduled $SLOT_NAME report for $TODAY_BJT; actual Beijing time is $NOW_HM."
           else
-            if [ "$NOW_HM" -ge 2100 ] && [ "$NOW_HM" -le 2359 ]; then
+            if [ "$NOW_HM" -ge 2100 ] && [ "$NOW_HM" -le 2230 ]; then
               export SLOT_NAME="evening"
               export SLOT_START_HM="2100"
-              export SLOT_END_HM="2359"
+              export SLOT_END_HM="2230"
             elif [ "$NOW_HM" -ge 900 ] && [ "$NOW_HM" -le 1030 ]; then
               export SLOT_NAME="morning"
               export SLOT_START_HM="900"
