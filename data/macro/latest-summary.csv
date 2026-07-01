@@ -1,9 +1,9 @@
 priority,id,label,region,theme,status,points,first_date,latest_date,latest_value,display_frequency,availability
 1,us_fed_funds_rate,Fed Funds Rate,US,rates,ok,863,1954-07-01,2026-05-01,3.63,month,stable
-2,us_policy_rate_expectations,Policy Expectations Proxy: 2Y-Fed Funds Spread,US,rates,ok,2500,2016-06-27,2026-06-26,0.4400000000000004,week,proxy
-3,us_10y_treasury_yield,10Y Treasury Yield,US,rates,ok,2500,2016-06-27,2026-06-26,4.38,week,stable
-4,us_10y_real_yield,10Y Real Yield,US,rates,ok,2500,2016-06-27,2026-06-26,2.18,week,stable
-5,us_2y10y_spread,10Y-2Y Treasury Spread,US,rates,ok,2500,2016-06-28,2026-06-29,0.28,week,stable
+2,us_policy_rate_expectations,Policy Expectations Proxy: 2Y-Fed Funds Spread,US,rates,ok,2500,2016-06-28,2026-06-29,0.46999999999999975,week,proxy
+3,us_10y_treasury_yield,10Y Treasury Yield,US,rates,ok,2500,2016-06-28,2026-06-29,4.38,week,stable
+4,us_10y_real_yield,10Y Real Yield,US,rates,ok,2500,2016-06-28,2026-06-29,2.16,week,stable
+5,us_2y10y_spread,10Y-2Y Treasury Spread,US,rates,ok,2500,2016-06-29,2026-06-30,0.3,week,stable
 6,us_dxy,US Dollar Index Proxy,US,fx,ok,2500,2016-06-20,2026-06-26,120.8866,week,proxy
 7,us_real_gdp_growth,Real GDP Growth,US,growth,ok,317,1947-01-01,2026-01-01,24180.419,quarter,stable
 8,us_ism_manufacturing_pmi,ISM Manufacturing PMI,US,growth,ok,669,1970-01-01,2025-09-02,48.7,month,stable
@@ -19,7 +19,7 @@ priority,id,label,region,theme,status,points,first_date,latest_date,latest_value
 18,us_m2_yoy,M2 YoY,US,liquidity,ok,809,1959-01-01,2026-05-01,23052.3,month,stable
 19,us_fed_balance_sheet,Fed Balance Sheet,US,liquidity,ok,1228,2002-12-18,2026-06-24,6735645.0,week,stable
 20,us_bank_reserves,Bank Reserves,US,liquidity,ok,1228,2002-12-18,2026-06-24,2951416.0,week,stable
-21,us_high_yield_spread,High Yield Spread,US,credit,ok,785,2023-06-30,2026-06-26,2.83,week,stable
+21,us_high_yield_spread,High Yield Spread,US,credit,ok,785,2023-07-03,2026-06-29,2.8,week,stable
 22,us_sp500_forward_pe,S&P 500 Valuation Proxy,US,equity_valuation,ok,39,2016-07-01,2026-01-01,1.8890818766802495,month,proxy
 23,us_sp500_eps_growth,Earnings Cycle Proxy: Corporate Profits YoY,US,equity_earnings,ok,313,1948-01-01,2026-01-01,11.415368154370253,quarter,proxy
 24,us_30y_mortgage_rate,30Y Mortgage Rate,US,real_estate,ok,2500,1978-08-04,2026-06-25,6.49,week,stable
@@ -54,18 +54,18 @@ priority,id,label,region,theme,status,points,first_date,latest_date,latest_value
 53,global_manufacturing_pmi,Global Manufacturing PMI,Global,growth,ok,669,1970-01-01,2025-09-01,49.253846153846155,month,proxy
 54,global_brent_oil,Brent Oil,Global,commodities,ok,2500,2016-08-12,2026-06-22,76.49,week,stable
 55,global_copper_price,Copper Price,Global,commodities,ok,413,1992-01-01,2026-05-01,13483.75153846154,month,stable
-56,xasset_gold_price,Gold Price,CrossAsset,precious_metals,ok,2500,2016-07-19,2026-06-29,368.58,week,stable
-57,xasset_vix,VIX,CrossAsset,risk,ok,2500,2016-08-30,2026-06-26,18.41,week,stable
-58,xasset_move_index,Treasury Rate Volatility Proxy,CrossAsset,risk,ok,2500,2016-06-27,2026-06-26,0.6793653568850806,week,proxy
-59,xasset_sp500,S&P 500,CrossAsset,equity_index,ok,2500,2016-07-19,2026-06-29,7440.43,week,stable
-60,xasset_nasdaq100,Nasdaq 100,CrossAsset,equity_index,ok,2500,2016-07-19,2026-06-29,724.08,week,stable
-61,xasset_msci_acwi,MSCI ACWI,CrossAsset,equity_index,ok,2500,2016-07-19,2026-06-29,155.82,week,stable
-62,xasset_btc_price_trend,BTC Price Trend,CrossAsset,crypto,ok,2142,2020-08-19,2026-06-30,58439.0,week,stable
-63,xasset_btc_dominance,BTC Dominance,CrossAsset,crypto,ok,1,2026-06-30,2026-06-30,55.449501393274325,week,proxy
-64,xasset_eth_btc,ETH/BTC,CrossAsset,crypto,ok,2142,2020-08-19,2026-06-30,0.026667122982939478,week,stable
-65,xasset_stablecoin_supply,Stablecoin Supply,CrossAsset,crypto_liquidity,ok,2500,2019-08-27,2026-06-30,310630776249.64,week,stable
-66,xasset_crypto_funding_rate,Crypto Funding Rate,CrossAsset,crypto_derivatives,ok,366,2025-06-30,2026-06-30,7.678954761904762e-06,week,stable
-67,xasset_crypto_open_interest,Crypto Open Interest,CrossAsset,crypto_derivatives,ok,1,2026-06-30,2026-06-30,3543777257.94462,week,proxy
-68,xasset_defi_tvl,DeFi TVL,CrossAsset,crypto_liquidity,ok,2500,2019-08-27,2026-06-30,69397458479.0,week,stable
-69,xasset_hyg,HYG High Yield ETF,CrossAsset,credit,ok,2500,2016-07-19,2026-06-29,80.01,week,stable
-70,xasset_reit_index,REIT Index,CrossAsset,real_estate,ok,2500,2016-07-19,2026-06-29,98.15,week,stable
+56,xasset_gold_price,Gold Price,CrossAsset,precious_metals,ok,2500,2016-07-20,2026-06-30,368.38,week,stable
+57,xasset_vix,VIX,CrossAsset,risk,ok,2500,2016-08-31,2026-06-29,17.65,week,stable
+58,xasset_move_index,Treasury Rate Volatility Proxy,CrossAsset,risk,ok,2500,2016-06-28,2026-06-29,0.6779808006881127,week,proxy
+59,xasset_sp500,S&P 500,CrossAsset,equity_index,ok,2500,2016-07-20,2026-06-30,7499.36,week,stable
+60,xasset_nasdaq100,Nasdaq 100,CrossAsset,equity_index,ok,2500,2016-07-20,2026-06-30,736.4,week,stable
+61,xasset_msci_acwi,MSCI ACWI,CrossAsset,equity_index,ok,2500,2016-07-20,2026-06-30,156.97,week,stable
+62,xasset_btc_price_trend,BTC Price Trend,CrossAsset,crypto,ok,2143,2020-08-19,2026-07-01,59107.0,week,stable
+63,xasset_btc_dominance,BTC Dominance,CrossAsset,crypto,ok,1,2026-07-01,2026-07-01,55.39858403897211,week,proxy
+64,xasset_eth_btc,ETH/BTC,CrossAsset,crypto,ok,2143,2020-08-19,2026-07-01,0.026920669294668992,week,stable
+65,xasset_stablecoin_supply,Stablecoin Supply,CrossAsset,crypto_liquidity,ok,2500,2019-08-28,2026-07-01,309501901044.23,week,stable
+66,xasset_crypto_funding_rate,Crypto Funding Rate,CrossAsset,crypto_derivatives,ok,366,2025-07-01,2026-07-01,8.45456111111111e-06,week,stable
+67,xasset_crypto_open_interest,Crypto Open Interest,CrossAsset,crypto_derivatives,ok,1,2026-07-01,2026-07-01,3669615050.49336,week,proxy
+68,xasset_defi_tvl,DeFi TVL,CrossAsset,crypto_liquidity,ok,2500,2019-08-28,2026-07-01,69756530736.0,week,stable
+69,xasset_hyg,HYG High Yield ETF,CrossAsset,credit,ok,2500,2016-07-20,2026-06-30,79.97,week,stable
+70,xasset_reit_index,REIT Index,CrossAsset,real_estate,ok,2500,2016-07-20,2026-06-30,96.43,week,stable
