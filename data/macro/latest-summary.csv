@@ -15,7 +15,7 @@ priority,id,label,region,theme,status,points,first_date,latest_date,latest_value
 14,us_oil_price,WTI Oil Price,US,commodities,ok,2500,2016-06-29,2026-06-29,71.87,week,stable
 15,us_unemployment_rate,Unemployment Rate,US,labor,ok,940,1948-01-01,2026-05-01,4.3,month,stable
 16,us_nonfarm_payrolls,Nonfarm Payrolls,US,labor,ok,1049,1939-01-01,2026-05-01,159001.0,month,stable
-17,us_initial_jobless_claims,Initial Jobless Claims,US,labor,ok,2500,1978-07-29,2026-06-20,215000.0,week,stable
+17,us_initial_jobless_claims,Initial Jobless Claims,US,labor,ok,2500,1978-08-05,2026-06-27,215000.0,week,stable
 18,us_m2_yoy,M2 YoY,US,liquidity,ok,809,1959-01-01,2026-05-01,23052.3,month,stable
 19,us_fed_balance_sheet,Fed Balance Sheet,US,liquidity,ok,1228,2002-12-18,2026-06-24,6735645.0,week,stable
 20,us_bank_reserves,Bank Reserves,US,liquidity,ok,1228,2002-12-18,2026-06-24,2951416.0,week,stable
@@ -44,7 +44,7 @@ priority,id,label,region,theme,status,points,first_date,latest_date,latest_value
 43,cn_exports_yoy,Exports YoY,China,trade,ok,221,2008-01-01,2026-05-01,19.4,month,stable
 44,cn_usdcny,USD/CNY,China,fx,ok,2500,2016-06-22,2026-06-26,6.798,week,stable
 45,cn_10y_gov_bond_yield,China 10Y Government Bond Yield,China,rates,ok,2500,2016-03-07,2026-03-04,1.78,week,proxy
-46,eu_ecb_policy_rate,ECB Deposit Facility Rate,Europe,rates,ok,2500,2019-08-27,2026-06-30,2.25,month,stable
+46,eu_ecb_policy_rate,ECB Deposit Facility Rate,Europe,rates,ok,2500,2019-08-28,2026-07-02,2.25,month,stable
 47,eu_core_hicp,Eurozone Core HICP,Europe,inflation,ok,289,2001-12-01,2025-12-01,2.3,month,stable
 48,eu_eurusd,EUR/USD,Europe,fx,ok,2500,2016-06-22,2026-06-26,1.1403,week,stable
 49,eu_composite_pmi,Eurozone Growth Sentiment Proxy,Europe,growth,ok,469,1985-01-01,2024-01-01,99.13425,month,proxy
@@ -60,12 +60,12 @@ priority,id,label,region,theme,status,points,first_date,latest_date,latest_value
 59,xasset_sp500,S&P 500,CrossAsset,equity_index,ok,2500,2016-07-21,2026-07-01,7483.23,week,stable
 60,xasset_nasdaq100,Nasdaq 100,CrossAsset,equity_index,ok,2500,2016-07-21,2026-07-01,725.17,week,stable
 61,xasset_msci_acwi,MSCI ACWI,CrossAsset,equity_index,ok,2500,2016-07-21,2026-07-01,156.12,week,stable
-62,xasset_btc_price_trend,BTC Price Trend,CrossAsset,crypto,ok,2144,2020-08-19,2026-07-02,59921.0,week,stable
-63,xasset_btc_dominance,BTC Dominance,CrossAsset,crypto,ok,1,2026-07-02,2026-07-02,55.613957467711494,week,proxy
-64,xasset_eth_btc,ETH/BTC,CrossAsset,crypto,ok,2144,2020-08-19,2026-07-02,0.026852021828741177,week,stable
-65,xasset_stablecoin_supply,Stablecoin Supply,CrossAsset,crypto_liquidity,ok,2500,2019-08-28,2026-07-01,309604970167.95,week,stable
-66,xasset_crypto_funding_rate,Crypto Funding Rate,CrossAsset,crypto_derivatives,ok,366,2025-07-02,2026-07-02,1.1627083333333334e-05,week,stable
-67,xasset_crypto_open_interest,Crypto Open Interest,CrossAsset,crypto_derivatives,ok,1,2026-07-02,2026-07-02,3742792964.0644403,week,proxy
-68,xasset_defi_tvl,DeFi TVL,CrossAsset,crypto_liquidity,ok,2500,2019-08-29,2026-07-02,70503995482.0,week,stable
+62,xasset_btc_price_trend,BTC Price Trend,CrossAsset,crypto,ok,2144,2020-08-19,2026-07-02,61673.0,week,stable
+63,xasset_btc_dominance,BTC Dominance,CrossAsset,crypto,ok,1,2026-07-02,2026-07-02,55.817228688267804,week,proxy
+64,xasset_eth_btc,ETH/BTC,CrossAsset,crypto,ok,2144,2020-08-19,2026-07-02,0.0270576598780646,week,stable
+65,xasset_stablecoin_supply,Stablecoin Supply,CrossAsset,crypto_liquidity,ok,2500,2019-08-29,2026-07-02,309585689154.34,week,stable
+66,xasset_crypto_funding_rate,Crypto Funding Rate,CrossAsset,crypto_derivatives,ok,366,2025-07-02,2026-07-02,1.2375297619047621e-05,week,stable
+67,xasset_crypto_open_interest,Crypto Open Interest,CrossAsset,crypto_derivatives,ok,1,2026-07-02,2026-07-02,4019421750.1584992,week,proxy
+68,xasset_defi_tvl,DeFi TVL,CrossAsset,crypto_liquidity,ok,2500,2019-08-29,2026-07-02,71261633576.0,week,stable
 69,xasset_hyg,HYG High Yield ETF,CrossAsset,credit,ok,2500,2016-07-21,2026-07-01,79.59,week,stable
 70,xasset_reit_index,REIT Index,CrossAsset,real_estate,ok,2500,2016-07-21,2026-07-01,96.82,week,stable
