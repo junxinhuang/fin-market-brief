@@ -15,7 +15,7 @@ priority,id,label,region,theme,status,points,first_date,latest_date,latest_value
 14,us_oil_price,WTI Oil Price,US,commodities,ok,2500,2016-07-20,2026-07-20,84.38,week,stable
 15,us_unemployment_rate,Unemployment Rate,US,labor,ok,941,1948-01-01,2026-06-01,4.2,month,stable
 16,us_nonfarm_payrolls,Nonfarm Payrolls,US,labor,ok,1050,1939-01-01,2026-06-01,158984.0,month,stable
-17,us_initial_jobless_claims,Initial Jobless Claims,US,labor,ok,2500,1978-08-19,2026-07-11,208000.0,week,stable
+17,us_initial_jobless_claims,Initial Jobless Claims,US,labor,ok,2500,1978-08-26,2026-07-18,187000.0,week,stable
 18,us_m2_yoy,M2 YoY,US,liquidity,ok,809,1959-01-01,2026-05-01,23052.3,month,stable
 19,us_fed_balance_sheet,Fed Balance Sheet,US,liquidity,ok,1231,2002-12-18,2026-07-15,6743028.0,week,stable
 20,us_bank_reserves,Bank Reserves,US,liquidity,ok,1231,2002-12-18,2026-07-15,3142721.0,week,stable
@@ -44,7 +44,7 @@ priority,id,label,region,theme,status,points,first_date,latest_date,latest_value
 43,cn_exports_yoy,Exports YoY,China,trade,ok,222,2008-01-01,2026-06-01,27.0,month,stable
 44,cn_usdcny,USD/CNY,China,fx,ok,2500,2016-07-13,2026-07-17,6.776,week,stable
 45,cn_10y_gov_bond_yield,China 10Y Government Bond Yield,China,rates,ok,2500,2016-03-07,2026-03-04,1.78,week,proxy
-46,eu_ecb_policy_rate,ECB Deposit Facility Rate,Europe,rates,ok,2500,2019-09-18,2026-07-22,2.25,month,stable
+46,eu_ecb_policy_rate,ECB Deposit Facility Rate,Europe,rates,ok,2500,2019-09-19,2026-07-23,2.25,month,stable
 47,eu_core_hicp,Eurozone Core HICP,Europe,inflation,ok,289,2001-12-01,2025-12-01,2.3,month,stable
 48,eu_eurusd,EUR/USD,Europe,fx,ok,2500,2016-07-13,2026-07-17,1.144,week,stable
 49,eu_composite_pmi,Eurozone Growth Sentiment Proxy,Europe,growth,ok,469,1985-01-01,2024-01-01,99.13425,month,proxy
@@ -60,12 +60,12 @@ priority,id,label,region,theme,status,points,first_date,latest_date,latest_value
 59,xasset_sp500,S&P 500,CrossAsset,equity_index,ok,2500,2016-08-10,2026-07-22,7498.96,week,stable
 60,xasset_nasdaq100,Nasdaq 100,CrossAsset,equity_index,ok,2500,2016-08-10,2026-07-22,705.35,week,stable
 61,xasset_msci_acwi,MSCI ACWI,CrossAsset,equity_index,ok,2500,2016-08-10,2026-07-22,156.19,week,stable
-62,xasset_btc_price_trend,BTC Price Trend,CrossAsset,crypto,ok,2165,2020-08-19,2026-07-23,66003.0,week,stable
-63,xasset_btc_dominance,BTC Dominance,CrossAsset,crypto,ok,1,2026-07-23,2026-07-23,56.74862592708491,week,proxy
-64,xasset_eth_btc,ETH/BTC,CrossAsset,crypto,ok,2165,2020-08-19,2026-07-23,0.029283517415875034,week,stable
-65,xasset_stablecoin_supply,Stablecoin Supply,CrossAsset,crypto_liquidity,ok,2500,2019-09-18,2026-07-22,306378470266.81,week,stable
-66,xasset_crypto_funding_rate,Crypto Funding Rate,CrossAsset,crypto_derivatives,ok,366,2025-07-23,2026-07-23,7.89855e-06,week,stable
-67,xasset_crypto_open_interest,Crypto Open Interest,CrossAsset,crypto_derivatives,ok,1,2026-07-23,2026-07-23,4766059481.68474,week,proxy
-68,xasset_defi_tvl,DeFi TVL,CrossAsset,crypto_liquidity,ok,2500,2019-09-19,2026-07-23,76494024763.0,week,stable
+62,xasset_btc_price_trend,BTC Price Trend,CrossAsset,crypto,ok,2165,2020-08-19,2026-07-23,65001.0,week,stable
+63,xasset_btc_dominance,BTC Dominance,CrossAsset,crypto,ok,1,2026-07-23,2026-07-23,56.59796135343076,week,proxy
+64,xasset_eth_btc,ETH/BTC,CrossAsset,crypto,ok,2165,2020-08-19,2026-07-23,0.029187243273180414,week,stable
+65,xasset_stablecoin_supply,Stablecoin Supply,CrossAsset,crypto_liquidity,ok,2500,2019-09-19,2026-07-23,307411317738.0,week,stable
+66,xasset_crypto_funding_rate,Crypto Funding Rate,CrossAsset,crypto_derivatives,ok,366,2025-07-23,2026-07-23,6.203973809523811e-06,week,stable
+67,xasset_crypto_open_interest,Crypto Open Interest,CrossAsset,crypto_derivatives,ok,1,2026-07-23,2026-07-23,4655568076.732981,week,proxy
+68,xasset_defi_tvl,DeFi TVL,CrossAsset,crypto_liquidity,ok,2500,2019-09-19,2026-07-23,77040142142.0,week,stable
 69,xasset_hyg,HYG High Yield ETF,CrossAsset,credit,ok,2500,2016-08-10,2026-07-22,79.52,week,stable
 70,xasset_reit_index,REIT Index,CrossAsset,real_estate,ok,2500,2016-08-10,2026-07-22,99.02,week,stable
