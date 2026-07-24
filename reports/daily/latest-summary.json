@@ -1,21 +1,21 @@
 {
-  "date": "2026-07-23",
-  "generatedAtBjt": "2026-07-23 21:15 北京时间(BJT)",
-  "fileName": "2026-07-23-2115-market-brief.html",
-  "outputPath": "reports/daily/2026-07-23-2115-market-brief.html",
-  "publicUrl": "https://junxinhuang.github.io/fin-market-brief/reports/daily/2026-07-23-2115-market-brief.html",
+  "date": "2026-07-24",
+  "generatedAtBjt": "2026-07-24 09:15 北京时间(BJT)",
+  "fileName": "2026-07-24-0915-market-brief.html",
+  "outputPath": "reports/daily/2026-07-24-0915-market-brief.html",
+  "publicUrl": "https://junxinhuang.github.io/fin-market-brief/reports/daily/2026-07-24-0915-market-brief.html",
   "relatedReports": {
     "macro": "https://junxinhuang.github.io/fin-market-brief/reports/macro/dashboard.html",
     "crypto": "https://junxinhuang.github.io/fin-market-brief/reports/crypto/daily/latest.html",
-    "market": "https://junxinhuang.github.io/fin-market-brief/reports/daily/2026-07-23-2115-market-brief.html"
+    "market": "https://junxinhuang.github.io/fin-market-brief/reports/daily/2026-07-24-0915-market-brief.html"
   },
-  "reportSlot": "evening",
-  "reportLabel": "晚报",
+  "reportSlot": "morning",
+  "reportLabel": "早报",
   "headline": "PPI(生产者价格指数)偏热削弱降息交易，市场主线变成“科技韧性对抗通胀粘性”。BTC 未有效站稳 4小时 VWAP，反弹仍按弱修复处理；PPI 偏热使中期风险偏好承压。 黄金仍受美元和实际利率压制，PPI 偏热后短线反弹质量偏弱。",
   "turns": [
-    "加密：BTC 65,007，4小时 VWAP 65,042，弱修复 / 未反转。",
-    "宏观：CPI 状态为已发布；CPI 后不能再按“等数据”交易；结合 PPI 偏热，当前结论是降息交易受限，风险资产修复要看盈利/资金承接，而不是单靠宏观转松。",
-    "美股：SPY -1.02%，QQQ -1.49%，SMH -2.12%。科技和半导体动能不足，通胀粘性会放大回撤风险。",
-    "黄金：GLD -2.18%，7个交易日 +1.82%。"
+    "加密：BTC 65,003，4小时 VWAP 65,025，弱修复 / 未反转。",
+    "宏观：CPI 状态为已发布；CPI 压力仍不低，降息交易难以单靠一次数据完全打开，风险资产反弹需要二次确认。",
+    "美股：SPY -1.23%，QQQ -1.90%，SMH -1.15%。科技和半导体动能不足，通胀粘性会放大回撤风险。",
+    "黄金：GLD -2.00%，7个交易日 +1.80%。"
   ]
 }
