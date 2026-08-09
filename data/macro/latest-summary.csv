@@ -38,8 +38,8 @@ priority,id,label,region,theme,status,points,first_date,latest_date,latest_value
 37,cn_real_estate_development_investment_yoy,Real Estate Development Investment YoY,China,real_estate,ok,366,1992-02-01,2026-06-01,-18.0,month,stable
 38,cn_commercial_housing_sales_area_yoy,Commercial Housing Sales Area YoY,China,real_estate,ok,284,1999-07-01,2026-06-01,-11.6,month,stable
 39,cn_70_city_home_price,70-City Home Price Index,China,real_estate,stale_cache,185,2011-01-01,2026-05-01,96.36428571428571,month,stable
-40,cn_cpi_yoy,CPI YoY,China,inflation,stale_cache,222,2008-01-01,2026-06-01,1.0,month,stable
-41,cn_ppi_yoy,PPI YoY,China,inflation,stale_cache,246,2006-01-01,2026-06-01,4.1,month,stable
+40,cn_cpi_yoy,CPI YoY,China,inflation,ok,223,2008-01-01,2026-07-01,0.5,month,stable
+41,cn_ppi_yoy,PPI YoY,China,inflation,ok,247,2006-01-01,2026-07-01,3.5,month,stable
 42,cn_retail_sales_yoy,Retail Sales YoY,China,consumption,stale_cache,191,2008-01-01,2026-05-01,-0.6,month,stable
 43,cn_exports_yoy,Exports YoY,China,trade,ok,223,2008-01-01,2026-07-01,23.9,month,stable
 44,cn_usdcny,USD/CNY,China,fx,ok,2500,2016-07-27,2026-07-31,6.7509,week,stable
@@ -60,12 +60,12 @@ priority,id,label,region,theme,status,points,first_date,latest_date,latest_value
 59,xasset_sp500,S&P 500,CrossAsset,equity_index,ok,2500,2016-08-26,2026-08-07,7757.64,week,stable
 60,xasset_nasdaq100,Nasdaq 100,CrossAsset,equity_index,ok,2500,2016-08-26,2026-08-07,723.03,week,stable
 61,xasset_msci_acwi,MSCI ACWI,CrossAsset,equity_index,ok,2500,2016-08-26,2026-08-07,161.44,week,stable
-62,xasset_btc_price_trend,BTC Price Trend,CrossAsset,crypto,ok,2182,2020-08-19,2026-08-09,64956.0,week,stable
-63,xasset_btc_dominance,BTC Dominance,CrossAsset,crypto,ok,1,2026-08-09,2026-08-09,56.65112951273117,week,proxy
-64,xasset_eth_btc,ETH/BTC,CrossAsset,crypto,ok,2182,2020-08-19,2026-08-09,0.02953275344469248,week,stable
-65,xasset_stablecoin_supply,Stablecoin Supply,CrossAsset,crypto_liquidity,ok,2500,2019-10-05,2026-08-08,306207297072.25,week,stable
-66,xasset_crypto_funding_rate,Crypto Funding Rate,CrossAsset,crypto_derivatives,ok,366,2025-08-09,2026-08-09,1.0088200000000001e-05,week,stable
-67,xasset_crypto_open_interest,Crypto Open Interest,CrossAsset,crypto_derivatives,ok,1,2026-08-09,2026-08-09,4140621867.629945,week,proxy
-68,xasset_defi_tvl,DeFi TVL,CrossAsset,crypto_liquidity,ok,2500,2019-10-06,2026-08-09,75722708852.0,week,stable
+62,xasset_btc_price_trend,BTC Price Trend,CrossAsset,crypto,ok,2182,2020-08-19,2026-08-09,65193.0,week,stable
+63,xasset_btc_dominance,BTC Dominance,CrossAsset,crypto,ok,1,2026-08-09,2026-08-09,56.66795900923765,week,proxy
+64,xasset_eth_btc,ETH/BTC,CrossAsset,crypto,ok,2182,2020-08-19,2026-08-09,0.029487828447839492,week,stable
+65,xasset_stablecoin_supply,Stablecoin Supply,CrossAsset,crypto_liquidity,ok,2500,2019-10-06,2026-08-09,306203937515.66,week,stable
+66,xasset_crypto_funding_rate,Crypto Funding Rate,CrossAsset,crypto_derivatives,ok,366,2025-08-09,2026-08-09,1.0499261904761906e-05,week,stable
+67,xasset_crypto_open_interest,Crypto Open Interest,CrossAsset,crypto_derivatives,ok,1,2026-08-09,2026-08-09,4193708333.68802,week,proxy
+68,xasset_defi_tvl,DeFi TVL,CrossAsset,crypto_liquidity,ok,2500,2019-10-06,2026-08-09,75728905242.0,week,stable
 69,xasset_hyg,HYG High Yield ETF,CrossAsset,credit,ok,2500,2016-08-26,2026-08-07,79.61,week,stable
 70,xasset_reit_index,REIT Index,CrossAsset,real_estate,ok,2500,2016-08-26,2026-08-07,98.43,week,stable
