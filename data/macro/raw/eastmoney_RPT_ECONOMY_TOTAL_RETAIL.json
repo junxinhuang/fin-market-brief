@@ -1,6 +1,15 @@
 {
   "data": [
     {
+      "REPORT_DATE": "2026-07-01 00:00:00",
+      "TIME": "2026年07月份",
+      "RETAIL_TOTAL": 39022,
+      "RETAIL_TOTAL_SAME": 0.6,
+      "RETAIL_TOTAL_SEQUENTIAL": -8.59367497,
+      "RETAIL_TOTAL_ACCUMULATE": 287744,
+      "RETAIL_ACCUMULATE_SAME": 1.2
+    },
+    {
       "REPORT_DATE": "2026-06-01 00:00:00",
       "TIME": "2026年06月份",
       "RETAIL_TOTAL": 42690.7,
