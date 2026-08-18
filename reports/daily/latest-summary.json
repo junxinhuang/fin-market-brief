@@ -1,21 +1,21 @@
 {
-  "date": "2026-08-17",
-  "generatedAtBjt": "2026-08-17 21:16 北京时间(BJT)",
-  "fileName": "2026-08-17-2116-market-brief.html",
-  "outputPath": "reports/daily/2026-08-17-2116-market-brief.html",
-  "publicUrl": "https://junxinhuang.github.io/fin-market-brief/reports/daily/2026-08-17-2116-market-brief.html",
+  "date": "2026-08-18",
+  "generatedAtBjt": "2026-08-18 09:46 北京时间(BJT)",
+  "fileName": "2026-08-18-0946-market-brief.html",
+  "outputPath": "reports/daily/2026-08-18-0946-market-brief.html",
+  "publicUrl": "https://junxinhuang.github.io/fin-market-brief/reports/daily/2026-08-18-0946-market-brief.html",
   "relatedReports": {
     "macro": "https://junxinhuang.github.io/fin-market-brief/reports/macro/dashboard.html",
     "crypto": "https://junxinhuang.github.io/fin-market-brief/reports/crypto/daily/latest.html",
-    "market": "https://junxinhuang.github.io/fin-market-brief/reports/daily/2026-08-17-2116-market-brief.html"
+    "market": "https://junxinhuang.github.io/fin-market-brief/reports/daily/2026-08-18-0946-market-brief.html"
   },
-  "reportSlot": "evening",
-  "reportLabel": "晚报",
-  "headline": "PPI(生产者价格指数)偏热削弱降息交易，市场主线变成“科技韧性对抗通胀粘性”。BTC 未有效站稳 4小时 VWAP，反弹仍按弱修复处理；PPI 偏热使中期风险偏好承压。 黄金短线反弹主要来自避险和美元波动，但 PPI 偏热意味着实际利率压力未解除。",
+  "reportSlot": "morning",
+  "reportLabel": "早报",
+  "headline": "PPI(生产者价格指数)偏热削弱降息交易，市场主线变成“科技韧性对抗通胀粘性”。BTC 已接近/站上 4小时 VWAP，短线从偏空转为震荡修复；若资金费率走高但价格不跟，仍要防回落。 黄金短线反弹主要来自避险和美元波动，但 PPI 偏热意味着实际利率压力未解除。",
   "turns": [
-    "加密：BTC 63,494，4小时 VWAP 63,645，弱修复 / 未反转。",
+    "加密：BTC 64,232，4小时 VWAP 63,652，中性观察。",
     "宏观：CPI 状态为已发布；CPI 压力仍不低，降息交易难以单靠一次数据完全打开，风险资产反弹需要二次确认。",
-    "美股：SPY +0.02%，QQQ +0.25%，SMH +0.88%。科技和半导体仍在带动指数，短线韧性强；但 PPI 偏热会限制估值扩张。",
-    "黄金：GLD +0.20%，7个交易日 +0.76%。"
+    "美股：SPY -0.47%，QQQ -0.16%，SMH +1.06%。科技和半导体动能不足，通胀粘性会放大回撤风险。",
+    "黄金：GLD +1.00%，7个交易日 +0.73%。"
   ]
 }
