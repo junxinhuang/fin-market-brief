@@ -1,9 +1,9 @@
 priority,id,label,region,theme,status,points,first_date,latest_date,latest_value,display_frequency,availability
 1,us_fed_funds_rate,Fed Funds Rate,US,rates,ok,865,1954-07-01,2026-07-01,3.63,month,stable
-2,us_policy_rate_expectations,Policy Expectations Proxy: 2Y-Fed Funds Spread,US,rates,ok,2500,2016-08-17,2026-08-18,0.5600000000000005,week,proxy
-3,us_10y_treasury_yield,10Y Treasury Yield,US,rates,ok,2500,2016-08-17,2026-08-18,4.71,week,stable
-4,us_10y_real_yield,10Y Real Yield,US,rates,ok,2500,2016-08-17,2026-08-18,2.41,week,stable
-5,us_2y10y_spread,10Y-2Y Treasury Spread,US,rates,ok,2500,2016-08-18,2026-08-19,0.46,week,stable
+2,us_policy_rate_expectations,Policy Expectations Proxy: 2Y-Fed Funds Spread,US,rates,ok,2500,2016-08-18,2026-08-19,0.5600000000000005,week,proxy
+3,us_10y_treasury_yield,10Y Treasury Yield,US,rates,ok,2500,2016-08-18,2026-08-19,4.65,week,stable
+4,us_10y_real_yield,10Y Real Yield,US,rates,ok,2500,2016-08-18,2026-08-19,2.35,week,stable
+5,us_2y10y_spread,10Y-2Y Treasury Spread,US,rates,ok,2500,2016-08-19,2026-08-20,0.5,week,stable
 6,us_dxy,US Dollar Index Proxy,US,fx,ok,2500,2016-08-08,2026-08-14,118.9028,week,proxy
 7,us_real_gdp_growth,Real GDP Growth,US,growth,ok,318,1947-01-01,2026-04-01,24270.599,quarter,stable
 8,us_ism_manufacturing_pmi,ISM Manufacturing PMI,US,growth,ok,669,1970-01-01,2025-09-02,48.7,month,stable
@@ -17,12 +17,12 @@ priority,id,label,region,theme,status,points,first_date,latest_date,latest_value
 16,us_nonfarm_payrolls,Nonfarm Payrolls,US,labor,ok,1051,1939-01-01,2026-07-01,158858.0,month,stable
 17,us_initial_jobless_claims,Initial Jobless Claims,US,labor,ok,2500,1978-09-23,2026-08-15,206000.0,week,stable
 18,us_m2_yoy,M2 YoY,US,liquidity,ok,810,1959-01-01,2026-06-01,23155.2,month,stable
-19,us_fed_balance_sheet,Fed Balance Sheet,US,liquidity,ok,1235,2002-12-18,2026-08-12,6759955.0,week,stable
-20,us_bank_reserves,Bank Reserves,US,liquidity,ok,1235,2002-12-18,2026-08-12,2944059.0,week,stable
-21,us_high_yield_spread,High Yield Spread,US,credit,ok,786,2023-08-21,2026-08-18,2.75,week,stable
+19,us_fed_balance_sheet,Fed Balance Sheet,US,liquidity,ok,1236,2002-12-18,2026-08-19,6745699.0,week,stable
+20,us_bank_reserves,Bank Reserves,US,liquidity,ok,1236,2002-12-18,2026-08-19,2935287.0,week,stable
+21,us_high_yield_spread,High Yield Spread,US,credit,ok,787,2023-08-21,2026-08-19,2.73,week,stable
 22,us_sp500_forward_pe,S&P 500 Valuation Proxy,US,equity_valuation,ok,38,2016-10-01,2026-01-01,1.8890818766802495,month,proxy
 23,us_sp500_eps_growth,Earnings Cycle Proxy: Corporate Profits YoY,US,equity_earnings,ok,313,1948-01-01,2026-01-01,11.415368154370253,quarter,proxy
-24,us_30y_mortgage_rate,30Y Mortgage Rate,US,real_estate,ok,2500,1978-09-22,2026-08-13,6.67,week,stable
+24,us_30y_mortgage_rate,30Y Mortgage Rate,US,real_estate,ok,2500,1978-09-29,2026-08-20,6.65,week,stable
 25,us_case_shiller_hpi,Case-Shiller Home Price Index,US,real_estate,ok,473,1987-01-01,2026-05-01,335.104,month,stable
 26,cn_tsf_stock_yoy,Aggregate Financing to Real Economy Stock YoY,China,credit,ok,110,2016-03-01,2026-07-01,7.4,month,stable
 27,cn_tsf_flow,Aggregate Financing Flow,China,credit,ok,136,2015-01-01,2026-04-01,6245.0,month,stable
@@ -54,18 +54,18 @@ priority,id,label,region,theme,status,points,first_date,latest_date,latest_value
 53,global_manufacturing_pmi,Global Manufacturing PMI,Global,growth,ok,669,1970-01-01,2025-09-01,49.253846153846155,month,proxy
 54,global_brent_oil,Brent Oil,Global,commodities,ok,2500,2016-10-10,2026-08-18,95.29,week,stable
 55,global_copper_price,Copper Price,Global,commodities,ok,415,1992-01-01,2026-07-01,13542.82086956522,month,stable
-56,xasset_gold_price,Gold Price,CrossAsset,precious_metals,ok,2500,2016-09-08,2026-08-19,413.84,week,stable
+56,xasset_gold_price,Gold Price,CrossAsset,precious_metals,ok,2500,2016-09-09,2026-08-20,415.26,week,stable
 57,xasset_vix,VIX,CrossAsset,risk,ok,2500,2016-10-24,2026-08-19,14.89,week,stable
-58,xasset_move_index,Treasury Rate Volatility Proxy,CrossAsset,risk,ok,2500,2016-08-17,2026-08-18,0.6680008119349574,week,proxy
-59,xasset_sp500,S&P 500,CrossAsset,equity_index,ok,2500,2016-09-08,2026-08-19,7707.98,week,stable
-60,xasset_nasdaq100,Nasdaq 100,CrossAsset,equity_index,ok,2500,2016-09-08,2026-08-19,716.08,week,stable
-61,xasset_msci_acwi,MSCI ACWI,CrossAsset,equity_index,ok,2500,2016-09-08,2026-08-19,160.7,week,stable
-62,xasset_btc_price_trend,BTC Price Trend,CrossAsset,crypto,ok,2193,2020-08-19,2026-08-20,71600.0,week,stable
-63,xasset_btc_dominance,BTC Dominance,CrossAsset,crypto,ok,1,2026-08-20,2026-08-20,58.57793715294787,week,proxy
-64,xasset_eth_btc,ETH/BTC,CrossAsset,crypto,ok,2193,2020-08-19,2026-08-20,0.031759267018631805,week,stable
-65,xasset_stablecoin_supply,Stablecoin Supply,CrossAsset,crypto_liquidity,ok,2500,2019-10-17,2026-08-20,307115541547.62,week,stable
-66,xasset_crypto_funding_rate,Crypto Funding Rate,CrossAsset,crypto_derivatives,ok,366,2025-08-20,2026-08-20,1.2500000000000002e-05,week,stable
-67,xasset_crypto_open_interest,Crypto Open Interest,CrossAsset,crypto_derivatives,ok,1,2026-08-20,2026-08-20,4981114150.2668705,week,proxy
-68,xasset_defi_tvl,DeFi TVL,CrossAsset,crypto_liquidity,ok,2500,2019-10-17,2026-08-20,83043759468.0,week,stable
-69,xasset_hyg,HYG High Yield ETF,CrossAsset,credit,ok,2500,2016-09-08,2026-08-19,79.71,week,stable
-70,xasset_reit_index,REIT Index,CrossAsset,real_estate,ok,2500,2016-09-08,2026-08-19,98.61,week,stable
+58,xasset_move_index,Treasury Rate Volatility Proxy,CrossAsset,risk,ok,2500,2016-08-18,2026-08-19,0.679700582135937,week,proxy
+59,xasset_sp500,S&P 500,CrossAsset,equity_index,ok,2500,2016-09-09,2026-08-20,7641.16,week,stable
+60,xasset_nasdaq100,Nasdaq 100,CrossAsset,equity_index,ok,2500,2016-09-09,2026-08-20,710.93,week,stable
+61,xasset_msci_acwi,MSCI ACWI,CrossAsset,equity_index,ok,2500,2016-09-09,2026-08-20,159.97,week,stable
+62,xasset_btc_price_trend,BTC Price Trend,CrossAsset,crypto,ok,2194,2020-08-19,2026-08-21,73932.0,week,stable
+63,xasset_btc_dominance,BTC Dominance,CrossAsset,crypto,ok,1,2026-08-21,2026-08-21,58.9153098438956,week,proxy
+64,xasset_eth_btc,ETH/BTC,CrossAsset,crypto,ok,2194,2020-08-19,2026-08-21,0.03172282263191354,week,stable
+65,xasset_stablecoin_supply,Stablecoin Supply,CrossAsset,crypto_liquidity,ok,2500,2019-10-17,2026-08-20,307187330311.82,week,stable
+66,xasset_crypto_funding_rate,Crypto Funding Rate,CrossAsset,crypto_derivatives,ok,366,2025-08-21,2026-08-21,1.2342366666666667e-05,week,stable
+67,xasset_crypto_open_interest,Crypto Open Interest,CrossAsset,crypto_derivatives,ok,1,2026-08-21,2026-08-21,5201321699.745909,week,proxy
+68,xasset_defi_tvl,DeFi TVL,CrossAsset,crypto_liquidity,ok,2500,2019-10-17,2026-08-20,83419334170.0,week,stable
+69,xasset_hyg,HYG High Yield ETF,CrossAsset,credit,ok,2500,2016-09-09,2026-08-20,79.56,week,stable
+70,xasset_reit_index,REIT Index,CrossAsset,real_estate,ok,2500,2016-09-09,2026-08-20,98.6,week,stable
