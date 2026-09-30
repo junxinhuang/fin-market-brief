@@ -1,6 +1,14 @@
 {
   "data": [
     {
+      "REPORT_DATE": "2026-09-01 00:00:00",
+      "TIME": "2026年09月份",
+      "MAKE_INDEX": 50.1,
+      "MAKE_SAME": 0.60240964,
+      "NMAKE_INDEX": 50.2,
+      "NMAKE_SAME": 0.4
+    },
+    {
       "REPORT_DATE": "2026-08-01 00:00:00",
       "TIME": "2026年08月份",
       "MAKE_INDEX": 49.8,
