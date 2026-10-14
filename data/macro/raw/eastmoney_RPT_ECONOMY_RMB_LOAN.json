@@ -1,6 +1,15 @@
 {
   "data": [
     {
+      "REPORT_DATE": "2026-09-01 00:00:00",
+      "TIME": "2026年09月份",
+      "RMB_LOAN": 12734,
+      "RMB_LOAN_SAME": -20.81338225,
+      "RMB_LOAN_SEQUENTIAL": 2206.88405797,
+      "RMB_LOAN_ACCUMULATE": 114995,
+      "LOAN_ACCUMULATE_SAME": -20.91182316
+    },
+    {
       "REPORT_DATE": "2026-08-01 00:00:00",
       "TIME": "2026年08月份",
       "RMB_LOAN": 552,
