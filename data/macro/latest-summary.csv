@@ -60,12 +60,12 @@ priority,id,label,region,theme,status,points,first_date,latest_date,latest_value
 59,xasset_sp500,S&P 500,CrossAsset,equity_index,ok,2500,2016-11-09,2026-10-21,7757.17,week,stable
 60,xasset_nasdaq100,Nasdaq 100,CrossAsset,equity_index,ok,2500,2016-11-11,2026-10-23,704.4,week,stable
 61,xasset_msci_acwi,MSCI ACWI,CrossAsset,equity_index,ok,2500,2016-11-11,2026-10-23,156.8,week,stable
-62,xasset_btc_price_trend,BTC Price Trend,CrossAsset,crypto,ok,2258,2020-08-19,2026-10-24,80752.0,week,stable
-63,xasset_btc_dominance,BTC Dominance,CrossAsset,crypto,ok,1,2026-10-24,2026-10-24,59.45271959986983,week,proxy
-64,xasset_eth_btc,ETH/BTC,CrossAsset,crypto,ok,2258,2020-08-19,2026-10-24,0.029435438931061386,week,stable
-65,xasset_stablecoin_supply,Stablecoin Supply,CrossAsset,crypto_liquidity,ok,2500,2019-12-21,2026-10-24,302808386987.51,week,stable
-66,xasset_crypto_funding_rate,Crypto Funding Rate,CrossAsset,crypto_derivatives,ok,366,2025-10-24,2026-10-24,2.9682833333333333e-06,week,stable
-67,xasset_crypto_open_interest,Crypto Open Interest,CrossAsset,crypto_derivatives,ok,1,2026-10-24,2026-10-24,6670925041.792239,week,proxy
-68,xasset_defi_tvl,DeFi TVL,CrossAsset,crypto_liquidity,ok,2500,2019-12-21,2026-10-24,89704467120.0,week,stable
+62,xasset_btc_price_trend,BTC Price Trend,CrossAsset,crypto,ok,2258,2020-08-19,2026-10-24,79635.0,week,stable
+63,xasset_btc_dominance,BTC Dominance,CrossAsset,crypto,ok,1,2026-10-24,2026-10-24,59.58451211734067,week,proxy
+64,xasset_eth_btc,ETH/BTC,CrossAsset,crypto,ok,2258,2020-08-19,2026-10-24,0.028836204731528457,week,stable
+65,xasset_stablecoin_supply,Stablecoin Supply,CrossAsset,crypto_liquidity,ok,2500,2019-12-21,2026-10-24,302807719530.51,week,stable
+66,xasset_crypto_funding_rate,Crypto Funding Rate,CrossAsset,crypto_derivatives,ok,366,2025-10-24,2026-10-24,5.6126176470588235e-06,week,stable
+67,xasset_crypto_open_interest,Crypto Open Interest,CrossAsset,crypto_derivatives,ok,1,2026-10-24,2026-10-24,6564080174.7691765,week,proxy
+68,xasset_defi_tvl,DeFi TVL,CrossAsset,crypto_liquidity,ok,2500,2019-12-21,2026-10-24,88947614428.0,week,stable
 69,xasset_hyg,HYG High Yield ETF,CrossAsset,credit,ok,2500,2016-11-11,2026-10-23,77.05,week,stable
 70,xasset_reit_index,REIT Index,CrossAsset,real_estate,ok,2500,2016-11-11,2026-10-23,92.69,week,stable
