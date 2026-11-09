@@ -1,6 +1,13 @@
 {
   "data": [
     {
+      "REPORT_DATE": "2026-10-01 00:00:00",
+      "TIME": "2026年10月份",
+      "BASE": 105.7,
+      "BASE_SAME": 5.7,
+      "BASE_ACCUMULATE": 102.7
+    },
+    {
       "REPORT_DATE": "2026-09-01 00:00:00",
       "TIME": "2026年09月份",
       "BASE": 105,
