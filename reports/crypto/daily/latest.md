@@ -1,6 +1,6 @@
 # 每日加密交易决策
 
-生成时间：2026/11/14 15:39:35 北京时间
+生成时间：2026/11/15 15:52:55 北京时间
 覆盖资产：BTC / ETH / SOL / 热门永续候选
 
 ## 1. 总判断
@@ -8,7 +8,7 @@
 - 市场状态：偏空
 - 今日主策略：主策略是反弹做空弱势币，避免在刚强平后追空。
 - 风险偏好：risk-off。跨资产环境压制风险资产，crypto 反弹更容易被视为减仓/反弹做空窗口。
-- 情绪代理：Fear & Greed 13 / Extreme Fear；ETH gas 0.0740 gwei，链上交易很便宜，gas 本身不是风险源。
+- 情绪代理：Fear & Greed 10 / Extreme Fear；ETH gas 0.2593 gwei，链上交易很便宜，gas 本身不是风险源。
 - 杠杆状态：Coinalyze 多空比和 OI history 已纳入；强平使用已发生强平流，不使用伪 heatmap。
 - 仓位建议：总仓位 0%-15%，单笔 2%-5%，优先减风险或等反弹失败。
 - 置信度：中等偏低到中等。原因是核心合约数据已接入，但 true liquidation heatmap、ETF flow、社交情绪仍缺。
@@ -28,8 +28,8 @@
 预测市场入口：接口入口：https://gamma-api.polymarket.com/markets?active=true&closed=false&search=<query>；当前环境偶发超时，查询时需重试。。
 
 主要新闻：
-- Cointelegraph: Bitcoin ETFs shed $2.35B in two weeks as BlackRock’s losing streak hits 11 sessions (Sat, 14 Nov 2026 06:33:13 +0000)
-- Cointelegraph: Here’s what happened in crypto today (Fri, 13 Nov 2026 22:08:37 +0000)
+- Cointelegraph: Here’s what happened in crypto today (Sat, 14 Nov 2026 11:28:12 +0000)
+- Cointelegraph: Bitcoin ETFs shed $2.35B in 2 weeks, BlackRock’s losing streak hits 11 (Sat, 14 Nov 2026 06:33:13 +0000)
 - Cointelegraph: Adam Back makes case for simpler security as Blockstream launches Bitcoin custody system (Fri, 13 Nov 2026 21:49:27 +0000)
 - Decrypt: JPMorgan’s Bitcoin and Crypto-Linked Holdings Approach $1 Billion (Fri, 13 Nov 2026 20:16:03 +0000)
 - Decrypt: Dormant Bitcoin Wallets Wake Up After 16 Years, Moving $6.9 Million (Fri, 13 Nov 2026 19:36:03 +0000)
@@ -38,81 +38,85 @@
 
 ## 4. BTC
 
-- 实时价格：67,139，24h 相对 prevDay：-2.40%
-- 成交/持仓：24h notional volume $3.94B，base volume 57.6K BTC，Hyperliquid OI 38.2K BTC；Coinalyze OI 24h 缺失/未验证。
-- 7d/30d背景：短中期仍弱；7d -11.49%，区间 66,434-76,173，位置 7.2%，VWAP 71,830；30d -18.33%，区间 66,434-84,850，位置 3.8%，VWAP 77,326
-- 1h结构：阴线 O:67,346 H:67,423 L:67,001 C:67,138，VWAP下方，VWAP 68,908
-- 4h结构：阳线 O:66,716 H:67,424 L:66,434 C:67,138，VWAP下方，VWAP 72,380
-- 1d结构：阴线 O:68,275 H:68,414 L:66,434 C:67,138，VWAP下方，VWAP 78,687
+- 实时价格：63,773，24h 相对 prevDay：-5.02%
+- 成交/持仓：24h notional volume $7.52B，base volume 116K BTC，Hyperliquid OI 36.9K BTC；Coinalyze OI 24h 缺失/未验证。
+- 7d/30d背景：短中期仍弱；7d -14.76%，区间 61,970-75,585，位置 13.2%，VWAP 69,106；30d -21.84%，区间 61,970-84,850，位置 7.9%，VWAP 75,710
+- 1h结构：阴线 O:64,434 H:64,514 L:63,750 C:63,773，VWAP下方，VWAP 65,268
+- 4h结构：阴线 O:64,806 H:65,138 L:63,750 C:63,773，VWAP下方，VWAP 70,032
+- 1d结构：阴线 O:64,122 H:65,574 L:61,970 C:63,773，VWAP下方，VWAP 77,296
 - funding/premium：funding +<0.1%，premium -<0.1%
 - Coinalyze long/short：缺失/未验证
-- 估算多/空持仓：总 OI $2.56B；估多仓 $0；估空仓 $0。估算：Hyperliquid OI × 标记价 × Coinalyze 多空占比；不等同真实仓位分布或强平热力图。
-- 估算强平价带：10x 多/空 60,425 / 73,853；25x 多/空 64,453 / 69,825；50x 多/空 65,796 / 68,482。未计维护保证金、真实入场分布和逐仓/全仓差异。
+- 估算多/空持仓：总 OI $2.35B；估多仓 $0；估空仓 $0。估算：Hyperliquid OI × 标记价 × Coinalyze 多空占比；不等同真实仓位分布或强平热力图。
+- 估算强平价带：10x 多/空 57,396 / 70,150；25x 多/空 61,222 / 66,324；50x 多/空 62,498 / 65,048。未计维护保证金、真实入场分布和逐仓/全仓差异。
 - 近6小时强平流：long liq 0.0000，short liq 0.0000。这是已发生强平流，不是热力图。
-- 盘口深度/spread：bid 67,137 / ask 67,138，spread 1.0000 (0.0015%)，top20 bid 102.55 / ask 28.41，买盘更厚，短线回踩承接较好
-- 支撑：66,772-67,001
-- 压力：69,121-70,214
+- 盘口深度/spread：bid 63,772 / ask 63,773，spread 1.0000 (0.0016%)，top20 bid 28.07 / ask 149.13，卖盘更厚，反弹上方抛压更明显
+- 支撑：63,363-63,750
+- 压力：66,231-67,486
 - 判断：偏空。24h 价格偏弱；价格低于1h VWAP；价格低于4h VWAP；价格仍低于30d日线VWAP，中期反弹尚未确认反转；7d趋势仍弱，反弹需要更多确认
 - 策略：反弹压力失败后做空，不在支撑位追空
-- 触发条件：反弹 69,121-70,214 失败，1h 收不回 VWAP 后试空。
-- 失效条件：放量站上 69,121-70,214 且 short liquidation 扩大。
+- 触发条件：反弹 66,231-67,486 失败，1h 收不回 VWAP 后试空。
+- 失效条件：放量站上 66,231-67,486 且 short liquidation 扩大。
 
 ## 5. ETH
 
-- 实时价格：1,895，24h 相对 prevDay：-2.35%
-- 成交/持仓：24h notional volume $926M，base volume 480K ETH，Hyperliquid OI 705K ETH；Coinalyze OI 24h 缺失/未验证。
-- 7d/30d背景：短中期仍弱；7d -15.39%，区间 1,876-2,245，位置 5.0%，VWAP 2,038；30d -22.39%，区间 1,876-2,525，位置 2.8%，VWAP 2,250
-- 1h结构：阴线 O:1,904 H:1,906 L:1,889 C:1,895，VWAP下方，VWAP 1,941
-- 4h结构：阳线 O:1,883 H:1,910 L:1,878 C:1,895，VWAP下方，VWAP 2,055
-- 1d结构：阴线 O:1,929 H:1,936 L:1,876 C:1,895，VWAP下方，VWAP 2,327
-- funding/premium：funding +<0.1%，premium -<0.1%
+- 实时价格：1,773，24h 相对 prevDay：-6.55%
+- 成交/持仓：24h notional volume $2.21B，base volume 1.23M ETH，Hyperliquid OI 606K ETH；Coinalyze OI 24h 缺失/未验证。
+- 7d/30d背景：短中期仍弱；7d -16.60%，区间 1,710-2,159，位置 14.0%，VWAP 1,946；30d -26.81%，区间 1,710-2,525，位置 7.7%，VWAP 2,199
+- 1h结构：阴线 O:1,792 H:1,796 L:1,772 C:1,773，VWAP下方，VWAP 1,822
+- 4h结构：阴线 O:1,818 H:1,823 L:1,772 C:1,773，VWAP下方，VWAP 1,985
+- 1d结构：阳线 O:1,768 H:1,833 L:1,710 C:1,773，VWAP下方，VWAP 2,281
+- funding/premium：funding -<0.1%，premium -<0.1%
 - Coinalyze long/short：缺失/未验证
-- 估算多/空持仓：总 OI $1.34B；估多仓 $0；估空仓 $0。估算：Hyperliquid OI × 标记价 × Coinalyze 多空占比；不等同真实仓位分布或强平热力图。
-- 估算强平价带：10x 多/空 1,705 / 2,084；25x 多/空 1,819 / 1,971；50x 多/空 1,857 / 1,933。未计维护保证金、真实入场分布和逐仓/全仓差异。
+- 估算多/空持仓：总 OI $1.07B；估多仓 $0；估空仓 $0。估算：Hyperliquid OI × 标记价 × Coinalyze 多空占比；不等同真实仓位分布或强平热力图。
+- 估算强平价带：10x 多/空 1,596 / 1,950；25x 多/空 1,702 / 1,844；50x 多/空 1,738 / 1,808。未计维护保证金、真实入场分布和逐仓/全仓差异。
 - 近6小时强平流：long liq 0.0000，short liq 0.0000。这是已发生强平流，不是热力图。
-- 盘口深度/spread：bid 1,895 / ask 1,895，spread 0.1000 (0.0053%)，top20 bid 3.54K / ask 3.83K，买卖盘接近平衡
-- 支撑：1,879-1,891
-- 压力：1,956-1,988
+- 盘口深度/spread：bid 1,773 / ask 1,773，spread 0.1000 (0.0056%)，top20 bid 5.94K / ask 6.40K，买卖盘接近平衡
+- 支撑：1,769-1,772
+- 压力：1,857-1,918
 - 判断：偏空。24h 价格偏弱；价格低于1h VWAP；价格低于4h VWAP；价格仍低于30d日线VWAP，中期反弹尚未确认反转；7d趋势仍弱，反弹需要更多确认
 - 策略：反弹压力失败后做空，不在支撑位追空
-- 触发条件：反弹 1,956-1,988 失败，1h 收不回 VWAP 后试空。
-- 失效条件：放量站上 1,956-1,988 且 short liquidation 扩大。
+- 触发条件：反弹 1,857-1,918 失败，1h 收不回 VWAP 后试空。
+- 失效条件：放量站上 1,857-1,918 且 short liquidation 扩大。
 
 ## 6. SOL
 
-- 实时价格：75.23，24h 相对 prevDay：-6.13%
-- 成交/持仓：24h notional volume $355M，base volume 4.52M SOL，Hyperliquid OI 4.06M SOL；Coinalyze OI 24h 缺失/未验证。
-- 7d/30d背景：短中期仍弱；7d -16.19%，区间 74.83-90.00，位置 2.8%，VWAP 82.30；30d -28.61%，区间 74.83-109.19，位置 1.2%，VWAP 93.32
-- 1h结构：阴线 O:75.69 H:75.74 L:74.99 C:75.24，VWAP下方，VWAP 78.73
-- 4h结构：阳线 O:75.02 H:76.11 L:74.83 C:75.24，VWAP下方，VWAP 83.56
-- 1d结构：阴线 O:78.16 H:78.45 L:74.83 C:75.24，VWAP下方，VWAP 97.76
-- funding/premium：funding -<0.1%，premium -<0.1%
+- 实时价格：69.49，24h 相对 prevDay：-7.63%
+- 成交/持仓：24h notional volume $649M，base volume 9.11M SOL，Hyperliquid OI 4.52M SOL；Coinalyze OI 24h 缺失/未验证。
+- 7d/30d背景：短中期仍弱；7d -19.67%，区间 67.38-88.42，位置 10.0%，VWAP 77.26；30d -33.44%，区间 67.38-109.19，位置 5.1%，VWAP 89.80
+- 1h结构：阴线 O:70.43 H:70.50 L:69.48 C:69.49，VWAP下方，VWAP 72.54
+- 4h结构：阴线 O:71.32 H:71.58 L:69.48 C:69.49，VWAP下方，VWAP 79.38
+- 1d结构：阴线 O:70.24 H:71.98 L:67.38 C:69.49，VWAP下方，VWAP 94.74
+- funding/premium：funding +<0.1%，premium -<0.1%
 - Coinalyze long/short：缺失/未验证
-- 估算多/空持仓：总 OI $305M；估多仓 $0；估空仓 $0。估算：Hyperliquid OI × 标记价 × Coinalyze 多空占比；不等同真实仓位分布或强平热力图。
-- 估算强平价带：10x 多/空 67.71 / 82.76；25x 多/空 72.22 / 78.24；50x 多/空 73.73 / 76.74。未计维护保证金、真实入场分布和逐仓/全仓差异。
+- 估算多/空持仓：总 OI $314M；估多仓 $0；估空仓 $0。估算：Hyperliquid OI × 标记价 × Coinalyze 多空占比；不等同真实仓位分布或强平热力图。
+- 估算强平价带：10x 多/空 62.54 / 76.44；25x 多/空 66.71 / 72.27；50x 多/空 68.10 / 70.88。未计维护保证金、真实入场分布和逐仓/全仓差异。
 - 近6小时强平流：long liq 0.0000，short liq 0.0000。这是已发生强平流，不是热力图。
-- 盘口深度/spread：bid 75.23 / ask 75.23，spread 0.0010 (0.0013%)，top20 bid 4.40K / ask 5.09K，买卖盘接近平衡
-- 支撑：74.99-75.22
-- 压力：80.54-82.35
+- 盘口深度/spread：bid 69.51 / ask 69.51，spread 0.0010 (0.0014%)，top20 bid 3.37K / ask 6.71K，卖盘更厚，反弹上方抛压更明显
+- 支撑：69.31-69.48
+- 压力：73.92-76.17
 - 判断：偏空。24h 价格偏弱；价格低于1h VWAP；价格低于4h VWAP；价格仍低于30d日线VWAP，中期反弹尚未确认反转；7d趋势仍弱，反弹需要更多确认
 - 策略：反弹压力失败后做空，不在支撑位追空
-- 触发条件：反弹 80.54-82.35 失败，1h 收不回 VWAP 后试空。
-- 失效条件：放量站上 80.54-82.35 且 short liquidation 扩大。
+- 触发条件：反弹 73.92-76.17 失败，1h 收不回 VWAP 后试空。
+- 失效条件：放量站上 73.92-76.17 且 short liquidation 扩大。
 
 ## 7. 热门叙事币
 
 | 币种 |热度分 |24h |成交额 |OI |funding |处理 |
 | --- |--- |--- |--- |--- |--- |--- |
-| ENA |94.5 |-8.11% |$16.6M |$41.8M |-<0.1% |可交易：高成交/高OI/有波动，等待技术位确认 |
-| VVV |93.6 |-6.09% |$9.32M |$43.9M |-<0.1% |只观察：衍生品拥挤或溢价异常 |
-| WLD |93.5 |-6.51% |$10.2M |$30.1M |-<0.1% |只观察：衍生品拥挤或溢价异常 |
-| NEAR |91.6 |-4.84% |$63.8M |$123M |+<0.1% |可交易：高成交/高OI/有波动，等待技术位确认 |
-| LIT |91.0 |-6.38% |$35.7M |$106M |+<0.1% |可交易：高成交/高OI/有波动，等待技术位确认 |
-| kPEPE |90.8 |-7.18% |$23.7M |$43.7M |+<0.1% |可交易：高成交/高OI/有波动，等待技术位确认 |
-| GRAM |90.0 |-6.37% |$7.81M |$15.1M |-<0.1% |只观察：衍生品拥挤或溢价异常 |
-| ADA |87.1 |-4.97% |$4.87M |$21.9M |-<0.1% |不碰：流动性/OI 偏低 |
+| kPEPE |89.5 |-8.89% |$42.7M |$21.4M |-<0.1% |可交易：高成交/高OI/有波动，等待技术位确认 |
+| XMR |88.5 |-8.20% |$61.1M |$90.1M |+<0.1% |可交易：高成交/高OI/有波动，等待技术位确认 |
+| UNI |88.2 |-10.08% |$35.2M |$33.3M |+<0.1% |可交易：高成交/高OI/有波动，等待技术位确认 |
+| PUMP |88.2 |-15.24% |$62.0M |$40.4M |+<0.1% |可交易：高成交/高OI/有波动，等待技术位确认 |
+| TRUMP |88.1 |-11.37% |$7.67M |$6.55M |-<0.1% |只观察：衍生品拥挤或溢价异常 |
+| WLD |87.8 |-8.19% |$17.8M |$26.5M |-<0.1% |只观察：衍生品拥挤或溢价异常 |
+| AVAX |87.6 |-11.07% |$32.6M |$18.5M |+<0.1% |可交易：高成交/高OI/有波动，等待技术位确认 |
+| INJ |85.3 |-13.38% |$11.5M |$6.65M |+<0.1% |可交易：高成交/高OI/有波动，等待技术位确认 |
 
 热门币结论：只把前排当候选，不直接追。优先选择“高成交 + 高OI + funding不过热 + 有新闻叙事”的币；被脚本标成“不碰”的币，即使涨幅大也先排除。
+
+热门币相关新闻：
+- Decrypt: Trump’s First Democratic Picks for SEC and CFTC Could Reshape Crypto’s Regulators (Fri, 13 Nov 2026 17:56:03 +0000)
+- Cointelegraph: Trump nominates Hester Peirce successor among SEC, CFTC picks (Fri, 13 Nov 2026 02:29:27 +0000)
 
 ## 8. 仓位与执行
 
